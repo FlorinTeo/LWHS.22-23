@@ -6,7 +6,7 @@ public class Student {
     // Student ID as given by the school
     private int id;
     
-    // Student's name
+    // Student name
     private String name;
     
     // Student grade: one of 9, 10, 11 or 12.
@@ -14,8 +14,8 @@ public class Student {
     
     /**
      * Creates and initializes an instance of a student.
-     * @param id - student's ID as given by school.
-     * @param name - student's first name.
+     * @param id - student ID as given by school.
+     * @param name - student first name.
      * @param grade - the grade the student is in (9, 10, 11 or 12).
      */
     public Student(int id, String name, int grade) {
@@ -34,7 +34,7 @@ public class Student {
     
     /**
      * Class accessor for the name.
-     * @return student's name.
+     * @return student name.
      */
     public String getName() {
         return name;
