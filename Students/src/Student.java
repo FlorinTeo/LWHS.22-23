@@ -78,9 +78,15 @@ public class Student {
         if (id <= 0) {
             return false;
         }
-        if (name.isBlank() || name.isEmpty()) {
+        
+        // String class has both isBlank() and isEmpty() methods.
+        // isBlank() returns true if string is either empty or has only white chars.
+        // isEmpty() returns true only if string is empty.
+        // For us is sufficient to use the encommpassing isBlank()
+        if (name.isBlank()) {
             return false;
         }
+        
         if (grade < 9 || grade > 12) {
             return false;
         }
