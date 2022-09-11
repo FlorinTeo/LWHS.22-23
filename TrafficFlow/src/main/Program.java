@@ -26,7 +26,8 @@ public class Program {
         mainFrame.step();
         System.out.println("More steps 3");
         mainFrame.step();
-        System.out.println("More steps 4");
+        System.out.println("Last step 2");
+        mainFrame.step(2);
         mainFrame.close();
     }
 }
