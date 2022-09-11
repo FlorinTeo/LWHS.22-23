@@ -1,3 +1,4 @@
+package main;
 
 public class Classroom {
     // The name of this classroom

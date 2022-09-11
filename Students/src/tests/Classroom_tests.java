@@ -1,8 +1,13 @@
+package tests;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import main.Classroom;
+import main.Student;
 
 class Classroom_tests {
     

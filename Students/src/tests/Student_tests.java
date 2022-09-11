@@ -1,5 +1,9 @@
+package tests;
+
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+
+import main.Student;
 
 class Student_tests {
 

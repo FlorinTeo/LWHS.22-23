@@ -1,3 +1,4 @@
+package main;
 /**
  * Class representing a record of a highschool student
  */
