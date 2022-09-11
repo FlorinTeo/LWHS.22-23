@@ -1,8 +1,11 @@
+package main;
 import java.awt.Canvas;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
-public class MapCanvas extends Canvas {
+public class MapCanvas extends StepCtrlCanvas {
     private static final long serialVersionUID = 1L;
     
     private BufferedImage _mapImage;
