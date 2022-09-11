@@ -22,7 +22,6 @@ public class StepCtrlCanvas extends Canvas implements KeyListener {
         synchronized (_sync) {
             switch (Character.toUpperCase(ch)) {
             case ' ':
-            case '0':
                 _keyStepLevel = 0;
                 _sync.notifyAll();
                 break;
