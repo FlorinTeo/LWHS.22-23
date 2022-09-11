@@ -4,13 +4,13 @@
 public class Student {
     
     // Student ID as given by the school
-    private int id;
+    private int _id;
     
     // Student name
-    private String name;
+    private String _name;
     
     // Student grade: one of 9, 10, 11 or 12.
-    private int grade;
+    private int _grade;
     
     /**
      * Creates and initializes an instance of a student.
@@ -19,9 +19,9 @@ public class Student {
      * @param grade - the grade the student is in (9, 10, 11 or 12).
      */
     public Student(int id, String name, int grade) {
-        this.id = id;
-        this.name = name;
-        this.grade = grade;
+        _id = id;
+        _name = name;
+        _grade = grade;
     }
     
     /**
@@ -29,7 +29,7 @@ public class Student {
      * @return student's ID.
      */
     public int getId() {
-        return id;
+        return _id;
     }
     
     /**
@@ -37,7 +37,7 @@ public class Student {
      * @return student name.
      */
     public String getName() {
-        return name;
+        return _name;
     }
     
     /**
@@ -45,7 +45,7 @@ public class Student {
      * @return The grade this student is in.
      */
     public int getGrade() {
-        return grade;
+        return _grade;
     }
     
     /**
@@ -53,7 +53,7 @@ public class Student {
      * @param name - The new name for this student.
      */
     public void setName(String name) {
-        this.name = name;
+        _name = name;
     }
     
     /**
@@ -61,9 +61,9 @@ public class Student {
      */
     @Override
     public String toString() {
-        String output = "[" + id + "]";
-        output += " " + name;
-        output += " in grade " + grade;
+        String output = "[" + _id + "]";
+        output += " " + _name;
+        output += " in grade " + _grade;
         return output;
     }
     
@@ -75,7 +75,7 @@ public class Student {
      * @return - true if instance is valid, false otherwise
      */
     public boolean isValid() {
-        if (id <= 0) {
+        if (_id <= 0) {
             return false;
         }
         
@@ -83,11 +83,11 @@ public class Student {
         // isBlank() returns true if string is either empty or has only white chars.
         // isEmpty() returns true only if string is empty.
         // For us is sufficient to use the encommpassing isBlank()
-        if (name.isBlank()) {
+        if (_name.isBlank()) {
             return false;
         }
         
-        if (grade < 9 || grade > 12) {
+        if (_grade < 9 || _grade > 12) {
             return false;
         }
         
