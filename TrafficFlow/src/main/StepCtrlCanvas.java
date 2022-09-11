@@ -5,7 +5,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class StepCtrlCanvas extends Canvas implements KeyListener {
-
+    // default serial version
+    private static final long serialVersionUID = 1L;
+    
     // Region: Data fields
     private Object _sync = new Object();
     private Integer _keyStepLevel = Integer.MIN_VALUE;

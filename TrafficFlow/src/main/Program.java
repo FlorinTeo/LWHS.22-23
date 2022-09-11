@@ -1,5 +1,4 @@
 package main;
-import java.awt.Frame;
 import java.io.IOException;
 
 public class Program {
