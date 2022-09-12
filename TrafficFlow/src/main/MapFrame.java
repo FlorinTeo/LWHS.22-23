@@ -11,7 +11,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class MainFrame implements Closeable, WindowListener {
+public class MapFrame implements Closeable, WindowListener {
 
     private static final String TITLE = "Traffic Flow Manager";
     private static final int PADDING = 4;
@@ -19,7 +19,7 @@ public class MainFrame implements Closeable, WindowListener {
     private Frame _frame = null;
     private MapCanvas _mapCanvas = null;
 
-    public MainFrame(String mapFilePath) throws IOException {
+    public MapFrame(String mapFilePath) throws IOException {
         File mapFile = new File(mapFilePath);
 
         if (!mapFile.exists()) {
