@@ -5,7 +5,8 @@ public class Program {
     
     public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("Welcome to Traffic Flow Manager!");
-        MapFrame mainFrame = new MapFrame("Ravenna/Ravenna.jpg");
+        MapImage mapImage = new MapImage("Ravenna");
+        MapFrame mainFrame = new MapFrame(mapImage);
         mainFrame.open();
         mainFrame.step();
         mainFrame.close();

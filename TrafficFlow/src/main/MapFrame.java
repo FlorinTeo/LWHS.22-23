@@ -19,14 +19,7 @@ public class MapFrame implements Closeable, WindowListener {
     private Frame _frame = null;
     private MapCanvas _mapCanvas = null;
 
-    public MapFrame(String mapFilePath) throws IOException {
-        File mapFile = new File(mapFilePath);
-
-        if (!mapFile.exists()) {
-            throw new IOException();
-        }
-
-        BufferedImage mapImage = ImageIO.read(mapFile);
+    public MapFrame(MapImage mapImage) throws IOException {
         _frame = new Frame(TITLE);
         _frame.pack();
         Insets insets = _frame.getInsets();
@@ -36,7 +29,10 @@ public class MapFrame implements Closeable, WindowListener {
         _frame.setLocationRelativeTo(null);
         _frame.setResizable(false);
 
-        _mapCanvas = new MapCanvas(insets.left + PADDING, insets.top + PADDING, mapImage);
+        _mapCanvas = new MapCanvas(
+                insets.left + PADDING, 
+                insets.top + PADDING,
+                mapImage);
         _frame.add(_mapCanvas);
 
         _frame.addWindowListener(this);

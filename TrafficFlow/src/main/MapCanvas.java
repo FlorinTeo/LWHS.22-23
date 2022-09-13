@@ -5,9 +5,9 @@ import java.awt.image.BufferedImage;
 public class MapCanvas extends StepCtrlCanvas {
     private static final long serialVersionUID = 1L;
     
-    private BufferedImage _mapImage;
+    private MapImage _mapImage;
     
-    public MapCanvas(int xAnchor, int yAnchor, BufferedImage mapImage) {
+    public MapCanvas(int xAnchor, int yAnchor, MapImage mapImage) {
         _mapImage = mapImage;
         setBounds(
             xAnchor, yAnchor,
@@ -16,6 +16,6 @@ public class MapCanvas extends StepCtrlCanvas {
     
     @Override
     public void paint(Graphics g) {
-        g.drawImage(_mapImage, 0, 0, null);
+        g.drawImage(_mapImage.getBaseMap(), 0, 0, null);
     }
 }
