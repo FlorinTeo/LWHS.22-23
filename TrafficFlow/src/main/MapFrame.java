@@ -86,16 +86,13 @@ public class MapFrame implements Closeable, WindowListener {
     // Region: WindowListener overrides
     @Override
     public void windowOpened(WindowEvent e) {
-        System.out.println("Opened");
     }
 
     @Override
     public void windowClosing(WindowEvent e) {
-        System.out.println("Closing");
         try {
             this.close();
         } catch (IOException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
     }

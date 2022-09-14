@@ -8,14 +8,12 @@ public class Program {
         MapImage mapImage = new MapImage("Ravenna");
         MapFrame mainFrame = new MapFrame(mapImage);
         mainFrame.open();
+
         System.out.println("-> step()");
         mainFrame.step();
-        System.out.println("-> step()");
-        mainFrame.step();
-        System.out.println("-> step(1)");
-        mainFrame.step(1);
         System.out.println("-> step(2)");
         mainFrame.step(2);
+
         mainFrame.close();
         System.out.println("DONE");
     }
