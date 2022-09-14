@@ -7,6 +7,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapFrame implements Closeable, WindowListener {
 
@@ -28,30 +30,49 @@ public class MapFrame implements Closeable, WindowListener {
         _keyInterceptor.step(level);
     }
     
-    /**
-     * On KEY_UP, create another random set of overlays and have them
-     * displayed over the base map.
-     */
-    private KeyInterceptor.KeyHook _onKeyArrowUp = (keyEvent) -> {
-        int nOverlays = _mapImage.getOverlaysCount();
-        int overlayMask = (int)((1 << nOverlays) * Math.random());
-        _mapCanvas.setOverlayMask(overlayMask);
+    private String[][] _demoOverlays = {
+            {"AB", "AC", "AD"},
+            {},
+            {"CA", "CB", "CD"},
+            {"DA", "DB", "DC"},
+            {"EA", "EB", "EC", "ED"}
+    };
+    private int[] _iOverlays = {-1, -1, -1, -1, -1};
+    private KeyInterceptor.KeyHook _onKeyACDE = (keyEvent) -> {
+        
+        int iO = Character.toUpperCase(keyEvent.getKeyChar()) - 'A';
+        _iOverlays[iO]++;
+        if (_iOverlays[iO] == _demoOverlays[iO].length) {
+            _iOverlays[iO] = -1;
+        }
+        
+        List<String> overlays = new ArrayList<String>();
+        for (int i = 0; i < _iOverlays.length; i++) {
+            if (_iOverlays[i] >= 0) {
+                overlays.add(_demoOverlays[i][_iOverlays[i]]);
+            }
+        }
+        String[] overlaysArr = overlays.toArray(new String[overlays.size()]);
+        _mapCanvas.setOverlays(overlaysArr);
         _mapCanvas.repaint();
     };
     
-    /**
-     * On 'B', clean all overlays from the base map and repaint.
-     */
-    private KeyInterceptor.KeyHook _onKeyB = (keyEvent) -> {
-        _mapCanvas.setOverlayMask(0);
+    private KeyInterceptor.KeyHook _onKeyDelete = (keyEvent) -> {
+        _iOverlays = new int[] {-1, -1, -1, -1, -1};
+        _mapCanvas.setOverlays();
         _mapCanvas.repaint();
     };
     // EndRegion: KeyInterceptor wiring
 
     public MapFrame(MapImage mapImage) throws IOException {
         _mapImage = mapImage;
-        _keyInterceptor.setKeyPressedHook(KeyEvent.VK_UP, _onKeyArrowUp);
-        _keyInterceptor.setKeyTypedHook('B', _onKeyB);
+        
+        // hook in the key intercepts
+        _keyInterceptor.setKeyTypedHook('A', _onKeyACDE);
+        _keyInterceptor.setKeyTypedHook('C', _onKeyACDE);
+        _keyInterceptor.setKeyTypedHook('D', _onKeyACDE);
+        _keyInterceptor.setKeyTypedHook('E', _onKeyACDE);
+        _keyInterceptor.setKeyPressedHook(KeyEvent.VK_DELETE, _onKeyDelete);
         
         _frame = new Frame(TITLE);
         _frame.pack();
