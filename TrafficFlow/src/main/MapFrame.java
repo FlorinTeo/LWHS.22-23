@@ -21,7 +21,7 @@ public class MapFrame implements Closeable, WindowListener {
     private KeyInterceptor _keyInterceptor = new KeyInterceptor();
     
     public void step() {
-        _keyInterceptor.step(0);
+        _keyInterceptor.step(1);
     }
     
     public void step(int level) {

@@ -64,24 +64,22 @@ public class KeyInterceptor implements KeyListener {
         synchronized (_sync) {
             char ch = keyEvent.getKeyChar();
             switch (Character.toUpperCase(ch)) {
-            case ' ':
-                _keyStepLevel = 0;
-                _sync.notifyAll();
-                break;
             case '1':
+                // Continue execution. Ignore all step(0) or lesser,
+                // break on next step(1) or greater. 
                 _keyStepLevel = 1;
                 _sync.notifyAll();
                 break;
             case '2':
+                // Continue execution. Ignore all step(1) or lesser,
+                // break on next step(2) or greater. 
                 _keyStepLevel = 2;
                 _sync.notifyAll();
                 break;
-            case 'C':
+            case ' ':
+                // Fast-forward the execution, ignore all code step() calls. 
                 _keyStepLevel = Integer.MAX_VALUE;
                 _sync.notifyAll();
-                break;
-            case 'Q':
-                System.exit(0);
                 break;
             default:
                 forwardKeyEvent(keyEvent, _keyTypedHooks);
@@ -91,7 +89,15 @@ public class KeyInterceptor implements KeyListener {
     
     @Override
     public void keyPressed(KeyEvent keyEvent) {
-        forwardKeyEvent(keyEvent, _keyPressedHooks);
+        synchronized (_sync) {
+            switch (keyEvent.getKeyCode()) {
+            case KeyEvent.VK_ESCAPE:
+                System.exit(0);
+                break;
+            default:
+                forwardKeyEvent(keyEvent, _keyPressedHooks);
+            }
+        }
     }
     
     @Override
