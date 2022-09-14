@@ -2,14 +2,11 @@ package main;
 
 import java.awt.Frame;
 import java.awt.Insets;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.image.BufferedImage;
 import java.io.Closeable;
-import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 public class MapFrame implements Closeable, WindowListener {
 
@@ -18,13 +15,42 @@ public class MapFrame implements Closeable, WindowListener {
 
     private Frame _frame = null;
     private MapCanvas _mapCanvas = null;
+    private MapImage _mapImage = null;
+    
+    // Region: KeyInterceptor wiring
+    private KeyInterceptor _keyInterceptor = new KeyInterceptor();
+    
+    public void step() {
+        _keyInterceptor.step(0);
+    }
+    
+    public void step(int level) {
+        _keyInterceptor.step(level);
+    }
+    
+    private KeyInterceptor.KeyHook _onKeyArrowUp = (keyEvent) -> {
+        int nOverlays = _mapImage.getCountOverlays();
+        int overlayMask = (int)((1 << nOverlays) * Math.random());
+        _mapCanvas.setOverlayMask(overlayMask);
+        _mapCanvas.repaint();
+    };
+    
+    private KeyInterceptor.KeyHook _onKeyB = (keyEvent) -> {
+        _mapCanvas.setOverlayMask(0);
+        _mapCanvas.repaint();
+    };
+    // EndRegion: KeyInterceptor wiring
 
     public MapFrame(MapImage mapImage) throws IOException {
+        _mapImage = mapImage;
+        _keyInterceptor.setKeyPressedHook(KeyEvent.VK_UP, _onKeyArrowUp);
+        _keyInterceptor.setKeyTypedHook('B', _onKeyB);
+        
         _frame = new Frame(TITLE);
         _frame.pack();
         Insets insets = _frame.getInsets();
-        _frame.setSize(insets.left + PADDING + mapImage.getWidth() + PADDING + insets.right,
-                insets.top + PADDING + mapImage.getHeight() + PADDING + insets.bottom);
+        _frame.setSize(insets.left + PADDING + _mapImage.getWidth() + PADDING + insets.right,
+                insets.top + PADDING + _mapImage.getHeight() + PADDING + insets.bottom);
         _frame.setLayout(null);
         _frame.setLocationRelativeTo(null);
         _frame.setResizable(false);
@@ -32,9 +58,10 @@ public class MapFrame implements Closeable, WindowListener {
         _mapCanvas = new MapCanvas(
                 insets.left + PADDING, 
                 insets.top + PADDING,
-                mapImage);
+                _mapImage);
+        _mapCanvas.addKeyListener(_keyInterceptor);
+        
         _frame.add(_mapCanvas);
-
         _frame.addWindowListener(this);
     }
 
@@ -47,14 +74,6 @@ public class MapFrame implements Closeable, WindowListener {
         _frame.setVisible(false);
         _frame.dispose();
         _frame = null;
-    }
-
-    public void step() {
-        _mapCanvas.step(0);
-    }
-    
-    public void step(int level) {
-        _mapCanvas.step(level);
     }
 
     // Region: WindowListener overrides
