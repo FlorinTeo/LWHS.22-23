@@ -28,6 +28,10 @@ public class MapFrame implements Closeable, WindowListener {
         _keyInterceptor.step(level);
     }
     
+    /**
+     * On KEY_UP, create another random set of overlays and have them
+     * displayed over the base map.
+     */
     private KeyInterceptor.KeyHook _onKeyArrowUp = (keyEvent) -> {
         int nOverlays = _mapImage.getCountOverlays();
         int overlayMask = (int)((1 << nOverlays) * Math.random());
@@ -35,6 +39,9 @@ public class MapFrame implements Closeable, WindowListener {
         _mapCanvas.repaint();
     };
     
+    /**
+     * On 'B', clean all overlays from the base map and repaint.
+     */
     private KeyInterceptor.KeyHook _onKeyB = (keyEvent) -> {
         _mapCanvas.setOverlayMask(0);
         _mapCanvas.repaint();
