@@ -50,7 +50,7 @@ public class MapImage {
         return entry.getValue();
     }
     
-    public int getCountOverlays() {
+    public int getOverlaysCount() {
         return _mapOverlays.size();
     }
     

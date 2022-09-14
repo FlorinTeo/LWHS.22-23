@@ -33,7 +33,7 @@ public class MapFrame implements Closeable, WindowListener {
      * displayed over the base map.
      */
     private KeyInterceptor.KeyHook _onKeyArrowUp = (keyEvent) -> {
-        int nOverlays = _mapImage.getCountOverlays();
+        int nOverlays = _mapImage.getOverlaysCount();
         int overlayMask = (int)((1 << nOverlays) * Math.random());
         _mapCanvas.setOverlayMask(overlayMask);
         _mapCanvas.repaint();
