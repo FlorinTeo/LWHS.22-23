@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 
@@ -43,11 +42,6 @@ public class MapImage {
     
     public BufferedImage getOverlay(String layerName) {
         return _mapOverlays.get(layerName);
-    }
-    
-    public BufferedImage getOverlay(int iOverlay) {
-        Entry<String, BufferedImage> entry = (Entry<String, BufferedImage>)(_mapOverlays.entrySet().toArray()[iOverlay]);
-        return entry.getValue();
     }
     
     public int getOverlaysCount() {
