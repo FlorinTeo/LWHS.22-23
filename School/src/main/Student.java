@@ -84,7 +84,7 @@ public class Student {
         // isBlank() returns true if string is either empty or has only white chars.
         // isEmpty() returns true only if string is empty.
         // For us is sufficient to use the encommpassing isBlank()
-        if (_name.isBlank()) {
+        if (_name == null || _name.trim().isEmpty()) {
             return false;
         }
         
