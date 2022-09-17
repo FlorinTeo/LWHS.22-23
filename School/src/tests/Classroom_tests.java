@@ -58,15 +58,15 @@ class Classroom_tests {
         // initially the classroom has 0 students.
         assertEquals(0, _classroom.size());
         // Seating a student out of bounds of the classroom is expected to fail.
-        assertFalse(_classroom.setStudent(_students[0], 4, 0));
+        assertFalse(_classroom.seatStudent(_students[0], 4, 0));
         // Seating a student on a valid seat is expected to succeed.
-        assertTrue(_classroom.setStudent(_students[0], 0, 0));
+        assertTrue(_classroom.seatStudent(_students[0], 0, 0));
         // Now the classroom should have one student.
         assertEquals(1, _classroom.size());
         // And should be the first student, seated in the first seat.
         assertEquals(_students[0], _classroom.getStudent(0, 0));
         // Seating another student on the last seat in the class should succeed.
-        assertTrue(_classroom.setStudent(_students[3], 3, 2));
+        assertTrue(_classroom.seatStudent(_students[3], 3, 2));
         // Now there are two students in the classroom.
         assertEquals(2, _classroom.size());
         // Last student is seated on the last seat of the classroom.
@@ -90,7 +90,7 @@ class Classroom_tests {
         // free up (unseat students from) one of the seats, then
         // add again the 4 students verifying that the freed seat is used
         // as expected by the first student in the batch.
-        assertTrue(_classroom.setStudent(null, 0, 1));
+        assertTrue(_classroom.seatStudent(null, 0, 1));
         assertEquals(3, _classroom.size());
         assertTrue(_classroom.addStudents(_students));
         assertEquals(7, _classroom.size());

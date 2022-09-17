@@ -50,13 +50,29 @@ public class Classroom {
      * @param col - the column where the student should sit.
      * @return - true if successful, false if the seat is out of bounds.
      */
-    public boolean setStudent(Student student, int row, int col) {
+    public boolean seatStudent(Student student, int row, int col) {
         if (row < _seating.length && col < _seating[row].length) {
             _seating[row][col] = student;
             return true;
         } else {
             return false;
         }
+    }
+    
+    /**
+     * Verifies if this classroom configuration is valid:
+     * - _seating has been created (valid row & columns)
+     * - _name exists and is not empty.
+     * @return true if classroom is valid, false otherwise.
+     */
+    public boolean isValid() {
+        if (_seating == null) {
+            return false;
+        }
+        if (_name == null || _name.trim().isEmpty()) {
+            return false;
+        }
+        return true;
     }
     
     /**
@@ -84,7 +100,11 @@ public class Classroom {
      * @return - success or failure if class is full and cannot accomodate all students.
      */
     public boolean addStudents(Student... students) {
+        // set the index to the first student in the students array who needs seating.
         int i = 0;
+        // scan each seat in the classroom, for as long as there are still students
+        // to be seated. If a seat is empty, give it to the student i, then advance
+        // to the next student to be seated.
         for (int r = 0; r < _seating.length && i < students.length; r++) {
             for (int c = 0; c < _seating[r].length && i < students.length; c++) {
                 if (_seating[r][c] == null) {
@@ -94,6 +114,7 @@ public class Classroom {
             }
         }
         
+        // return true if all students were seated, false otherwise.
         return (i == students.length);
     }
     
