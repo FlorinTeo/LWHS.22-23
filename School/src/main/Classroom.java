@@ -16,7 +16,11 @@ public class Classroom {
      */
     public Classroom(String name, int rows, int cols) {
         _name = name;
-        _seating = new Student[rows][cols];
+        if (rows < 1 || cols < 1) {
+            _seating = null;
+        } else {
+            _seating = new Student[rows][cols];
+        }
     }
     
     /**
@@ -124,7 +128,7 @@ public class Classroom {
     @Override
     public String toString() {
         String output = "Classroom '" + _name + "'";
-        output += " [" + _seating.length + " x " + _seating[0].length + "]";
+        output += " layout " + _seating.length + " by " + _seating[0].length;
         output += " has " + size() + " students";
         return output;
     }

@@ -44,17 +44,18 @@ class Classroom_tests {
      * Tests the constructor and basic methods of a classroom
      */
     @Test
-    void testConstructor() {
-        assertEquals("CompSci Data Structures", _classroom.getName());
-        assertEquals(0, _classroom.size());
-        assertEquals("Classroom 'CompSci Data Structures' [4 x 3] has 0 students", _classroom.toString());
+    void test_Classroom() {
+        Classroom class1 = new Classroom("Data Structures", 4, 8);
+        assertEquals("Classroom 'Data Structures' layout 4 by 8 has 0 students", class1.toString());
+        class1 = new Classroom("Other class", -1, 0);
+        assertFalse(class1.isValid());
     }
     
     /**
      * Tests the Student accessor and mutator of the classroom.
      */
     @Test
-    void testGetSetStudent() {
+    void test_seatStudent() {
         // initially the classroom has 0 students.
         assertEquals(0, _classroom.size());
         // Seating a student out of bounds of the classroom is expected to fail.
@@ -77,7 +78,7 @@ class Classroom_tests {
      * Tests adding students as a batch.
      */
     @Test
-    void testAddStudents() {
+    void test_addStudents() {
         // classroom is initially empty
         assertEquals(0, _classroom.size());
         // add all 4 students then verify the classroom size and

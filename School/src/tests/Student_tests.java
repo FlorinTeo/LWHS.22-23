@@ -8,7 +8,7 @@ import main.Student;
 class Student_tests {
 
     @Test
-    void testConstructor() {
+    void test_Student() {
         // Tests a properly created student instance
         // returns the expected string
         Student fiona = new Student(123, "Fiona Fantastic", 9);
@@ -16,7 +16,7 @@ class Student_tests {
     }
     
     @Test
-    void testAccessors() {
+    void test_get() {
         // Tests that a properly created student instance
         // returns the expected values for each of its accessors
         Student mary = new Student(451, "Mary Marvellous", 12);
@@ -26,7 +26,7 @@ class Student_tests {
     }
     
     @Test
-    void testMutator() {
+    void test_set() {
         // Tests that a properly created student instance
         // can be modified via its mutator and the modified value is visible via the accessor
         Student brian = new Student(743, "Brian Briliant", 11);
@@ -36,7 +36,7 @@ class Student_tests {
     }
     
     @Test
-    void testIsValid() {
+    void test_isValid() {
         // Tests a student with an empty or blank name is correctly marked as invalid
         // Once the name is set to something non blank/empty then instance becomes valid
         Student sean = new Student(852, "", 10);
