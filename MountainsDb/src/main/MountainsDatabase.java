@@ -8,14 +8,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class MountainsDb {
+public class MountainsDatabase {
     private Path _dbPath;
     private boolean _scanned;
     private Path _absolutePath;
     private long _size;
     private long _nLines;
+    
+    public boolean _debug = false;
 
-    public MountainsDb(String dbFilePath) {
+    public MountainsDatabase(String dbFilePath) {
         _dbPath = Paths.get(dbFilePath);
         _absolutePath = null;
         _scanned = false;
@@ -76,51 +78,58 @@ public class MountainsDb {
         writer1.close();
     }
 
-    public void merge() throws IOException {
+    private MountainRecord nextRecord(BufferedReader reader) throws IOException {
+        return reader.ready()
+                ? new MountainRecord(reader.readLine())
+                : null;
+    }
+    
+    public boolean merge() throws IOException {
+        boolean isSorted = true;
         BufferedReader reader1 = Files.newBufferedReader(Paths.get(_dbPath + "_1"), StandardCharsets.UTF_8);
         BufferedReader reader2 = Files.newBufferedReader(Paths.get(_dbPath + "_2"), StandardCharsets.UTF_8);
-        BufferedWriter writer = Files.newBufferedWriter(Paths.get(_dbPath + "_merged"), StandardCharsets.UTF_8);
+        BufferedWriter writer = Files.newBufferedWriter(_dbPath, StandardCharsets.UTF_8);
 
         String header = reader1.readLine();
         reader2.readLine();
         writer.write(header + "\n");
 
-        MountainRecord rec1 = null;
-        MountainRecord rec2 = null;
-        while (rec1 == null || rec2 == null) {
-            if (rec1 == null) {
-                rec1 = new MountainRecord(reader1.readLine());
-            }
-            if (rec2 == null) {
-                rec2 = new MountainRecord(reader2.readLine());
-            }
-
-            if (rec1.getElevation("m") < rec2.getElevation("m")) {
-                writer.write(rec1.getRawLine() + "\n");
-                if (reader1.ready()) {
-                    rec1 = null;
+        MountainRecord rec1 = nextRecord(reader1);
+        MountainRecord rec2 = nextRecord(reader2);
+        double lastElevation = -1;
+        while (rec1 != null || rec2 != null) {
+            MountainRecord rec = null;
+            if (rec1 != null && rec2 != null) {
+                if (rec1.getElevation("ft") < rec2.getElevation("ft")) {
+                    rec = rec1;
+                    rec1 = nextRecord(reader1);
+                } else {
+                    rec = rec2;
+                    rec2 = nextRecord(reader2);
                 }
-            } else {
-                writer.write(rec2.getRawLine() + "\n");
-                if (reader2.ready()) {
-                    rec2 = null;
-                }
+            } else if (rec1 != null) {
+                rec = rec1;
+                rec1 = nextRecord(reader1);
+            } else if (rec2 != null) {
+                rec = rec2;
+                rec2 = nextRecord(reader2);
             }
+            
+            writer.write(rec.getRawLine() + "\n");
+            if (_debug && lastElevation > rec.getElevation("ft")) {
+                System.out.println(rec);
+            }
+            isSorted = isSorted && (lastElevation <= rec.getElevation("ft"));
+            lastElevation = rec.getElevation("ft");
         }
-
-        while (reader1.ready()) {
-            writer.write(reader1.readLine() + "\n");
-        }
-
-        while (reader2.ready()) {
-            writer.write(reader2.readLine() + "\n");
-        }
-
+        
         writer.close();
         reader1.close();
         reader2.close();
         Files.delete(Paths.get(_dbPath + "_1"));
         Files.delete(Paths.get(_dbPath + "_2"));
+
+        return isSorted;
     }
 
     @Override
