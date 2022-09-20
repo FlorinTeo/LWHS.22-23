@@ -39,7 +39,7 @@ class Classroom_tests {
     void setUp() throws Exception {
         _classroom = new Classroom("CompSci Data Structures", 4, 3);
     }
-
+    
     /**
      * Tests the constructor and basic methods of a classroom
      */
@@ -49,6 +49,9 @@ class Classroom_tests {
         assertEquals("Classroom 'Data Structures' layout 4 by 8 has 0 students", class1.toString());
         class1 = new Classroom("Other class", -1, 0);
         assertFalse(class1.isValid());
+        
+        Exception e = assertThrows(IllegalArgumentException.class, ()->{ new Classroom("No classroom", -1, -1); });
+        assertEquals("Wrong layout", e.getMessage());
     }
     
     /**

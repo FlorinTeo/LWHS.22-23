@@ -2,6 +2,7 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import main.MountainRecord;
@@ -12,7 +13,7 @@ class MountainRecord_tests {
     void test_MountainRecord() {
         MountainRecord mtRainier = new MountainRecord(
                 "United States	Volcano	Mount Rainier	46.8528543410397	-121.760530471802	4392 m");
-        assertEquals(
+        Assert.assertEquals(
                 "Volcano Mount Rainier in United States [lat:46.852854, lon:-121.760530], elevation 14409.448841 ft",
                 mtRainier.toString());
     }

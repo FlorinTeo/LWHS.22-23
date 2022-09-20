@@ -16,6 +16,9 @@ public class Classroom {
      */
     public Classroom(String name, int rows, int cols) {
         _name = name;
+        if (rows < 0 && cols < 0) {
+            throw new IllegalArgumentException("Wrong layout");
+        }
         if (rows < 1 || cols < 1) {
             _seating = null;
         } else {
