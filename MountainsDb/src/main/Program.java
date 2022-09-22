@@ -19,6 +19,7 @@ import java.nio.file.Paths;
 
 public class Program {
     
+    //Region: demo code
     public static void demoRead1() throws IOException {
         File f = new File("mountains_db.tsv");
         FileInputStream fis = new FileInputStream(f);
@@ -80,26 +81,11 @@ public class Program {
         bw.write("New Zealand\tMountain\tOutlaw Peak..." + "\n");
         bw.close();
     }
+    //EndRegion:demo code
 
     public static void main(String[] args) throws Exception {
-//        demoWrite3();
         MountainsDatabase mountainsDb = new MountainsDatabase("mountains.tsv");
         System.out.println(mountainsDb);
-        int i = 0;
-        do {
-            mountainsDb.split();
-            System.out.printf(".");
-            i++;
-            if (i % 50 == 0) {
-                System.out.println();
-            }
-            if (i == 1000) {
-                mountainsDb._debug = true;
-            }
-            if (i > 1100) {
-                break;
-            }
-        } while(!mountainsDb.merge());
-        System.out.println("SORTED!");
+        mountainsDb.fuzzy("mountains_db.tsv");
     }
 }

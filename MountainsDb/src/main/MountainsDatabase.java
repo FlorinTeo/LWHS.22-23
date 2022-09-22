@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Random;
 
 public class MountainsDatabase {
     private Path _dbPath;
@@ -17,6 +18,12 @@ public class MountainsDatabase {
     
     public boolean _debug = false;
 
+    private static MountainRecord nextRecord(BufferedReader reader) throws IOException {
+        return reader.ready()
+                ? new MountainRecord(reader.readLine())
+                : null;
+    }
+    
     public MountainsDatabase(String dbFilePath) {
         _dbPath = Paths.get(dbFilePath);
         _absolutePath = null;
@@ -53,6 +60,43 @@ public class MountainsDatabase {
         }
     }
 
+    public void fuzzy(String dbFuzzyPath) throws IOException {
+        BufferedReader inClean = Files.newBufferedReader(_dbPath, StandardCharsets.UTF_8);
+        BufferedWriter outFuzzy = Files.newBufferedWriter(Paths.get(dbFuzzyPath), StandardCharsets.UTF_8);
+        
+        Random r = new Random();
+        int iRec = 0;
+        int nFuzzy = 0;
+        while(inClean.ready()) {
+            String line = inClean.readLine();
+            iRec++;
+            if (iRec == 1) {
+                outFuzzy.write(line + "\n");
+            } else try {
+                MountainRecord m = new MountainRecord(line);
+                int rnd = r.nextInt(35389);
+                if (rnd < 200) {
+                    nFuzzy++;
+                    outFuzzy.write(m.getFuzzyLine(rnd % 12) +"\n");
+                    System.out.printf("\n[%d]>%d", iRec, rnd % 12);
+                } else {
+                    outFuzzy.write(m.getRawLine() +"\n");
+                    System.out.print(".");
+                    if (iRec % 100 == 0) {
+                        System.out.println();
+                    }
+                }
+            } catch(Exception e) {
+                System.out.printf("[%d] %s\n", iRec, e.getMessage());
+            }
+        }
+        
+        System.out.printf("\nFuzzied %d records\n", nFuzzy);
+        
+        outFuzzy.close();
+        inClean.close();
+    }
+    
     public void split() throws IOException {
         scan();
         BufferedReader reader = Files.newBufferedReader(_dbPath, StandardCharsets.UTF_8);
@@ -78,12 +122,6 @@ public class MountainsDatabase {
         writer1.close();
     }
 
-    private MountainRecord nextRecord(BufferedReader reader) throws IOException {
-        return reader.ready()
-                ? new MountainRecord(reader.readLine())
-                : null;
-    }
-    
     public boolean merge() throws IOException {
         boolean isSorted = true;
         BufferedReader reader1 = Files.newBufferedReader(Paths.get(_dbPath + "_1"), StandardCharsets.UTF_8);
