@@ -19,8 +19,18 @@ import java.nio.file.Paths;
 
 public class Program {
     
-    //Region: demo code
+    //Region: demo reading code
     public static void demoRead1() throws IOException {
+        File f = new File("mountains_db.tsv");
+        FileReader fr = new FileReader(f);
+        BufferedReader br = new BufferedReader(fr);
+        while(br.ready()) {
+            System.out.println(br.readLine());
+        }
+        br.close();
+    }
+    
+    public static void demoRead2() throws IOException {
         File f = new File("mountains_db.tsv");
         FileInputStream fis = new FileInputStream(f);
         InputStreamReader isr = new InputStreamReader(
@@ -33,16 +43,6 @@ public class Program {
         br.close();
     }
 
-    public static void demoRead2() throws IOException {
-        File f = new File("mountains_db.tsv");
-        FileReader fr = new FileReader(f);
-        BufferedReader br = new BufferedReader(fr);
-        while(br.ready()) {
-            System.out.println(br.readLine());
-        }
-        br.close();
-    }
-    
     public static void demoRead3() throws IOException {
         Path dbPath = Paths.get("mountains_db.tsv");
         BufferedReader br = Files.newBufferedReader(
@@ -52,6 +52,16 @@ public class Program {
             System.out.println(br.readLine());
         }
         br.close();
+    }
+    //EndRegion: demo reading code
+
+    //Region: demo writing code
+    public static void demoWrite2() throws IOException {
+        File f = new File("mountains_err.tsv");
+        FileWriter fw = new FileWriter(f);
+        BufferedWriter bw = new BufferedWriter(fw);
+        bw.write("New Zealand\tMountain\tOutlaw Peak..." + "\n");
+        bw.close();
     }
     
     public static void demoWrite1() throws IOException {
@@ -64,14 +74,6 @@ public class Program {
         bw.write("New Zealand\tMountain\tOutlaw Peak..." + "\n");
         bw.close();
     }
-
-    public static void demoWrite2() throws IOException {
-        File f = new File("mountains_err.tsv");
-        FileWriter fw = new FileWriter(f);
-        BufferedWriter bw = new BufferedWriter(fw);
-        bw.write("New Zealand\tMountain\tOutlaw Peak..." + "\n");
-        bw.close();
-    }
     
     public static void demoWrite3() throws IOException {
         Path dbPath = Paths.get("mountains_err.tsv");
@@ -81,7 +83,7 @@ public class Program {
         bw.write("New Zealand\tMountain\tOutlaw Peak..." + "\n");
         bw.close();
     }
-    //EndRegion:demo code
+    //EndRegion:demo writing code
 
     public static void main(String[] args) throws Exception {
         MountainsDatabase mountainsDb = new MountainsDatabase("mountains.tsv");

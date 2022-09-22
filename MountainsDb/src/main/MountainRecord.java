@@ -73,7 +73,7 @@ public class MountainRecord {
                     (int)_elevation,
                     _elevationUnit);
         case 5: // ..elevation<extra tab>
-            return String.format("%s\t%s\t%s\t%f\t%f\t%d\t",
+            return String.format("%s\t%s\t%s\t%f\t%f\t%d\tm",
                     _country, _type, _name,
                     _latitude, _longitude,
                     (int)_elevation);
