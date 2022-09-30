@@ -5,13 +5,19 @@ public class Program {
     private static FiboCache _fiboCache = new FiboCache(1000);
     
     private static long fibonacci(int n) {
+        return n < 2
+            ? n
+            : fibonacci(n-1) + fibonacci(n-2);
+    }
+    
+    private static long fastFibonacci(int n) {
         Long fiboValue = _fiboCache.retrieveFibo(n);
         if (fiboValue != null) {
             return fiboValue;
         } else {
             fiboValue = n < 2
                     ? n
-                    : fibonacci(n-1) + fibonacci(n-2);
+                    : fastFibonacci(n-1) + fastFibonacci(n-2);
             _fiboCache.cacheFibo(n, fiboValue);
             return fiboValue;
         }
@@ -31,7 +37,7 @@ public class Program {
                 continue;
             }
             int n = Integer.parseInt(line);
-            System.out.printf("%d\n",fibonacci(n));
+            System.out.printf("%d\n",fastFibonacci(n));
             System.out.println(_fiboCache);
         } while(true);
         
