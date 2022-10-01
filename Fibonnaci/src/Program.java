@@ -33,7 +33,7 @@ public class Program {
             if (line.equalsIgnoreCase("quit")) {
                 break;
             }
-            if (line.isBlank()) {
+            if (line.isEmpty()) {
                 continue;
             }
             int n = Integer.parseInt(line);
