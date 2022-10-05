@@ -13,6 +13,8 @@ from
 	join [dbo].[PropertyBag] pb on pb.EntityId = m.EntityId
 	join [dbo].[LkpProperties] p on p.PropertyId = pb.PropertyId
 where
+    --m.EntityId = 5zMDP_7419866682933379073 --Everest
 	c.TypeId = 40
 	and m.Name_en is not null
 	and m.TypeId in (70, 107, 108, 181)
+	
