@@ -19,10 +19,11 @@ public class NumCalc {
      */
     private void buildExprList(String[] exprStrings) {
         for(String exprString : exprStrings) {
+            RawNode newNode = RawNode.createNode(exprString);
             if (_head == null) {
-                _head = new RawNode(exprString);
+                _head = newNode;
             } else {
-                _head.addTail(new RawNode(exprString));
+                _head.addTail(newNode);
             }
         }
     }
@@ -47,10 +48,11 @@ public class NumCalc {
             traceFrame += node.getRawContent() + " ";
         }
         
+        RawNode newTraceNode = RawNode.createNode(traceFrame);
         if (_trace == null) {
-            _trace = new RawNode(traceFrame);
+            _trace = newTraceNode;
         } else {
-            _trace.addTail(new RawNode(traceFrame));
+            _trace.addTail(newTraceNode);
         }
     }
     

@@ -6,8 +6,18 @@ public class RawNode {
     private RawNode _next;
     
     /**
+     * Node factory method, returning a new node for the given raw content
+     * or null if the node could not be created.
+     * @param rawContent - the row content stored in this node.
+     * @return the new node.
+     */
+    public static RawNode createNode(String rawContent) {
+        return new RawNode(rawContent, null, null);
+    }
+    
+    /**
      * Class constructor. Transfers parameters in the class fields.
-     * @param rawContent - the raw content hosted by this node.
+     * @param rawContent - the row content stored in this node.
      * @param previous - link to the previous node, or null if none exists.
      * @param next - link to the next node, or null if none exists.
      */
@@ -15,14 +25,6 @@ public class RawNode {
         _rawContent = rawContent;
         _prev = previous;
         _next = next;
-    }
-    
-    /**
-     * Convenience constructor overload, for a node with null links.
-     * @param rawContent - the raw content hosted by this node.
-     */
-    public RawNode(String rawContent) {
-        this(rawContent, null, null);
     }
     
     /**
