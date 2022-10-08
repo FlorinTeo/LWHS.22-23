@@ -16,9 +16,9 @@ public class NumNode extends RawNode {
      * NumNode factory method, returning a new numerical node 
      * for the given raw content or null if the node could not be created.
      * @param rawContent - the raw content stored in this node.
-     * @return the new NumNode as a RawNode.
+     * @return the new numerical node.
      */
-    public static RawNode createNode(String rawContent) {
+    public static NumNode createNode(String rawContent) {
         NumNode numNode;
         try {
             double numContent = Double.parseDouble(rawContent);

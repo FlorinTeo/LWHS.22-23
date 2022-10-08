@@ -1,9 +1,21 @@
 package main;
 
+import java.util.Arrays;
+
 public class NumCalc {
     
     private RawNode _head = null;
     private RawNode _trace = null;
+    
+    /**
+     * Operator precedence table:
+     * @see <a href="https://refreshjava.com/java/operator-precedence">operator-precedence</a>
+     */
+    private OpNode.OpCode[][] _opPrecedence = {
+            { OpNode.OpCode.POWER },
+            { OpNode.OpCode.MULTIPLICATION, OpNode.OpCode.DIVISION, OpNode.OpCode.MODULO },
+            { OpNode.OpCode.ADDITION, OpNode.OpCode.SUBTRACTION }
+    };
     
     /**
      * Class constructor.
@@ -31,7 +43,7 @@ public class NumCalc {
                     _head.addTail(newNode);
                 }
             } else {
-                throw new RuntimeException("Invalid expression string!");
+                throw new RuntimeException("Unrecognized token: " + exprString);
             }
         }
     }
@@ -42,8 +54,47 @@ public class NumCalc {
      * @return - evaluation result.
      */
     private String evalExprList() {
-        addTraceFrame();
-        return "<Result not implemented yet>";
+        for (OpNode.OpCode[] ops: _opPrecedence) {
+            for(RawNode node = _head; node != null; node = node._next) {
+                // skip nodes which are not operators
+                if (!(node instanceof OpNode)) {
+                    continue;
+                }
+                
+                OpNode opNode = (OpNode)node;
+                
+                // skip operator nodes which are not in the current precedence row
+                if (!Arrays.asList(ops).contains(opNode.getOpCode())) {
+                    continue;
+                }
+                
+                // evaluate the operator
+                NumNode resultNode = opNode.evaluate();
+                
+                // since evaluation succeeded, it means operator
+                // has valid _prev and _next numerical operand nodes.
+                
+                // set the _prev, _next link of the new result node
+                resultNode._prev = opNode._prev._prev;
+                resultNode._next = opNode._next._next;
+                
+                // link the new result node into the list
+                if (resultNode._prev != null) {
+                    resultNode._prev._next = resultNode;
+                } else {
+                    _head = resultNode;
+                }
+                if (resultNode._next != null) {
+                    resultNode._next._prev = resultNode;
+                }
+                
+                // since an operator has just been evaluated and the
+                // expression list changed, add a trace frame.
+                addTraceFrame();
+            }
+        }
+        
+        return _head.getRawContent();
     }
     
     /**

@@ -2,9 +2,9 @@ package main;
 
 public class RawNode {
     
-    private String _rawContent;
-    private RawNode _prev;
-    private RawNode _next;
+    protected String _rawContent;
+    protected RawNode _prev;
+    protected RawNode _next;
     
     /**
      * Class constructor. Builds a new generic raw content node.
