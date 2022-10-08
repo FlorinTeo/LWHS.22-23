@@ -35,7 +35,7 @@ public class RawNode {
     }
     
     /**
-     * Gets reference to the next node
+     * Accessor for the next node
      * @return the reference to the next node, or null if none exists.
      */
     public RawNode getNext() {
@@ -43,7 +43,7 @@ public class RawNode {
     }
     
     /**
-     * Gets the reference to the previous node.
+     * Accessor for the previous node.
      * @return the reference to the previous node, or null if none exists.
      */
     public RawNode getPrev() {
