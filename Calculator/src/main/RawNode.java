@@ -1,9 +1,20 @@
 package main;
 
 public class RawNode {
+    
     private String _rawContent;
     private RawNode _prev;
     private RawNode _next;
+    
+    /**
+     * Class constructor. Builds a new generic raw content node.
+     * @param rawContent - the raw content stored in this node.
+     */
+    protected RawNode(String rawContent) {
+        _rawContent = rawContent;
+        _prev = null;
+        _next = null;
+    }
     
     /**
      * Node factory method, returning a new node for the given raw content
@@ -12,23 +23,11 @@ public class RawNode {
      * @return the new node.
      */
     public static RawNode createNode(String rawContent) {
-        return new RawNode(rawContent, null, null);
+        return new RawNode(rawContent);
     }
     
     /**
-     * Class constructor. Transfers parameters in the class fields.
-     * @param rawContent - the row content stored in this node.
-     * @param previous - link to the previous node, or null if none exists.
-     * @param next - link to the next node, or null if none exists.
-     */
-    public RawNode(String rawContent, RawNode previous, RawNode next) {
-        _rawContent = rawContent;
-        _prev = previous;
-        _next = next;
-    }
-    
-    /**
-     * Accessor for the node's raw content.
+     * Gets the node's raw content.
      * @return the raw content.
      */
     public String getRawContent() {

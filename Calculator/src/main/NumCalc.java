@@ -19,11 +19,19 @@ public class NumCalc {
      */
     private void buildExprList(String[] exprStrings) {
         for(String exprString : exprStrings) {
-            RawNode newNode = RawNode.createNode(exprString);
-            if (_head == null) {
-                _head = newNode;
+            RawNode newNode = NumNode.createNode(exprString);
+            if (newNode == null) {
+                newNode = OpNode.createNode(exprString);
+            }
+            
+            if (newNode != null) {
+                if (_head == null) {
+                    _head = newNode;
+                } else {
+                    _head.addTail(newNode);
+                }
             } else {
-                _head.addTail(newNode);
+                throw new RuntimeException("Invalid expression string!");
             }
         }
     }
