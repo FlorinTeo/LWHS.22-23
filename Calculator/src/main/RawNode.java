@@ -43,6 +43,14 @@ public class RawNode {
     }
     
     /**
+     * Gets the previous node.
+     * @return the reference to the previous node, or null if none exists.
+     */
+    public RawNode getPrev() {
+        return _prev;
+    }
+    
+    /**
      * Adds another node right after this node.
      * @param other - the node to be added.
      * @return the node that's been added.
