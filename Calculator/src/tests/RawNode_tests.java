@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import junit.framework.Assert;
 import main.RawNode;
 
 class RawNode_tests {
