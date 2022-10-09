@@ -39,10 +39,10 @@ public class Program {
             } catch (Exception e) {
                 // in case of any exception, print the exception message
                 // and the full stack trace.
-                System.out.println();
+                // System.out.println();
                 System.out.printf("##Error: %s\n", e.getMessage());
-                System.out.printf("##Stack: ----------------\n");
-                e.printStackTrace();
+                // System.out.printf("##Stack: ----------------\n");
+                // e.printStackTrace();
                 System.out.println();
             }
         } while (true);

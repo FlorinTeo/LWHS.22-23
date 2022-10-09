@@ -43,14 +43,6 @@ public class RawNode {
     }
     
     /**
-     * Accessor for the previous node.
-     * @return the reference to the previous node, or null if none exists.
-     */
-    public RawNode getPrev() {
-        return _prev;
-    }
-    
-    /**
      * Adds another node right after this node.
      * @param other - the node to be added.
      * @return the node that's been added.
@@ -66,21 +58,6 @@ public class RawNode {
     }
     
     /**
-     * Adds another node ahead of this node.
-     * @param other - the node to be added.
-     * @return the node that's been added.
-     */
-    public RawNode addPrev(RawNode other) {
-        other._next = this;
-        other._prev = _prev;
-        if (_prev != null) {
-            _prev._next = other;
-        }
-        _prev = other;
-        return other;
-    }
-    
-    /**
      * Adds another node to the tail of the list.
      * @param other - the node to be added.
      * @return the new tail of the list.
@@ -90,19 +67,6 @@ public class RawNode {
             return addNext(other);
         } else {
             return _next.addTail(other);
-        }
-    }
-    
-    /**
-     * Adds another node to the head of the list.
-     * @param other - the node to be added.
-     * @return the new head of the list.
-     */
-    public RawNode addHead(RawNode other) {
-        if (_prev == null) {
-            return addPrev(other);
-        } else {
-            return _prev.addHead(other);
         }
     }
 }
