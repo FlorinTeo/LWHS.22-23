@@ -122,8 +122,8 @@ public class OpNode extends RawNode {
         }
         
         DecimalFormat df = new DecimalFormat("#0.######");
-        df.format(result);
-        return NumNode.createNode(df.format(result));
+        String resultString = df.format(result);
+        return NumNode.createNode(resultString);
     }
 
 }
