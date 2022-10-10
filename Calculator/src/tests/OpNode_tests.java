@@ -34,14 +34,14 @@ class OpNode_tests {
     @Test
     void test_evaluate() {
         String[][] tests = {
-                // operand1, operator, "operand2", expected_result
-                { "1", "+", "2", "3" },
-                { "1", "-", "2", "-1" },
-                { "3", "*", "4", "12" },
-                { "4", "/", "-5", "-0.8" },
-                { "7", "%", "5", "2" },
-                { "4", "^", "2", "16" },
-                { "8", "/", "0", null }
+                // operand1, operator, "operand2", expected_result, expected_exception_message
+                { "1", "+", "2", "3", null },
+                { "1", "-", "2", "-1", null },
+                { "3", "*", "4", "12", null },
+                { "4", "/", "-5", "-0.8", null },
+                { "7", "%", "5", "2", null },
+                { "4", "^", "2", "16", null },
+                { "8", "/", "0", null,"Division by zero" }
         };
         
         for (String[] test : tests) {
@@ -52,14 +52,13 @@ class OpNode_tests {
             op.addNext(n2);
             try {
                 NumNode result = op.evaluate();
-                assertNotNull(test[3]);
-                double expectedResult = Double.parseDouble(test[3]);
                 assertNotNull(result);
+                double expectedResult = Double.parseDouble(test[3]);
                 double actualResult = result.getNumValue();
                 assertEquals(expectedResult, actualResult);
             } catch (RuntimeException e) {
                 assertNull(test[3]);
-                assertEquals("Division by zero", e.getMessage());
+                assertEquals(test[4], e.getMessage());
             }
         }
     }

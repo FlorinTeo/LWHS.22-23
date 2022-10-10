@@ -107,7 +107,7 @@ public class NumCalc {
             traceFrame += node.getRawContent() + " ";
         }
         
-        RawNode newTraceNode = RawNode.createNode(traceFrame);
+        RawNode newTraceNode = RawNode.createNode(traceFrame.trim());
         if (_trace == null) {
             _trace = newTraceNode;
         } else {
