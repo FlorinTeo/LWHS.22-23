@@ -14,6 +14,7 @@ public class MapFrame implements Closeable, WindowListener {
 
     private static final String TITLE = "Traffic Flow Manager";
     private static final int PADDING = 4;
+    private static final int CTRLSHEIGHT = 40;
 
     private Frame _frame = null;
     private MapCanvas _mapCanvas = null;
@@ -77,15 +78,21 @@ public class MapFrame implements Closeable, WindowListener {
         _frame = new Frame(TITLE);
         _frame.pack();
         Insets insets = _frame.getInsets();
-        _frame.setSize(insets.left + PADDING + _mapImage.getWidth() + PADDING + insets.right,
-                insets.top + PADDING + _mapImage.getHeight() + PADDING + insets.bottom);
+        int frameWidth = insets.left + PADDING
+                + _mapImage.getWidth()
+                + PADDING + insets.right;
+        int frameHeight = insets.top + PADDING
+                + CTRLSHEIGHT + PADDING
+                + _mapImage.getHeight()
+                + PADDING + insets.bottom;
+        _frame.setSize(frameWidth, frameHeight);
         _frame.setLayout(null);
         _frame.setLocationRelativeTo(null);
         _frame.setResizable(false);
 
         _mapCanvas = new MapCanvas(
                 insets.left + PADDING, 
-                insets.top + PADDING,
+                insets.top + PADDING + CTRLSHEIGHT + PADDING,
                 _mapImage);
         _mapCanvas.addKeyListener(_keyInterceptor);
         
