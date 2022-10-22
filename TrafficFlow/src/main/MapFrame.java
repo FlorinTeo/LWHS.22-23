@@ -3,15 +3,16 @@ package main;
 import java.awt.Frame;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.Closeable;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapFrame implements Closeable, WindowListener {
+public class MapFrame implements Closeable, WindowListener, MouseListener {
 
     private static final String TITLE = "Traffic Flow Manager";
     private static final int PADDING = 4;
@@ -125,11 +126,12 @@ public class MapFrame implements Closeable, WindowListener {
         
         // add the controls
         for(MapButton dbgButton : _dbgButtons) {
+            dbgButton.addMouseListener(this);
+            dbgButton.addKeyListener(_keyInterceptor);
             _frame.add(dbgButton);
         }
         
         _frame.add(_mapCanvas);
-        
         // add the listeners
         _frame.addWindowListener(this);
     }
@@ -179,4 +181,35 @@ public class MapFrame implements Closeable, WindowListener {
     public void windowDeactivated(WindowEvent e) {
     }
     // EndRegion: WindowListener overrides
+
+    // Region: MouseListener overrides
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        boolean flip = false;
+        for (MapButton dbgButton : _dbgButtons) {
+            if (dbgButton == e.getSource()) {
+                flip = true;
+            }
+            if (flip) {
+                dbgButton.flip();
+            }
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+    // EndRegion: MouseListener overrides
 }
