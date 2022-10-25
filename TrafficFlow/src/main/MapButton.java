@@ -28,4 +28,9 @@ public class MapButton extends Canvas {
     public void paint(Graphics g) {
         g.drawImage(_btnFaces[_crtFace], 0, 0, null);
     }
+    
+    public void flip() {
+        _crtFace = 1 - _crtFace;
+        repaint();
+    }
 }
