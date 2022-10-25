@@ -106,7 +106,7 @@ public class Program {
         graphAppend.add("sList", countX, sListY);
         graphAppend.add("aList", countX, aListY);
         graphAppend.plot();
-        System.out.printf("sList max append = %f, aList max append = %f", sListY[99], aListY[99]);
+        System.out.printf("sList max append = %f, aList max append = %f\n", sListY[99], aListY[99]);
         
         System.out.println("Goodbye!");
     }
