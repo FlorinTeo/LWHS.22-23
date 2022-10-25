@@ -21,6 +21,13 @@ public interface SimpleList {
     void clear();
     
     /**
+     * Returns the element at the specified position in this list.
+     * @param index - index of the element to return.
+     * @return the element at the specified position in this list.
+     */
+    Object get(int index);
+    
+    /**
      * Removes the element at the specified position in this list.
      * @param index - the index of the element to be removed.
      * @return the element previously at the specified position.

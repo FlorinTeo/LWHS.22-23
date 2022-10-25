@@ -14,105 +14,109 @@ public class SimpleArrayList implements SimpleList {
             _data = data;
             _next = next;
         }
-        
-        private void addTail(SimpleNode other) {
-            if (_next == null) {
-                _next = other;
-            } else {
-                _next.addTail(other);;
-            }
-        }
-        
-        private SimpleNode atIndex(int index) {
-            if (index == 0) {
-                return this;
-            } else if (_next == null) {
-                return null;
-            } else {
-                return _next.atIndex(index - 1); 
-            }
-        }
-    };
+    }
     
-    private SimpleNode _list;
+    private SimpleNode _head;
+    private SimpleNode _tail;
+    private int _size;
+    
+    private SimpleNode nodeAtIndex(int index) {
+        if (index < 0 || index >= _size) {
+            throw new IndexOutOfBoundsException();
+        }
+        SimpleNode node = _head;
+        while(node != null && index > 0) {
+            node = node._next;
+            index--;
+        }
+        return node;
+    }
     
     public SimpleArrayList() {
-        _list = null;
+        _head = null;
+        _tail = null;
+        _size = 0;
     }
 
     @Override
     public boolean add(Object element) {
-        SimpleNode other = new SimpleNode(element);
-        if (_list == null) {
-            _list = other;
+        SimpleNode newNode = new SimpleNode(element);
+        if (_size == 0) {
+            _head = _tail = newNode;
         } else {
-            _list.addTail(other);
+            _tail._next = newNode;
+            _tail = newNode;
         }
+        _size++;
         return true;
     }
 
     @Override
     public void add(int index, Object element) {
+        SimpleNode newNode = new SimpleNode(element);
         if (index == 0) {
-            _list = new SimpleNode(element, _list);
+            newNode._next = _head;
+            _head = newNode;
         } else {
-            SimpleNode other = _list.atIndex(index-1);
-            if (other != null) {
-                other._next = new SimpleNode(element, other._next);
-            } else {
-                throw new IndexOutOfBoundsException();
-            }
+            SimpleNode node = nodeAtIndex(index-1);
+            newNode._next = node._next;
+            node._next = newNode;
         }
+        if (newNode._next == null) {
+            _tail = newNode;
+        }
+        _size++;
     }
-
+    
     @Override
     public void clear() {
-        _list = null;
+        _head = null;
+        _tail = null;
+        _size = 0;
     }
-
+    
+    @Override
+    public Object get(int index) {
+        SimpleNode node = nodeAtIndex(index);
+        return node._data;
+    }
+    
     @Override
     public Object remove(int index) {
-        SimpleNode removed = null;
-        if (_list == null) {
+        if (index < 0 || index >= _size) {
             throw new IndexOutOfBoundsException();
-        } else {
-            if (index == 0) {
-                removed = _list;
-                _list = _list._next;
+        }
+        
+        SimpleNode delNode = null;
+        if (index == 0) {
+            delNode = _head;
+            if (_head == _tail) {
+                _head = _tail = null;
             } else {
-                SimpleNode other = _list.atIndex(index-1);
-                if (other == null) {
-                    throw new IndexOutOfBoundsException();
-                }
-                removed = other._next;
+                _head = _head._next;
+            }
+        } else {
+            SimpleNode prevNode = nodeAtIndex(index - 1);
+            delNode = prevNode._next;
+            prevNode._next = delNode._next;
+            if (prevNode._next == null) {
+                _tail = prevNode;
             }
         }
-        return removed;
+        _size--;
+        return delNode._data;
     }
 
     @Override
     public Object set(int index, Object element) {
-        if (_list == null) {
-            throw new IndexOutOfBoundsException();
-        }
-        SimpleNode other = _list.atIndex(index);
-        if (other == null) {
-            throw new IndexOutOfBoundsException();
-        }
-        other._data = element;
-        return other;
+        SimpleNode node = nodeAtIndex(index);
+        Object prevElement = node._data;
+        node._data = element;
+        return prevElement;
     }
 
     @Override
     public int size() {
-        int count = 0;
-        SimpleNode node = _list;
-        while(node != null) {
-            count++;
-            node = node._next;
-        }
-        
-        return count;
+        return _size;
     }
-
 }
