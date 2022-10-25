@@ -4,13 +4,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import main.SimpleArrayList;
+import main.SimpleList;
 
-class SimpleArrayList_tests {
+class SimpleList_tests {
 
     @Test
     void test_add() {
-        SimpleArrayList sList = new SimpleArrayList();
+        SimpleList sList = new SimpleList();
         sList.add(11);
         sList.add(22);
         sList.add(33);
@@ -22,7 +22,7 @@ class SimpleArrayList_tests {
     
     @Test
     void test_addAtIndex() {
-        SimpleArrayList sList = new SimpleArrayList();
+        SimpleList sList = new SimpleList();
         sList.add(0, "abc");
         sList.add(1, "def");
         sList.add(0, "ghi");
@@ -34,7 +34,7 @@ class SimpleArrayList_tests {
     
     @Test
     void test_remove() {
-        SimpleArrayList sList = new SimpleArrayList();
+        SimpleList sList = new SimpleList();
         sList.add(0, "x");
         sList.add(1, "y");
         sList.add(2, "z");
