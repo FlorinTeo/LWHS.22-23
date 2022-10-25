@@ -2,6 +2,9 @@ package main;
 
 public class SimpleArrayList implements SimpleList {
     
+    /**
+     * SimpleNode definition of a single-linked list of Objects 
+     */
     private class SimpleNode {
         private Object _data;
         private SimpleNode _next;
@@ -16,107 +19,87 @@ public class SimpleArrayList implements SimpleList {
         }
     }
     
-    private SimpleNode _head;
-    private SimpleNode _tail;
-    private int _size;
-    
-    private SimpleNode nodeAtIndex(int index) {
-        if (index < 0 || index >= _size) {
-            throw new IndexOutOfBoundsException();
-        }
-        SimpleNode node = _head;
-        while(node != null && index > 0) {
-            node = node._next;
-            index--;
-        }
-        return node;
-    }
-    
+    /**
+     * TODO: Class fields: Keep track of the head and tail of the list
+     * TODO: and the number of nodes it contains.
+     */
     public SimpleArrayList() {
-        _head = null;
-        _tail = null;
-        _size = 0;
+        // TODO: Initialize class fields
     }
 
+    /**
+     * Appends the specified element to the end of this list (optional operation).
+     * @param element - element to be appended to this list.
+     * @return true
+     */
     @Override
     public boolean add(Object element) {
-        SimpleNode newNode = new SimpleNode(element);
-        if (_size == 0) {
-            _head = _tail = newNode;
-        } else {
-            _tail._next = newNode;
-            _tail = newNode;
-        }
-        _size++;
-        return true;
+        // TODO: Implement interface method add
+        throw new RuntimeException("Not yet implemented");
     }
-
+    
+    /**
+     * Inserts the specified element at the specified position in this list.
+     * @param index - index at which the specified element is to be inserted.
+     * @param element - element to be inserted.
+     */
     @Override
     public void add(int index, Object element) {
-        SimpleNode newNode = new SimpleNode(element);
-        if (index == 0) {
-            newNode._next = _head;
-            _head = newNode;
-        } else {
-            SimpleNode node = nodeAtIndex(index-1);
-            newNode._next = node._next;
-            node._next = newNode;
-        }
-        if (newNode._next == null) {
-            _tail = newNode;
-        }
-        _size++;
+        // TODO: Implement interface method add
+        throw new RuntimeException("Not yet implemented");
     }
     
+    /**
+     * Removes all of the elements from this list (optional operation).
+     */
     @Override
     public void clear() {
-        _head = null;
-        _tail = null;
-        _size = 0;
+        // TODO: Implement interface method clear
+        throw new RuntimeException("Not yet implemented");
     }
     
+    /**
+     * Returns the element at the specified position in this list.
+     * @param index - index of the element to return.
+     * @return the element at the specified position in this list.
+     */
     @Override
     public Object get(int index) {
-        SimpleNode node = nodeAtIndex(index);
-        return node._data;
+        // TODO: Implement interface method get
+        throw new RuntimeException("Not yet implemented");
     }
     
+    /**
+     * Removes the element at the specified position in this list.
+     * @param index - the index of the element to be removed.
+     * @return the element previously at the specified position.
+     */
     @Override
     public Object remove(int index) {
-        if (index < 0 || index >= _size) {
-            throw new IndexOutOfBoundsException();
-        }
-        
-        SimpleNode delNode = null;
-        if (index == 0) {
-            delNode = _head;
-            if (_head == _tail) {
-                _head = _tail = null;
-            } else {
-                _head = _head._next;
-            }
-        } else {
-            SimpleNode prevNode = nodeAtIndex(index - 1);
-            delNode = prevNode._next;
-            prevNode._next = delNode._next;
-            if (prevNode._next == null) {
-                _tail = prevNode;
-            }
-        }
-        _size--;
-        return delNode._data;
+        // TODO: Implement interface method remove
+        throw new RuntimeException("Not yet implemented");
     }
 
+    /**
+     * Replaces the element at the specified position in this list with the
+     * specified element.
+     * @param index - index of the element to replace.
+     * @param element - element to be stored at the specified position.
+     * @return the element previously at the specified position.
+     */
     @Override
     public Object set(int index, Object element) {
-        SimpleNode node = nodeAtIndex(index);
-        Object prevElement = node._data;
-        node._data = element;
-        return prevElement;
+        // TODO: Implement interface method set
+        throw new RuntimeException("Not yet implemented");
     }
 
+    /**
+     * Returns the number of elements in this list.
+     * @return the number of elements in this list.
+     */
     @Override
     public int size() {
-        return _size;
+        // TODO: Implement interface method size
+        throw new RuntimeException("Not yet implemented");
     }
 }
