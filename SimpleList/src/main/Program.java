@@ -1,14 +1,16 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import graph.Graph;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class Program {
     
     // Create two static lists: a standard ArrayList<Integer> and a custom SimpleArrayList.
-    private static ArrayList<Integer> aList = new ArrayList<Integer>();
-    private static SimpleArrayList sList = new SimpleArrayList();
+    private static List<Integer> aList = new ArrayList<Integer>();
+    private static SimpleList sList = new SimpleList();
     
     /**
      * Prepends the first {count} numbers starting from 1, into the given {list}.
@@ -17,15 +19,10 @@ public class Program {
      * @param count - count of numbers to be prepended.
      * @return the time it took for the entire operation, in nano seconds.
      */
-    public static double prependToList(Object list, int count) {
+    public static double prependToList(List list, int count) {
         long start = System.nanoTime();
         for (int n = 1; n <= count; n++) {
-            if (list == sList) {
-                sList.add(0, n);
-            }
-            if (list == aList) {
-                aList.add(0, n);
-            }
+            list.add(0, n);
         }
         return System.nanoTime() - start;
     }
@@ -37,15 +34,10 @@ public class Program {
      * @param count - count of numbers to be appended.
      * @return the time it took for the entire operation, in nano seconds.
      */
-    public static double appendToList(Object list, int count) {
+    public static double appendToList(List list, int count) {
         long start = System.nanoTime();
         for (int n = 1; n <= count; n++) {
-            if (list == sList) {
-                sList.add(n);
-            }
-            if (list == aList) {
-                aList.add(n);
-            }
+            list.add(n);
         }
         return System.nanoTime() - start;
     }
