@@ -284,12 +284,19 @@ public final class DrawingPanel extends FileFilter
     private int instanceNumber;
     private int currentZoom = 1;
     private int initialPixel;              // initial value in each pixel, for clear()
+    private String title = TITLE;
+    
+    public DrawingPanel(int width, int height) {
+        this(TITLE, width, height);
+    }
     
     // construct a drawing panel of given width and height enclosed in a window
-    public DrawingPanel(int width, int height) {
+    public DrawingPanel(String title, int width, int height) {
         if (width < 0 || width > MAX_SIZE || height < 0 || height > MAX_SIZE) {
             throw new IllegalArgumentException("Illegal width/height: " + width + " x " + height);
         }
+        
+        this.title = title;
         
         checkAnimationSettings();
         
@@ -370,7 +377,7 @@ public final class DrawingPanel extends FileFilter
             panel.addMouseMotionListener(this);
             
             // main window frame
-            frame = new JFrame(TITLE);
+            frame = new JFrame(title);
             // frame.setResizable(false);
             frame.addWindowListener(this);
             // JPanel center = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
