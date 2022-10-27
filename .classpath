@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="Calculator_Solved/src"/>
+	<classpathentry kind="src" path="Fibonnaci/src"/>
+	<classpathentry kind="src" path="Graph/src"/>
+	<classpathentry kind="src" path="HelloJavaWorld/src"/>
+	<classpathentry kind="src" path="ListSort/src"/>
+	<classpathentry kind="src" path="MountainsDb_Solved/src"/>
+	<classpathentry kind="src" path="School/src"/>
+	<classpathentry kind="src" path="SimpleList/src"/>
+	<classpathentry kind="src" path="TrafficFlow/src"/>
+	<classpathentry kind="lib" path="SimpleList/graph.jar"/>
+	<classpathentry kind="output" path="Calculator/bin"/>
+</classpath>
