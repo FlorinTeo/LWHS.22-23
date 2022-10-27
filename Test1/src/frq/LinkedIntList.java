@@ -64,6 +64,27 @@ public class LinkedIntList {
         return crt.getData();
     }
     
+    public int insert(int i) {
+        ListNode prev = null;
+        ListNode crt = _front;
+        while(crt != null && i > 0) {
+            i--;
+            prev = crt;
+            crt = crt._next;
+        }
+        if (crt == null) {
+            crt = new ListNode(1, null);
+        } else {
+            crt = new ListNode(2 * crt.getData(), crt);
+        }
+        if (prev == null) {
+            _front = crt;
+        } else {
+            prev._next = crt;
+        }
+        return crt.getData();
+    }
+    
     @Override
     public String toString() {
         String output = "[";
