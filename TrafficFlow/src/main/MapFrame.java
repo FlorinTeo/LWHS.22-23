@@ -85,9 +85,9 @@ public class MapFrame implements Closeable, WindowListener, MouseListener {
                         yAnchor,
                         String.format("res/%d_up.png", i+1),
                         String.format("res/%d_down.png", i+1));
-                xAnchor += _dbgButtons[i].getWidth() + PADDING;
+                xAnchor += _dbgButtons[i].getWidth();
             } else {
-                xAnchor += 3 * PADDING;
+                xAnchor += 8 * PADDING;
                 _dbgButtons[i] = new MapButton(
                         xAnchor,
                         yAnchor,
@@ -162,6 +162,7 @@ public class MapFrame implements Closeable, WindowListener, MouseListener {
         
         _frame.add(_mapCanvas);
         // add the listeners
+        _frame.addKeyListener(_keyInterceptor);
         _frame.addWindowListener(this);
     }
 
