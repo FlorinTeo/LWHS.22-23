@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
@@ -106,12 +107,17 @@ public class KeyInterceptor implements KeyListener {
     }
     // EndRegion: KeyListener overrides
     
+    // Region: Public methods
+    public boolean blocksOnLevel(int level) {
+        return (level >= _keyStepLevel);
+    }
+    
     public void step(int level) {
         synchronized (_sync) {
             try {
                 // block if level is same or greater than the key-typed level.
                 // (i.e step_0 won't block if user typed 2)
-                if (level >= _keyStepLevel) {
+                if (blocksOnLevel(level)) {
                     _sync.wait();
                 }
             } catch (InterruptedException e) {
@@ -119,4 +125,16 @@ public class KeyInterceptor implements KeyListener {
             }
         }
     }
+    
+    public void simulateKeyTyped(Component source, int keyEventKey) {
+        KeyEvent keyEvent = new KeyEvent(
+                source,
+                0,
+                0,
+                0,
+                keyEventKey,
+                (char)keyEventKey);
+        keyTyped(keyEvent);
+    }
+    // EndRegion: Public methods
 }

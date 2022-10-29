@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.MapButton.BtnState;
+
 public class MapFrame implements Closeable, WindowListener, MouseListener {
 
     private static final String TITLE = "Traffic Flow Manager";
@@ -25,11 +27,17 @@ public class MapFrame implements Closeable, WindowListener, MouseListener {
     // Region: KeyInterceptor wiring
     private KeyInterceptor _keyInterceptor = new KeyInterceptor();
     
-    public void step() {
+    public void step() throws InterruptedException {
+        if (_keyInterceptor.blocksOnLevel(1)) {
+            dbgButtonsEnable();
+        }
         _keyInterceptor.step(1);
     }
     
-    public void step(int level) {
+    public void step(int level) throws InterruptedException {
+        if (_keyInterceptor.blocksOnLevel(level)) {
+            dbgButtonsEnable();
+        }
         _keyInterceptor.step(level);
     }
     
@@ -67,8 +75,9 @@ public class MapFrame implements Closeable, WindowListener, MouseListener {
     };
     // EndRegion: KeyInterceptor wiring
 
-    private void setupDbgButtons(int xAnchor, int yAnchor) throws IOException {
-        _dbgButtons = new MapButton[4];
+    // Region: DbgButtons management
+    private void dbgButtonsSetup(int xAnchor, int yAnchor) throws IOException {
+        _dbgButtons = new MapButton[3];
         for (int i = 0; i < _dbgButtons.length; i++) {
             if (i < _dbgButtons.length - 1) {
                 _dbgButtons[i] = new MapButton(
@@ -85,8 +94,28 @@ public class MapFrame implements Closeable, WindowListener, MouseListener {
                         "res/ff_up.png",
                         "res/ff_down.png");
             }
+            _dbgButtons[i].setState(BtnState.DISABLED);
         }
     }
+    
+    private void dbgButtonClick(int iButton) {
+        char[] dbgKeys = {'1', '2', ' '};
+        for (int i = iButton; i < _dbgButtons.length; i++) {
+            if (i != _dbgButtons.length-1) {
+                _dbgButtons[i].setState(BtnState.DISABLED);
+            }
+        }
+        _keyInterceptor.simulateKeyTyped(_dbgButtons[iButton], dbgKeys[iButton]);
+    }
+    
+    private void dbgButtonsEnable() {
+        for(MapButton dbgButton : _dbgButtons) {
+            if (dbgButton.getState() != BtnState.ENABLED) {
+                dbgButton.setState(BtnState.ENABLED);
+            }
+        }
+    }
+    // EndRegion: DbgButtons management
     
     public MapFrame(MapImage mapImage) throws IOException {
         _mapImage = mapImage;
@@ -108,7 +137,7 @@ public class MapFrame implements Closeable, WindowListener, MouseListener {
         int yAnchor = insets.top + PADDING;
         
         // create the debug buttons
-        setupDbgButtons(xAnchor, yAnchor);
+        dbgButtonsSetup(xAnchor, yAnchor);
         yAnchor += _dbgButtons[0].getHeight() + PADDING;
         
         // create the map canvas
@@ -186,12 +215,14 @@ public class MapFrame implements Closeable, WindowListener, MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         boolean flip = false;
-        for (MapButton dbgButton : _dbgButtons) {
-            if (dbgButton == e.getSource()) {
-                flip = true;
+        for (int i = 0; i < _dbgButtons.length; i++) {
+            if (_dbgButtons[i].getState() != BtnState.ENABLED) {
+                continue;
             }
-            if (flip) {
-                dbgButton.flip();
+            
+            if (e.getSource() == _dbgButtons[i]) {
+                dbgButtonClick(i);
+                break;
             }
         }
     }

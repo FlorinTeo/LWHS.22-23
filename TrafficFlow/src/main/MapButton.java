@@ -9,6 +9,11 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class MapButton extends Canvas {
+    public enum BtnState {
+        ENABLED,
+        DISABLED
+    };
+    
     private static final long serialVersionUID = 1L;
     private BufferedImage[] _btnFaces;
     private int _crtFace;
@@ -29,8 +34,12 @@ public class MapButton extends Canvas {
         g.drawImage(_btnFaces[_crtFace], 0, 0, null);
     }
     
-    public void flip() {
-        _crtFace = 1 - _crtFace;
+    public void setState(BtnState state) {
+        _crtFace = (state == BtnState.ENABLED) ? 0 : 1;
         repaint();
+    }
+    
+    public BtnState getState() {
+        return (_crtFace == 0) ? BtnState.ENABLED : BtnState.DISABLED;
     }
 }
