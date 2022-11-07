@@ -9,6 +9,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
 import java.io.Closeable;
 import java.io.IOException;
 
@@ -19,7 +20,8 @@ public class ColoringFrame implements Closeable, WindowListener, MouseListener, 
     private static final String TITLE = "Coloring Book";
     private static final int PADDING = 4;
     private static final int STATUS_XY_WIDTH = 32;
-    private static final int STATUS_XY_HEIGHT = 18;
+    private static final int STATUS_TEXT_WIDTH = 200;
+    private static final int STATUS_HEIGHT = 18;
 
     private DrwImage _drwImage = null;
     private Frame _frame = null;
@@ -27,6 +29,7 @@ public class ColoringFrame implements Closeable, WindowListener, MouseListener, 
     private ColoringCanvas _canvas = null;
     private TextField _statusX = null;
     private TextField _statusY = null;
+    private TextField _statusText = null;
     
     // Region: KeyInterceptor wiring
     private KeyInterceptor _keyInterceptor = new KeyInterceptor();
@@ -88,6 +91,31 @@ public class ColoringFrame implements Closeable, WindowListener, MouseListener, 
     }
     // EndRegion: DbgButtons management
     
+    // Region: StatusBar management
+    private void statusBarSetup(int xAnchor, int yAnchor, int width) {
+        int x = xAnchor;
+        _statusX = new TextField();
+        _statusX.setEditable(false);
+        _statusX.setBackground(Color.LIGHT_GRAY);
+        _statusX.setBounds(x, yAnchor, STATUS_XY_WIDTH, STATUS_HEIGHT);
+        x += STATUS_XY_WIDTH;
+        _statusY = new TextField();
+        _statusY.setEditable(false);
+        _statusY.setBackground(Color.LIGHT_GRAY);
+        _statusY.setBounds(x, yAnchor, STATUS_XY_WIDTH, STATUS_HEIGHT);
+        x += STATUS_XY_WIDTH;
+        _statusText = new TextField();
+        _statusText.setEditable(false);
+        _statusText.setBackground(Color.LIGHT_GRAY);
+        int w = Math.min(STATUS_TEXT_WIDTH, width - x);
+        _statusText.setBounds(
+                Math.max(x, xAnchor + width - STATUS_TEXT_WIDTH),
+                yAnchor, 
+                w,
+                STATUS_HEIGHT);
+    }
+    // EndRegion: StatusBar management
+    
     public ColoringFrame(DrwImage drwImage) throws IOException {
         _drwImage = drwImage;
         
@@ -109,18 +137,12 @@ public class ColoringFrame implements Closeable, WindowListener, MouseListener, 
         _canvas = new ColoringCanvas(xAnchor, yAnchor, _drwImage);
         _canvas.addKeyListener(_keyInterceptor);
         _canvas.addMouseMotionListener(this);
+        _canvas.addMouseListener(this);
         yAnchor += _canvas.getHeight() + PADDING;
         
         // create the status bar indicators
-        _statusX = new TextField();
-        _statusX.setEditable(false);
-        _statusX.setBackground(Color.LIGHT_GRAY);
-        _statusX.setBounds(xAnchor, yAnchor, STATUS_XY_WIDTH, STATUS_XY_HEIGHT);
-        _statusY = new TextField();
-        _statusY.setEditable(false);
-        _statusY.setBackground(Color.LIGHT_GRAY);
-        _statusY.setBounds(xAnchor + STATUS_XY_WIDTH, yAnchor, STATUS_XY_WIDTH, STATUS_XY_HEIGHT);
-        yAnchor += STATUS_XY_HEIGHT + PADDING;
+        statusBarSetup(xAnchor, yAnchor, _drwImage.getWidth());
+        yAnchor += STATUS_HEIGHT + PADDING;
         
         // layout the frame size and attributes
         _frame.setSize(
@@ -140,6 +162,7 @@ public class ColoringFrame implements Closeable, WindowListener, MouseListener, 
         _frame.add(_canvas);
         _frame.add(_statusX);
         _frame.add(_statusY);
+        _frame.add(_statusText);
         
         // add the listeners
         _frame.addKeyListener(_keyInterceptor);
@@ -210,6 +233,10 @@ public class ColoringFrame implements Closeable, WindowListener, MouseListener, 
                     break;
                 }
             }
+        } else {
+            BufferedImage bi = _drwImage.getDrwImage();
+            Color c = new Color(bi.getRGB(e.getX(), e.getY()));
+            _statusText.setText(String.format("R:%d, G:%d, B:%d", c.getRed(), c.getGreen(), c.getBlue()));
         }
     }
 
@@ -239,6 +266,7 @@ public class ColoringFrame implements Closeable, WindowListener, MouseListener, 
     public void mouseMoved(MouseEvent e) {
         _statusX.setText(""+e.getX());
         _statusY.setText(""+e.getY());
+        _statusText.setText("");
     }
     // EndRegion: MouseMotionListener overrides
 }
