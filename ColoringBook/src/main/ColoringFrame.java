@@ -58,7 +58,7 @@ public class ColoringFrame implements Closeable, WindowListener, MouseListener, 
                         String.format("res/%d_down.png", i+1));
                 xAnchor += _dbgButtons[i].getWidth();
             } else {
-                xAnchor += 8 * PADDING;
+                xAnchor += 4 * PADDING;
                 _dbgButtons[i] = new DbgButton(
                         xAnchor,
                         yAnchor,
