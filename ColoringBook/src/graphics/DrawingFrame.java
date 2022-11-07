@@ -1,4 +1,4 @@
-package main;
+package graphics;
 
 import java.awt.Color;
 import java.awt.Frame;
@@ -13,9 +13,9 @@ import java.awt.image.BufferedImage;
 import java.io.Closeable;
 import java.io.IOException;
 
-import main.DbgButton.BtnState;
+import graphics.DbgButton.BtnState;
 
-public class ColoringFrame implements Closeable, WindowListener, MouseListener, MouseMotionListener {
+public class DrawingFrame implements Closeable, WindowListener, MouseListener, MouseMotionListener {
 
     private static final String TITLE = "Coloring Book";
     private static final int PADDING = 4;
@@ -23,10 +23,10 @@ public class ColoringFrame implements Closeable, WindowListener, MouseListener, 
     private static final int STATUS_TEXT_WIDTH = 200;
     private static final int STATUS_HEIGHT = 18;
 
-    private DrwImage _drwImage = null;
+    private Drawing _drawing = null;
     private Frame _frame = null;
     private DbgButton[] _dbgButtons = null;
-    private ColoringCanvas _canvas = null;
+    private DrawingCanvas _canvas = null;
     private TextField _statusX = null;
     private TextField _statusY = null;
     private TextField _statusText = null;
@@ -35,14 +35,12 @@ public class ColoringFrame implements Closeable, WindowListener, MouseListener, 
     private KeyInterceptor _keyInterceptor = new KeyInterceptor();
     
     public void step() throws InterruptedException {
-        if (_keyInterceptor.blocksOnLevel(1)) {
-            dbgButtonsEnable();
-        }
-        _keyInterceptor.step(1);
+        step(1);
     }
     
     public void step(int level) throws InterruptedException {
         if (_keyInterceptor.blocksOnLevel(level)) {
+            repaint();
             dbgButtonsEnable();
         }
         _keyInterceptor.step(level);
@@ -57,16 +55,16 @@ public class ColoringFrame implements Closeable, WindowListener, MouseListener, 
                 _dbgButtons[i] = new DbgButton(
                         xAnchor,
                         yAnchor,
-                        String.format("res/%d_up.png", i+1),
-                        String.format("res/%d_down.png", i+1));
+                        String.format("src/graphics/res/%d_up.png", i+1),
+                        String.format("src/graphics/res/%d_down.png", i+1));
                 xAnchor += _dbgButtons[i].getWidth();
             } else {
                 xAnchor += 4 * PADDING;
                 _dbgButtons[i] = new DbgButton(
                         xAnchor,
                         yAnchor,
-                        "res/ff_up.png",
-                        "res/ff_down.png");
+                        "src/graphics/res/ff_up.png",
+                        "src/graphics/res/ff_down.png");
             }
             _dbgButtons[i].setState(BtnState.DISABLED);
         }
@@ -116,8 +114,8 @@ public class ColoringFrame implements Closeable, WindowListener, MouseListener, 
     }
     // EndRegion: StatusBar management
     
-    public ColoringFrame(DrwImage drwImage) throws IOException {
-        _drwImage = drwImage;
+    public DrawingFrame(Drawing drwImage) throws IOException {
+        _drawing = drwImage;
         
         // create the frame and get the insets
         _frame = new Frame(TITLE);
@@ -134,19 +132,19 @@ public class ColoringFrame implements Closeable, WindowListener, MouseListener, 
         yAnchor += _dbgButtons[0].getHeight() + PADDING;
         
         // create the map canvas
-        _canvas = new ColoringCanvas(xAnchor, yAnchor, _drwImage);
+        _canvas = new DrawingCanvas(xAnchor, yAnchor, _drawing);
         _canvas.addKeyListener(_keyInterceptor);
         _canvas.addMouseMotionListener(this);
         _canvas.addMouseListener(this);
         yAnchor += _canvas.getHeight() + PADDING;
         
         // create the status bar indicators
-        statusBarSetup(xAnchor, yAnchor, _drwImage.getWidth());
+        statusBarSetup(xAnchor, yAnchor, _drawing.getWidth());
         yAnchor += STATUS_HEIGHT + PADDING;
         
         // layout the frame size and attributes
         _frame.setSize(
-                xAnchor + _drwImage.getWidth() + PADDING + insets.right,
+                xAnchor + _drawing.getWidth() + PADDING + insets.right,
                 yAnchor + insets.bottom);
         _frame.setLayout(null);
         _frame.setLocationRelativeTo(null);
@@ -234,7 +232,7 @@ public class ColoringFrame implements Closeable, WindowListener, MouseListener, 
                 }
             }
         } else {
-            BufferedImage bi = _drwImage.getDrwImage();
+            BufferedImage bi = _drawing.getImage();
             Color c = new Color(bi.getRGB(e.getX(), e.getY()));
             _statusText.setText(String.format("R:%d, G:%d, B:%d", c.getRed(), c.getGreen(), c.getBlue()));
         }

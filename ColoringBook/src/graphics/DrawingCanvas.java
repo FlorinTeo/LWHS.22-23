@@ -1,13 +1,13 @@
-package main;
+package graphics;
 import java.awt.Canvas;
 import java.awt.Graphics;
 
-public class ColoringCanvas extends Canvas {
+public class DrawingCanvas extends Canvas {
     private static final long serialVersionUID = 1L;
     
-    private DrwImage _drwImage;
+    private Drawing _drwImage;
     
-    public ColoringCanvas(int xAnchor, int yAnchor, DrwImage drwImage) {
+    public DrawingCanvas(int xAnchor, int yAnchor, Drawing drwImage) {
         _drwImage = drwImage;
         setBounds(
             xAnchor, yAnchor,
@@ -16,6 +16,6 @@ public class ColoringCanvas extends Canvas {
     
     @Override
     public void paint(Graphics g) {
-        g.drawImage(_drwImage.getDrwImage(), 0, 0, null);
+        g.drawImage(_drwImage.getImage(), 0, 0, null);
     }
 }
