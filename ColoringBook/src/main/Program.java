@@ -7,15 +7,18 @@ public class Program {
     
     public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("Welcome to the Coloring Book app!");
-        DrwImage drwImage = new DrwImage("drawings/bird.gif");
+        DrwImage drwImage = new DrwImage("drawings/bird.jpg");
         ColoringFrame coloringFrame = new ColoringFrame(drwImage);
         coloringFrame.open();
         coloringFrame.step();
         
         BufferedImage bi = drwImage.getDrwImage();
-        for(int x = 0; x < 100; x++) {
-            bi.setRGB(x, x, Color.blue.getRGB());
-            coloringFrame.repaint();
+        Color c = new Color(255, 0, 0);
+        for(int x = 0; x < 10; x++) {
+            for (int y = 0; y < 10; y++) {
+                bi.setRGB(x+100, y+40, c.getRGB());
+                coloringFrame.repaint();
+            }
         }
         coloringFrame.step();
         coloringFrame.close();
