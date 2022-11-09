@@ -31,6 +31,10 @@ public class Drawing {
         return _image.getHeight();
     }
     
+    public boolean isValidPixel(int x, int y) {
+        return (x >= 0 && x <= _image.getWidth()-3 && y >=0 && y <= _image.getHeight()-3);
+    }
+    
     public boolean isBrightPixel(int x, int y) {
         Color c = new Color(_image.getRGB(x, y));
         return c.getRed() > 220 && c.getGreen() > 220 && c.getBlue() > 220;

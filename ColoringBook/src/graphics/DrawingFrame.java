@@ -199,6 +199,10 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
         _frame.setVisible(true);
     }
     
+    public void setStatusMessage(String message) {
+        _statusText.setText(message);
+    }
+    
     @Override
     public void close() throws IOException {
         if (_frame != null) {
