@@ -15,6 +15,13 @@ import java.io.IOException;
 
 import graphics.DbgButton.BtnState;
 
+/**
+ * Encapsulates a representation of a generic drawing image frame as a window that 
+ * can be interacted with. A DrawingFrame object can be created only by providing a valid
+ * Drawing object as argument to its constructor. In return, the object can be used for
+ * displaying the drawing image on the screen and reflecting its changes as coded
+ * in the program, in an interactive manner.
+ */
 public class DrawingFrame implements Closeable, WindowListener, MouseListener, MouseMotionListener {
     
     private static final String TITLE = "Coloring Book";
@@ -34,14 +41,34 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
     // Region: [Public] Execution control methods
     private KeyInterceptor _keyInterceptor = new KeyInterceptor();
     
+    /**
+     * In "step-by-step" mode (default) it causes the execution to stop until user resumes.<br>
+     * In "continue" mode it does nothing.<p>
+     * The “step-by-step” mode is defined as the segments of execution controlled by the user
+     * either pressing the key “1” or clicking the first (left-most) interactive button.<br>
+     * The “continue” mode is defined as the segments of execution controlled by the user
+     * either pressing the key “2” or clicking the second (from the left) interactive button.
+     * @throws InterruptedException
+     */
     public void step() throws InterruptedException {
         step(1, 0);
     }
     
+    /**
+     * In "step-by-step" mode (default) it causes the execution to stop until user resumes.<br>
+     * In “continue” mode it causes the execution to be paused for a given milliseconds duration.<p>
+     * @throws InterruptedException
+     * @see DrawingFrame#step()
+     */
     public void step(long delay) throws InterruptedException {
         step(1, delay);
     }
     
+    /**
+     * In “step-by-step” or “continue” modes it causes the program execution 
+     * to stop until the user is explicitly resuming it.
+     * @throws InterruptedException
+     */
     public void stop() throws InterruptedException {
         StackTraceElement stackFrame = new Throwable().getStackTrace()[1]; 
         String dbgLine = String.format("%s @ %d",stackFrame.getFileName(), stackFrame.getLineNumber());
@@ -136,13 +163,18 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
     }
     // EndRegion: [Private] StatusBar management
     
-    public DrawingFrame(Drawing drwImage) throws IOException {
+    /**
+     * Creates an instance of a DrawingFrame object encapsulating the representation of a window displaying the pixels of the given drawing object.
+     * @param drawing - the drawing to be displayed by this frame.
+     * @throws IOException
+     */
+    public DrawingFrame(Drawing drawing) throws IOException {
         // setup callback methods for keyInterceptor control keys
         _keyInterceptor.setKeyTypedHook('1', _onKeyInteceptorCtrl);
         _keyInterceptor.setKeyTypedHook('2', _onKeyInteceptorCtrl);
         _keyInterceptor.setKeyTypedHook(' ', _onKeyInteceptorCtrl);
         
-        _drawing = drwImage;
+        _drawing = drawing;
         
         // create the frame and get the insets
         _frame = new Frame(TITLE);
@@ -195,18 +227,34 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
     }
     
     // Region: [Public] Frame display methods
+    /**
+     * Opens a window on the screen, displaying the associated Drawing
+     * and the controls for interacting with it. 
+     */
     public void open() {
         _frame.setVisible(true);
     }
     
+    /**
+     * Forces a refresh of the window content such that any changes that may have been
+     * operated on the associated Drawing are reflected on the screen.
+     */
     public void repaint() {
         _canvas.repaint();
     }
     
+    /**
+     * Prints out the given message in the status bar area, the lower right corner of
+     * the drawing window.
+     * @param message - message to be printed in the status bar area.
+     */
     public void setStatusMessage(String message) {
         _statusText.setText(message);
     }
     
+    /**
+     * Closes the window.
+     */
     @Override
     public void close() throws IOException {
         if (_frame != null) {
