@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class DbgButton extends Canvas {
+class DbgButton extends Canvas {
     
     enum BtnState {
         ENABLED,

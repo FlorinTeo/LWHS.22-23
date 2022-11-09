@@ -2,7 +2,7 @@ package graphics;
 import java.awt.Canvas;
 import java.awt.Graphics;
 
-public class DrawingCanvas extends Canvas {
+class DrawingCanvas extends Canvas {
 
     private static final long serialVersionUID = 1L;
     private Drawing _drwImage;

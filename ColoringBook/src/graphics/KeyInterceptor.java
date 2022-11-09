@@ -11,7 +11,7 @@ import java.util.HashMap;
  * implementing UI level debugging on 2 levels, Fast-Fwd and Quit.
  * @author Florin
  */
-public class KeyInterceptor implements KeyListener {
+class KeyInterceptor implements KeyListener {
     
     // To customize key hooks, consuming classes need to define their own
     // functional interface and pass it to one of the setKey**Hook() method
