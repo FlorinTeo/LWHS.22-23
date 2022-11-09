@@ -73,17 +73,10 @@ public class Program {
         _frame.step(2);
         for (int x = xSeed - 1; x <= xSeed + 1; x++) {
             for (int y = ySeed - 1; y <= ySeed + 1; y++) {
-                if (x < 0 || x > _drawing.getWidth()-3 || y < 0 || y > _drawing.getHeight()-3) {
-                    continue;
-                }
                 if (x == xSeed && y == ySeed) {
                     continue;
                 }
-                Color crtCol = _drawing.getPixel(x, y);
-                if (crtCol == col) {
-                    continue;
-                }
-                if (crtCol != col && _drawing.isBrightPixel(x, y)) {
+                if (_drawing.isValidPixel(x, y) && _drawing.isBrightPixel(x, y)) {
                     floodR(x, y, col);
                 }
             }
@@ -91,14 +84,14 @@ public class Program {
     }
     
     /**
-     * Demonstrate a simple alteration to the drawing:
-     * On a square section of the image replace the white tones with red
-     * and the dark strokes with yellow.
-     * @throws InterruptedException 
+     * Demonstrates a simple alteration to the drawing:
+     * On a square section of the image, from top-left: (40,30) to bottom-right (140, 130)
+     * replace the dark pixels with yellow and the bright pixels with yellow.
      */
     public static void paint() throws InterruptedException {
         for(int x = 40; x < 140; x++) {
             for (int y = 30; y < 130; y++) {
+                _frame.step();
                 if (_drawing.isDarkPixel(x, y)) {
                     _drawing.setPixel(x, y, Color.yellow);
                 } else {
@@ -120,10 +113,11 @@ public class Program {
     }
     
     /**
-     * Main entrance in the program.
-     * @param args
-     * @throws IOException
-     * @throws InterruptedException
+     * Main entry point in the program:
+     * Initializes the static Drawing (_drawing) with an image of your choice,
+     * then initializes the static DrawingFrame (_frame) loading into it the new drawing.
+     * Subsequently the frame is opened on the screen then the drawing is painted upon
+     * and displayed as it is being modified before the program terminates. 
      */
     public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("Welcome to the Coloring Festival!");
@@ -136,7 +130,7 @@ public class Program {
 
         // put the frame on display and stop to admire it.
         _frame.open();
-        _frame.stop();
+        _frame.step();
         
         // make some change to the drawing, then stop for applause.
         paint();
