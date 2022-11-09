@@ -35,15 +35,25 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
     private KeyInterceptor _keyInterceptor = new KeyInterceptor();
     
     public void step() throws InterruptedException {
-        step(1);
+        step(1, 0);
     }
     
-    public void step(int level) throws InterruptedException {
-        if (_keyInterceptor.blocksOnLevel(level)) {
-            repaint();
+    public void step(long delay) throws InterruptedException {
+        step(1, delay);
+    }
+    
+    public void stop() throws InterruptedException {
+        step(2, 0);
+    }
+    
+    private void step(int level, long delay) throws InterruptedException {
+        if (_keyInterceptor.blocksOnLevel(level) || delay > 0) {
+                repaint();
+        }
+        if (_keyInterceptor.isFastFwd() || _keyInterceptor.blocksOnLevel(level)) {
             dbgButtonsEnable();
         }
-        _keyInterceptor.step(level);
+        _keyInterceptor.step(level, delay);
     }
     // EndRegion: KeyInterceptor wiring
 
@@ -177,9 +187,11 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
 
     @Override
     public void close() throws IOException {
-        _frame.setVisible(false);
-        _frame.dispose();
-        _frame = null;
+        if (_frame != null) {
+            _frame.setVisible(false);
+            _frame.dispose();
+            _frame = null;
+        }
     }
 
     // Region: WindowListener overrides

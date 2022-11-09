@@ -112,13 +112,23 @@ public class KeyInterceptor implements KeyListener {
         return (level >= _keyStepLevel);
     }
     
+    public boolean isFastFwd() {
+        return (_keyStepLevel == Integer.MAX_VALUE);
+    }
+    
     public void step(int level) {
+        step(level, 0);
+    }
+    
+    public void step(int level, long delay) {
         synchronized (_sync) {
             try {
                 // block if level is same or greater than the key-typed level.
                 // (i.e step_0 won't block if user typed 2)
                 if (blocksOnLevel(level)) {
                     _sync.wait();
+                } else if (!isFastFwd() && delay > 0) {
+                    Thread.sleep(delay);
                 }
             } catch (InterruptedException e) {
                 System.out.println(e.getMessage());

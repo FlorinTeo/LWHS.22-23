@@ -15,6 +15,11 @@ public class DrawingCanvas extends Canvas {
     }
     
     @Override
+    public void update(Graphics g) {
+        paint(g);
+    }
+    
+    @Override
     public void paint(Graphics g) {
         g.drawImage(_drwImage.getImage(), 0, 0, null);
     }

@@ -19,10 +19,11 @@ public class Program {
         return c.getRed() < 20 && c.getGreen() < 20 && c.getBlue() < 20;
     }
     
-    public static void flood(int xSeed, int ySeed, Color col) {
+    public static void flood(int xSeed, int ySeed, Color col) throws InterruptedException {
         _drawing.getImage().setRGB(xSeed, ySeed, col.getRGB());
         for (int x = xSeed - 1; x <= xSeed + 1; x++) {
             for (int y = ySeed - 1; y <= ySeed + 1; y++) {
+                _frame.step(4);
                 if (x < 0 || x > _drawing.getWidth()-3 || y < 0 || y > _drawing.getHeight()-3) {
                     continue;
                 }
@@ -58,11 +59,11 @@ public class Program {
                 }
             }
         }
-        _frame.step();
+        _frame.stop();
         flood(140, 320, Color.green);
-        _frame.step();
+        _frame.stop();
         flood(275, 423, Color.yellow);
-        _frame.step();
+        _frame.stop();
         flood(59, 457, Color.magenta);
     }
     
@@ -83,11 +84,11 @@ public class Program {
 
         // put the frame on display and pause to admire it.
         _frame.open();
-        _frame.step();
+        _frame.stop();
         
         // make some change to the drawing, then pause for applause.
         paint();
-        _frame.step();
+        _frame.stop();
         
         // shut down the exhibit.
         _frame.close();
