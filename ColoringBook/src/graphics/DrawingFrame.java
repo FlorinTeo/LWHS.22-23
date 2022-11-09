@@ -16,12 +16,12 @@ import java.io.IOException;
 import graphics.DbgButton.BtnState;
 
 public class DrawingFrame implements Closeable, WindowListener, MouseListener, MouseMotionListener {
-
+    
     private static final String TITLE = "Coloring Book";
     private static final int PADDING = 4;
     private static final int STATUS_XY_WIDTH = 32;
     private static final int STATUS_TEXT_WIDTH = 200;
-    private static final int STATUS_HEIGHT = 18;
+    private static final int STATUS_HEIGHT = 20;
 
     private Drawing _drawing = null;
     private Frame _frame = null;
@@ -31,7 +31,7 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
     private TextField _statusY = null;
     private TextField _statusText = null;
     
-    // Region: KeyInterceptor wiring
+    // Region: [Public] Execution control methods
     private KeyInterceptor _keyInterceptor = new KeyInterceptor();
     
     public void step() throws InterruptedException {
@@ -43,26 +43,55 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
     }
     
     public void stop() throws InterruptedException {
+        StackTraceElement stackFrame = new Throwable().getStackTrace()[1]; 
+        String dbgLine = String.format("%s @ %d",stackFrame.getFileName(), stackFrame.getLineNumber());
+        _statusText.setText(dbgLine);
         step(2, 0);
+        _statusText.setText("");
     }
     
     private void step(int level, long delay) throws InterruptedException {
-        if (_keyInterceptor.blocksOnLevel(level) || delay > 0) {
-                repaint();
+        if (_keyInterceptor.blocksOnLevel(level)) {
+            _dbgButtons[0].setState(BtnState.ENABLED);
+            _dbgButtons[1].setState(BtnState.ENABLED);
+            _dbgButtons[2].setState(BtnState.ENABLED);
         }
-        if (_keyInterceptor.isFastFwd() || _keyInterceptor.blocksOnLevel(level)) {
-            dbgButtonsEnable();
-        }
+        _canvas.repaint();
         _keyInterceptor.step(level, delay);
     }
-    // EndRegion: KeyInterceptor wiring
+    // EndRegion: [Public] Execution control methods
+    
+    // Region: [Private] KeyInterceptor hooks
+    private KeyInterceptor.KeyHook _onKeyInteceptorCtrl = (keyEvent) -> {
+        char ch = keyEvent.getKeyChar();
+        switch (Character.toUpperCase(ch)) {
+        case '1':
+            _dbgButtons[0].setState(BtnState.ENABLED);
+            _dbgButtons[1].setState(BtnState.ENABLED);
+            _dbgButtons[2].setState(BtnState.ENABLED);
+            break;
+        case '2':
+            _dbgButtons[0].setState(BtnState.ENABLED);
+            _dbgButtons[1].setState(BtnState.DISABLED);
+            _dbgButtons[2].setState(BtnState.ENABLED);
+            break;
+        case ' ':
+            _dbgButtons[0].setState(BtnState.ENABLED);
+            _dbgButtons[1].setState(BtnState.ENABLED);
+            _dbgButtons[2].setState(BtnState.DISABLED);
+            break;
+        }
+    };
+    // EndRegion: [Private] KeyInterceptor hooks
 
-    // Region: DbgButtons management
+    // Region: [Private] DbgButtons management
     private void dbgButtonsSetup(int xAnchor, int yAnchor) throws IOException {
+        char[] dbgKeys = {'1', '2', ' '};
         _dbgButtons = new DbgButton[3];
         for (int i = 0; i < _dbgButtons.length; i++) {
             if (i < _dbgButtons.length - 1) {
                 _dbgButtons[i] = new DbgButton(
+                        dbgKeys[i],
                         xAnchor,
                         yAnchor,
                         String.format("src/graphics/res/%d_up.png", i+1),
@@ -71,6 +100,7 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
             } else {
                 xAnchor += 4 * PADDING;
                 _dbgButtons[i] = new DbgButton(
+                        dbgKeys[i],
                         xAnchor,
                         yAnchor,
                         "src/graphics/res/ff_up.png",
@@ -79,27 +109,9 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
             _dbgButtons[i].setState(BtnState.DISABLED);
         }
     }
+    // EndRegion: [Private] DbgButtons management
     
-    private void dbgButtonClick(int iButton) {
-        char[] dbgKeys = {'1', '2', ' '};
-        for (int i = iButton; i < _dbgButtons.length; i++) {
-            if (i != _dbgButtons.length-1) {
-                _dbgButtons[i].setState(BtnState.DISABLED);
-            }
-        }
-        _keyInterceptor.simulateKeyTyped(_dbgButtons[iButton], dbgKeys[iButton]);
-    }
-    
-    private void dbgButtonsEnable() {
-        for(DbgButton dbgButton : _dbgButtons) {
-            if (dbgButton.getState() != BtnState.ENABLED) {
-                dbgButton.setState(BtnState.ENABLED);
-            }
-        }
-    }
-    // EndRegion: DbgButtons management
-    
-    // Region: StatusBar management
+    // Region: [Private] StatusBar management
     private void statusBarSetup(int xAnchor, int yAnchor, int width) {
         int x = xAnchor;
         _statusX = new TextField();
@@ -122,9 +134,14 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
                 w,
                 STATUS_HEIGHT);
     }
-    // EndRegion: StatusBar management
+    // EndRegion: [Private] StatusBar management
     
     public DrawingFrame(Drawing drwImage) throws IOException {
+        // setup callback methods for keyInterceptor control keys
+        _keyInterceptor.setKeyTypedHook('1', _onKeyInteceptorCtrl);
+        _keyInterceptor.setKeyTypedHook('2', _onKeyInteceptorCtrl);
+        _keyInterceptor.setKeyTypedHook(' ', _onKeyInteceptorCtrl);
+        
         _drawing = drwImage;
         
         // create the frame and get the insets
@@ -176,15 +193,12 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
         _frame.addKeyListener(_keyInterceptor);
         _frame.addWindowListener(this);
     }
-
+    
+    // Region: [Public] Frame display methods
     public void open() {
         _frame.setVisible(true);
     }
     
-    public void repaint() {
-        _canvas.repaint();
-    }
-
     @Override
     public void close() throws IOException {
         if (_frame != null) {
@@ -193,8 +207,9 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
             _frame = null;
         }
     }
+    // EndRegion: [Public] Frame display methods
 
-    // Region: WindowListener overrides
+    // Region: [Public] WindowListener overrides
     @Override
     public void windowOpened(WindowEvent e) {
     }
@@ -227,21 +242,15 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
     @Override
     public void windowDeactivated(WindowEvent e) {
     }
-    // EndRegion: WindowListener overrides
+    // EndRegion: [Public] WindowListener overrides
 
-    // Region: MouseListener overrides
+    // Region: [Public] MouseListener overrides
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getSource() != _canvas) {
-            for (int i = 0; i < _dbgButtons.length; i++) {
-                if (_dbgButtons[i].getState() != BtnState.ENABLED) {
-                    continue;
-                }
-                
-                if (e.getSource() == _dbgButtons[i]) {
-                    dbgButtonClick(i);
-                    break;
-                }
+        if (e.getSource() instanceof DbgButton) {
+            DbgButton dbgButton = (DbgButton)e.getSource();
+            if (dbgButton.getState() == BtnState.ENABLED) {
+                _keyInterceptor.simulateKeyTyped(dbgButton, dbgButton.getKey());
             }
         } else {
             BufferedImage bi = _drawing.getImage();
@@ -265,9 +274,9 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
     @Override
     public void mouseExited(MouseEvent e) {
     }
-    // EndRegion: MouseListener overrides
+    // EndRegion: [Public] MouseListener overrides
 
-    // Region: MouseMotionListener overrides
+    // Region: [Public] MouseMotionListener overrides
     @Override
     public void mouseDragged(MouseEvent e) {
     }
@@ -278,5 +287,5 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
         _statusY.setText(""+e.getY());
         _statusText.setText("");
     }
-    // EndRegion: MouseMotionListener overrides
+    // EndRegion: [Public] MouseMotionListener overrides
 }
