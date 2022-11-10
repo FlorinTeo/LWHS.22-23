@@ -17,6 +17,28 @@ class DrawingCanvas extends Canvas {
             _drwImage.getWidth(), _drwImage.getHeight());
     }
     
+    // Region: [Internal] User control methods
+    public void zoom(int xAnchor, int yAnchor, int levels) {
+        int newScale = _scale + levels;
+        if(newScale > 0 && newScale <= 8) {
+            int crtDx = -_xOrig + (xAnchor - xAnchor % _scale);
+            int crtDy = -_yOrig + (yAnchor - yAnchor % _scale);
+            int newDx = newScale * (crtDx / _scale);
+            int newDy = newScale * (crtDy / _scale);
+            _xOrig = Math.min(0, (xAnchor - xAnchor % newScale) - newDx);
+            _yOrig = Math.min(0, (yAnchor - yAnchor % newScale) - newDy);
+            _scale = newScale;
+            
+            if (_xOrig % _scale != 0 || _yOrig % _scale != 0) {
+                System.out.println("hmm");
+            }
+            
+            repaint();
+        }
+    }
+    
+    // EndRegion: [Internal] User control methods
+    
     // Region: [Public] Canvas overrides
     @Override
     public void update(Graphics g) {

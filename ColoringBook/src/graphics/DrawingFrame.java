@@ -355,7 +355,10 @@ public class DrawingFrame implements
     // Region: [Public] MouseWheelListener overrides
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        String dbg = String.format("(%d,%d) w:%d", e.getX(), e.getY(), e.getWheelRotation());
+        // wheel upwards (negative rotation) => zoom in => positive level value
+        int levels = -e.getWheelRotation();
+        _canvas.zoom(e.getX(), e.getY(), levels);
+        String dbg = String.format("(%d,%d) w:%d", e.getX(), e.getY(), levels);
         _statusText.setText(dbg);
     }
     // EndRegion: [Public] MouseWheelListener overrides
