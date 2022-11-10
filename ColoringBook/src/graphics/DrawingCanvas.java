@@ -5,6 +5,9 @@ import java.awt.Graphics;
 class DrawingCanvas extends Canvas {
 
     private static final long serialVersionUID = 1L;
+    private int _xOrig = 0;
+    private int _yOrig = 0;
+    private int _scale = 1;
     private Drawing _drwImage;
     
     DrawingCanvas(int xAnchor, int yAnchor, Drawing drwImage) {
@@ -22,7 +25,12 @@ class DrawingCanvas extends Canvas {
     
     @Override
     public void paint(Graphics g) {
-        g.drawImage(_drwImage.getImage(), 0, 0, null);
+        g.drawImage(
+                _drwImage.getImage(), 
+                _xOrig, _yOrig, 
+                _scale * _drwImage.getWidth(),
+                _scale * _drwImage.getHeight(),
+                null);
     }
     // EndRegion: [Public] Canvas overrides
 }

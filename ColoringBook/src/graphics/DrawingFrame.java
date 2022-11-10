@@ -7,6 +7,8 @@ import java.awt.TextField;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
@@ -22,7 +24,9 @@ import graphics.DbgButton.BtnState;
  * displaying the drawing image on the screen and reflecting its changes as coded
  * in the program, in an interactive manner.
  */
-public class DrawingFrame implements Closeable, WindowListener, MouseListener, MouseMotionListener {
+public class DrawingFrame implements 
+    Closeable, WindowListener, 
+    MouseListener, MouseMotionListener, MouseWheelListener {
     
     private static final String TITLE = "Coloring Book";
     private static final int PADDING = 4;
@@ -195,6 +199,7 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
         _canvas.addKeyListener(_keyInterceptor);
         _canvas.addMouseMotionListener(this);
         _canvas.addMouseListener(this);
+        _canvas.addMouseWheelListener(this);
         yAnchor += _canvas.getHeight() + PADDING;
         
         // create the status bar indicators
@@ -335,6 +340,8 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
     // Region: [Public] MouseMotionListener overrides
     @Override
     public void mouseDragged(MouseEvent e) {
+        String dbg = String.format("(%d,%d)", e.getX(), e.getY());
+        _statusText.setText(dbg);
     }
 
     @Override
@@ -344,4 +351,12 @@ public class DrawingFrame implements Closeable, WindowListener, MouseListener, M
         _statusText.setText("");
     }
     // EndRegion: [Public] MouseMotionListener overrides
+
+    // Region: [Public] MouseWheelListener overrides
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        String dbg = String.format("(%d,%d) w:%d", e.getX(), e.getY(), e.getWheelRotation());
+        _statusText.setText(dbg);
+    }
+    // EndRegion: [Public] MouseWheelListener overrides
 }
