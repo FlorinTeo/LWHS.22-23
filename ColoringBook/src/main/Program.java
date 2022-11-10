@@ -10,6 +10,10 @@ import graphics.Drawing;
 
 public class Program {
     
+    /**
+     * Global static fields for the Drawing object being worked on
+     * and the DrawingFrame containing and displaying it.
+     */
     private static Drawing _drawing;
     private static DrawingFrame _frame;
     
