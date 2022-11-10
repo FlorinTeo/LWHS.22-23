@@ -19,24 +19,32 @@ class DrawingCanvas extends Canvas {
     
     // Region: [Internal] User control methods
     public void zoom(int xAnchor, int yAnchor, int levels) {
+        if (levels != 1 && levels != -1) {
+            System.out.println("hmm");
+        }
+        
         int newScale = _scale + levels;
         if(newScale > 0 && newScale <= 8) {
-            int crtDx = -_xOrig + (xAnchor - xAnchor % _scale);
-            int crtDy = -_yOrig + (yAnchor - yAnchor % _scale);
-            int newDx = newScale * (crtDx / _scale);
-            int newDy = newScale * (crtDy / _scale);
-            _xOrig = Math.min(0, (xAnchor - xAnchor % newScale) - newDx);
-            _yOrig = Math.min(0, (yAnchor - yAnchor % newScale) - newDy);
+            // find out the pixel in the unscaled image corresponding to (xAnchor, yAnchor)
+            int xImg = xScreenToCanvas(xAnchor);
+            int yImg = yScreenToCanvas(yAnchor);
+            // recalculate the _xOrig & _yOrig
+            _xOrig = Math.min(0, (xAnchor / newScale - xImg) * newScale);
+            _xOrig = Math.max(_xOrig, getWidth() - _drwImage.getWidth() * newScale);
+            _yOrig = Math.min(0, (yAnchor / newScale - yImg) * newScale);
+            _yOrig = Math.max(_yOrig,  getHeight() - _drwImage.getHeight() * newScale);
             _scale = newScale;
-            
-            if (_xOrig % _scale != 0 || _yOrig % _scale != 0) {
-                System.out.println("hmm");
-            }
-            
             repaint();
         }
     }
     
+    public int xScreenToCanvas(int x) {
+        return (x - _xOrig) / _scale;
+    }
+    
+    public int yScreenToCanvas(int y) {
+        return (y - _yOrig) / _scale;
+    }
     // EndRegion: [Internal] User control methods
     
     // Region: [Public] Canvas overrides

@@ -346,8 +346,8 @@ public class DrawingFrame implements
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        _statusX.setText(""+e.getX());
-        _statusY.setText(""+e.getY());
+        _statusX.setText(""+_canvas.xScreenToCanvas(e.getX()));
+        _statusY.setText(""+_canvas.yScreenToCanvas(e.getY()));
         _statusText.setText("");
     }
     // EndRegion: [Public] MouseMotionListener overrides
@@ -358,8 +358,6 @@ public class DrawingFrame implements
         // wheel upwards (negative rotation) => zoom in => positive level value
         int levels = -e.getWheelRotation();
         _canvas.zoom(e.getX(), e.getY(), levels);
-        String dbg = String.format("(%d,%d) w:%d", e.getX(), e.getY(), levels);
-        _statusText.setText(dbg);
     }
     // EndRegion: [Public] MouseWheelListener overrides
 }
