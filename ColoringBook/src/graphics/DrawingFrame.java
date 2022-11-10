@@ -34,6 +34,7 @@ public class DrawingFrame implements
     private static final int STATUS_TEXT_WIDTH = 200;
     private static final int STATUS_HEIGHT = 20;
 
+    private MouseEvent _lastMouseEvent = null;
     private Drawing _drawing = null;
     private Frame _frame = null;
     private DbgButton[] _dbgButtons = null;
@@ -340,12 +341,17 @@ public class DrawingFrame implements
     // Region: [Public] MouseMotionListener overrides
     @Override
     public void mouseDragged(MouseEvent e) {
-        String dbg = String.format("(%d,%d)", e.getX(), e.getY());
-        _statusText.setText(dbg);
+//        String dbg = String.format("(%d,%d)", 
+//                e.getX()-_lastMouseEvent.getX(), 
+//                e.getY()-_lastMouseEvent.getY());
+//        _statusText.setText(dbg);
+        _canvas.pan(e.getX()-_lastMouseEvent.getX(), e.getY()-_lastMouseEvent.getY());
+        _lastMouseEvent = e;
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        _lastMouseEvent = e;
         _statusX.setText(""+_canvas.xScreenToCanvas(e.getX()));
         _statusY.setText(""+_canvas.yScreenToCanvas(e.getY()));
         _statusText.setText("");

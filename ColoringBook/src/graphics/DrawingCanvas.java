@@ -18,6 +18,21 @@ class DrawingCanvas extends Canvas {
     }
     
     // Region: [Internal] User control methods
+    private void constrainMovement() {
+        _xOrig = Math.min(0, _xOrig);
+        _xOrig = Math.max(_xOrig, getWidth() - _drwImage.getWidth() * _scale);
+        _yOrig = Math.min(0, _yOrig);
+        _yOrig = Math.max(_yOrig,  getHeight() - _drwImage.getHeight() * _scale);
+    }
+    
+    public int xScreenToCanvas(int x) {
+        return (x - _xOrig) / _scale;
+    }
+    
+    public int yScreenToCanvas(int y) {
+        return (y - _yOrig) / _scale;
+    }
+    
     public void zoom(int xAnchor, int yAnchor, int levels) {
         if (levels != 1 && levels != -1) {
             System.out.println("hmm");
@@ -29,21 +44,19 @@ class DrawingCanvas extends Canvas {
             int xImg = xScreenToCanvas(xAnchor);
             int yImg = yScreenToCanvas(yAnchor);
             // recalculate the _xOrig & _yOrig
-            _xOrig = Math.min(0, (xAnchor / newScale - xImg) * newScale);
-            _xOrig = Math.max(_xOrig, getWidth() - _drwImage.getWidth() * newScale);
-            _yOrig = Math.min(0, (yAnchor / newScale - yImg) * newScale);
-            _yOrig = Math.max(_yOrig,  getHeight() - _drwImage.getHeight() * newScale);
+            _xOrig = (xAnchor / newScale - xImg) * newScale;
+            _yOrig = (yAnchor / newScale - yImg) * newScale;
             _scale = newScale;
+            constrainMovement();
             repaint();
         }
     }
     
-    public int xScreenToCanvas(int x) {
-        return (x - _xOrig) / _scale;
-    }
-    
-    public int yScreenToCanvas(int y) {
-        return (y - _yOrig) / _scale;
+    public void pan(int xOffset, int yOffset) {
+        _xOrig += xOffset;
+        _yOrig += yOffset;
+        constrainMovement();
+        repaint();
     }
     // EndRegion: [Internal] User control methods
     
