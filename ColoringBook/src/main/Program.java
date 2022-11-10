@@ -32,7 +32,7 @@ public class Program {
         _drawing.setPixel(work._x, work._y, col);
         queue.add(work);
         while (!queue.isEmpty()) {
-            _frame.step(2);
+            _frame.step();
             _frame.setStatusMessage(String.format("%d",queue.size()));
             work = queue.remove();
             for(int x = work._x - 1; x <= work._x + 1; x ++) {
@@ -55,7 +55,7 @@ public class Program {
         _drawing.setPixel(work._x, work._y, col);
         stack.push(work);
         while (!stack.empty()) {
-            _frame.step(2);
+            _frame.step(1);
             _frame.setStatusMessage(String.format("%d",stack.size()));
             work = stack.pop();
             for(int x = work._x - 1; x <= work._x + 1; x ++) {
@@ -104,15 +104,15 @@ public class Program {
             }
         }
         _frame.stop();
-        floodS(140, 320, Color.orange.darker());
+        floodS(256, 274, Color.orange.darker());
         _frame.stop();
-        floodQ(275, 423, Color.orange);
+        floodQ(407, 222, Color.orange);
         _frame.stop();
-        floodR(59, 457, Color.green.brighter());
+        floodR(481, 295, Color.green.brighter());
         _frame.stop();
-        floodS(151, 253, Color.pink);
+        floodS(56, 165, Color.pink);
         _frame.stop();
-        floodQ(246,113, Color.cyan);
+        floodQ(406,395, Color.cyan);
     }
     
     /**
@@ -126,7 +126,7 @@ public class Program {
         System.out.println("Welcome to the Coloring Festival!");
         
         // pick a drawing
-        _drawing = new Drawing("drawings/bird.jpg");
+        _drawing = new Drawing("drawings/abstract.jpg");
         
         // put it in a frame
         _frame = new DrawingFrame(_drawing);
