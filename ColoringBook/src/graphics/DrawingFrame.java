@@ -341,10 +341,6 @@ public class DrawingFrame implements
     // Region: [Public] MouseMotionListener overrides
     @Override
     public void mouseDragged(MouseEvent e) {
-//        String dbg = String.format("(%d,%d)", 
-//                e.getX()-_lastMouseEvent.getX(), 
-//                e.getY()-_lastMouseEvent.getY());
-//        _statusText.setText(dbg);
         _canvas.pan(e.getX()-_lastMouseEvent.getX(), e.getY()-_lastMouseEvent.getY());
         _lastMouseEvent = e;
     }
