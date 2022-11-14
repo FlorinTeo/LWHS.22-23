@@ -316,7 +316,9 @@ public class DrawingFrame implements
             }
         } else {
             BufferedImage bi = _drawing.getImage();
-            Color c = new Color(bi.getRGB(e.getX(), e.getY()));
+            int x = _canvas.xScreenToCanvas(e.getX());
+            int y = _canvas.yScreenToCanvas(e.getY());
+            Color c = new Color(bi.getRGB(x, y));
             _statusText.setText(String.format("R:%d, G:%d, B:%d", c.getRed(), c.getGreen(), c.getBlue()));
         }
     }
