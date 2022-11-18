@@ -16,6 +16,7 @@ import java.io.Closeable;
 import java.io.IOException;
 
 import graphics.DbgButton.BtnState;
+import main.Program;
 
 /**
  * Encapsulates a representation of a generic drawing image frame as a window that 
@@ -42,6 +43,8 @@ public class DrawingFrame implements
     private TextField _statusX = null;
     private TextField _statusY = null;
     private TextField _statusText = null;
+    
+    private Floodable _floodable = null;
     
     // Region: [Public] Execution control methods
     private KeyInterceptor _keyInterceptor = new KeyInterceptor();
@@ -171,9 +174,11 @@ public class DrawingFrame implements
     /**
      * Creates an instance of a DrawingFrame object encapsulating the representation of a window displaying the pixels of the given drawing object.
      * @param drawing - the drawing to be displayed by this frame.
+     * @param floodable 
      * @throws IOException
      */
-    public DrawingFrame(Drawing drawing) throws IOException {
+    public DrawingFrame(Drawing drawing, Floodable floodable) throws IOException {
+        _floodable = floodable;
         // setup callback methods for keyInterceptor control keys
         _keyInterceptor.setKeyTypedHook('1', _onKeyInteceptorCtrl);
         _keyInterceptor.setKeyTypedHook('2', _onKeyInteceptorCtrl);
@@ -320,6 +325,13 @@ public class DrawingFrame implements
             int y = _canvas.yScreenToCanvas(e.getY());
             Color c = new Color(bi.getRGB(x, y));
             _statusText.setText(String.format("R:%d, G:%d, B:%d", c.getRed(), c.getGreen(), c.getBlue()));
+            if (_floodable != null) {
+                try {
+                    _floodable.flood(x, y);
+                    _canvas.repaint();
+                } catch (InterruptedException e1) {
+                }
+            }
         }
     }
 

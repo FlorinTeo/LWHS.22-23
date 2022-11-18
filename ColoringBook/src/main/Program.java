@@ -6,9 +6,10 @@ import java.util.Queue;
 import java.util.Stack;
 
 import graphics.DrawingFrame;
+import graphics.Floodable;
 import graphics.Drawing;
 
-public class Program {
+public class Program implements Floodable {
     
     /**
      * Global static fields for the Drawing object being worked on
@@ -50,8 +51,8 @@ public class Program {
         
         // keep removing work items from the queue for as long as there's work to do
         while (!queue.isEmpty()) {
-            _frame.step(1);
-            _frame.setStatusMessage(String.format("%d",queue.size()));
+            //_frame.step(1);
+            //_frame.setStatusMessage(String.format("%d",queue.size()));
             
             // remove the work item from the queue and execute on it:
             // analyze each of the neighbors of this pixel and if that neighbor is within
@@ -148,17 +149,17 @@ public class Program {
      * replace the dark pixels with yellow and the bright pixels with yellow.
      */
     public static void paint() throws InterruptedException {
-        for(int x = 40; x < 140; x++) {
-            for (int y = 30; y < 130; y++) {
-                _frame.step();
-                if (_drawing.isDarkPixel(x, y)) {
-                    _drawing.setPixel(x, y, Color.yellow);
-                } else {
-                    _drawing.setPixel(x, y, Color.red);
-                }
-            }
-        }
-        _frame.stop();
+//        for(int x = 40; x < 140; x++) {
+//            for (int y = 30; y < 130; y++) {
+//                _frame.step();
+//                if (_drawing.isDarkPixel(x, y)) {
+//                    _drawing.setPixel(x, y, Color.yellow);
+//                } else {
+//                    _drawing.setPixel(x, y, Color.red);
+//                }
+//            }
+//        }
+//        _frame.stop();
         floodS(256, 274, Color.orange.darker());
         _frame.stop();
         floodQ(407, 222, Color.orange);
@@ -184,7 +185,7 @@ public class Program {
         _drawing = new Drawing("drawings/abstract.jpg");
         
         // put it in a frame
-        _frame = new DrawingFrame(_drawing);
+        _frame = new DrawingFrame(_drawing, new Program());
 
         // put the frame on display and stop to admire it.
         _frame.open();
@@ -198,5 +199,10 @@ public class Program {
         //_frame.close();
         
         System.out.println("Well done, goodbye!");
+    }
+
+    @Override
+    public void flood(int x, int y) throws InterruptedException {
+        floodQ(x, y, Color.green);
     }
 }
