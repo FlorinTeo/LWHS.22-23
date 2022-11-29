@@ -83,7 +83,7 @@ public class Program {
         for (int i = 0; i < 2; i++) {
             while(!s.isEmpty()) {
                 sum += s.peek();
-                s2.add(s.pop());
+                s2.push(s.pop());
             }
             Stack<Integer> temp = s;
             s = s2;
@@ -104,10 +104,10 @@ public class Program {
     }
     
     public static void main(String[] args) {
-        q2("q2");
-        q3("q3");
-        mysteryS("q4");
-        q5("q5");
+//        q2("q2");
+//        q3("q3");
+//        mysteryS("q4");
+//        q5("q5");
         q78("q7 & q8");
     }
 }
