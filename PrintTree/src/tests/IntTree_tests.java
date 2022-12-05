@@ -52,9 +52,18 @@ class IntTree_tests {
     }
     
     @Test
-    void test_toPrettyPrintString() {
+    void test_toPrettyPrint() {
         IntTree tree = newTree(7, 4, 10, 2, 5, 8, 12, 9, 6, 11, 15);
+        String expected = 
+                  "      ______[7]______                \n"
+                + "     /               \\               \n"
+                + "   [4]            ___[10]____        \n"
+                + "  /   \\          /           \\       \n"
+                + "[2]   [5]      [8]           [12]    \n"
+                + "         \\        \\         /    \\   \n"
+                + "         [6]      [9]    [11]    [15]\n"
+                + "                                     \n";
         String output = tree.toPrettyPrint();
-        System.out.println(output);
+        Assert.assertEquals(expected, output);
     }
 }
