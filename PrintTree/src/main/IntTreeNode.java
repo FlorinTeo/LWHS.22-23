@@ -9,16 +9,15 @@ public class IntTreeNode {
     private IntTreeNode left;    // reference to left subtree
     private IntTreeNode right;   // reference to right subtree
     
-    // Constructs a leaf node with given data.
+    /**
+     * Constructs a node with no (null) left/right subtrees,
+     * and containing {data} in its data field.
+     * @param data - value stored in the node's data field.
+     */
     public IntTreeNode(int data) {
-        this(data, null, null);
-    }
-    
-    // Constructs a IntTreeNode with the given data and links.
-    public IntTreeNode(int data, IntTreeNode left, IntTreeNode right) {
         this.data = data;
-        this.left = left;
-        this.right = right;
+        this.left = null;
+        this.right = null;
     }
     
     public static String newString(char ch, int count) {
@@ -66,18 +65,18 @@ public class IntTreeNode {
         return queue;
     }
     
-    public void insert(int data) {
+    public void addValue(int data) {
         if (data <= this.data) {
            if (left == null) {
                left = new IntTreeNode(data);
            } else {
-               left.insert(data);
+               left.addValue(data);
            }
         } else {
             if (right == null) {
                 right = new IntTreeNode(data);
             } else {
-                right.insert(data);
+                right.addValue(data);
             }
         }
     }

@@ -66,4 +66,13 @@ class IntTree_tests {
         String output = tree.toPrettyPrint();
         Assert.assertEquals(expected, output);
     }
+    
+    @Test
+    void test_Output() {
+        IntTree tree = newTree(2, 1, 4, 3, 5);
+        System.out.println(tree.toPreOrderString());
+        System.out.println(tree.toInOrderString());
+        System.out.println(tree.toPostOrderString());
+        System.out.println(tree.toPrettyPrint());
+    }
 }
