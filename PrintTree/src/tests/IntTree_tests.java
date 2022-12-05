@@ -53,9 +53,4 @@ class IntTree_tests {
         tree = newTree(7,5, 9, 4, 12, 6, 10);
         Assert.assertEquals("((()()[4])(()()[6])[5])(()((()()[10])()[12])[9])[7]", tree.toPostOrderString());
     }
-    
-    @Test
-    void test_newString() {
-        Assert.assertEquals("xxxxxxx", IntTreeNode.newString('x', 7));
-    }
 }

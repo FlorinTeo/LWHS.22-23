@@ -27,6 +27,26 @@ public class IntTreeNode {
         return new String(chArr);
     }
     
+    public static void mergeQueues(Queue<String> q1, int sep, Queue<String> q2, Queue<String> qMerged) {
+        int len1 = q1.isEmpty() ? 0 : q1.peek().length();
+        int len2 = q2.isEmpty() ? 0 : q2.peek().length();
+        String spaces = newString(' ', sep);
+        while(!q1.isEmpty() && !q2.isEmpty()) {
+            qMerged.add(q1.remove() + spaces + q2.remove());
+        }
+        while(!q1.isEmpty()) {
+            qMerged.add(q1.remove() + spaces + newString(' ', len2));
+        }
+        while(!q2.isEmpty()) {
+            qMerged.add(newString(' ', len1) + spaces + q2.remove());
+        }
+    }
+    
+    public static Queue<String> newQueue(Queue<String> q1, String label, Queue<String>q2) {
+        Queue<String> queue = new LinkedList<String>();
+        return queue;
+    }
+    
     public void insert(int data) {
         if (data <= this.data) {
            if (left == null) {
@@ -83,17 +103,16 @@ public class IntTreeNode {
     }
     
     public Queue<String> toPrettyPrint() {
-        Queue<String> output = new LinkedList<String>();
-        if (left == null && right == null) {
-            output.add(toString()); 
-        } else if (left != null && right == null) {
-            
-        } else if (left == null && right != null) {
-            
-        } else {  // left != null && right != null
-            
-        }
-        return output;
+        String nodeLabel = toString();
+        Queue<String> qLeft = left != null 
+                ? left.toPrettyPrint() 
+                : new LinkedList<String>();
+        Queue<String> qRight = right != null 
+                ? right.toPrettyPrint()
+                : new LinkedList<String>();
+        Queue<String> qOutput = newQueue(qLeft, nodeLabel, qRight);
+        mergeQueues(qLeft, nodeLabel.length(), qRight, qOutput);
+        return qOutput;
     }
     
     public String toString() {
