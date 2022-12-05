@@ -1,5 +1,8 @@
 package main;
 
+import java.util.List;
+import java.util.Queue;
+
 public class IntTree {
     private IntTreeNode overallRoot;
     
@@ -38,5 +41,15 @@ public class IntTree {
         }
         return output;
     }
-
+    
+    public String toPrettyPrint() {
+        String output = "";
+        if (overallRoot != null) {
+            Queue<String> lines = overallRoot.toPrettyPrint();
+            while(!lines.isEmpty()) {
+                output += lines.remove() + "\n";
+            }
+        }
+        return output;
+    }
 }

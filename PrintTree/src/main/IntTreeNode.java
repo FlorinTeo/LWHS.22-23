@@ -27,23 +27,42 @@ public class IntTreeNode {
         return new String(chArr);
     }
     
-    public static void mergeQueues(Queue<String> q1, int sep, Queue<String> q2, Queue<String> qMerged) {
-        int len1 = q1.isEmpty() ? 0 : q1.peek().length();
-        int len2 = q2.isEmpty() ? 0 : q2.peek().length();
+    public static void mergeQueues(Queue<String> qLeft, int sep, Queue<String> qRight, Queue<String> qMerged) {
+        int len1 = qLeft.isEmpty() ? 0 : qLeft.peek().length();
+        int len2 = qRight.isEmpty() ? 0 : qRight.peek().length();
         String spaces = newString(' ', sep);
-        while(!q1.isEmpty() && !q2.isEmpty()) {
-            qMerged.add(q1.remove() + spaces + q2.remove());
+        while(!qLeft.isEmpty() && !qRight.isEmpty()) {
+            qMerged.add(qLeft.remove() + spaces + qRight.remove());
         }
-        while(!q1.isEmpty()) {
-            qMerged.add(q1.remove() + spaces + newString(' ', len2));
+        while(!qLeft.isEmpty()) {
+            qMerged.add(qLeft.remove() + spaces + newString(' ', len2));
         }
-        while(!q2.isEmpty()) {
-            qMerged.add(newString(' ', len1) + spaces + q2.remove());
+        while(!qRight.isEmpty()) {
+            qMerged.add(newString(' ', len1) + spaces + qRight.remove());
         }
     }
     
-    public static Queue<String> newQueue(Queue<String> q1, String label, Queue<String>q2) {
+    public static Queue<String> initializeQueue(Queue<String> qLeft, String label, Queue<String>qRight) {
+        String strLeft = qLeft.isEmpty() ? "" : qLeft.peek();
+        String strRight = qRight.isEmpty() ? "" : qRight.peek();
+        int iLeft = strLeft.indexOf(']');
+        int iRight = strRight.indexOf('[');
+        String line1 = "";
+        String line2 = "";
+        if (iLeft >= 0) {
+            line1 += newString(' ', iLeft) + " " + newString('_', strLeft.length() - iLeft - 1);
+            line2 += newString(' ', iLeft) + "/" + newString(' ', strLeft.length() - iLeft - 1);
+        }
+        line1 += label;
+        line2 += newString(' ', label.length());
+        if (iRight >= 0) {
+            line1 += newString('_', iRight) + " " + newString(' ', strRight.length() - iRight - 1);
+            line2 += newString(' ', iRight) + "\\" + newString(' ', strRight.length() - iRight - 1);
+        }
+
         Queue<String> queue = new LinkedList<String>();
+        queue.add(line1);
+        queue.add(line2);
         return queue;
     }
     
@@ -110,7 +129,7 @@ public class IntTreeNode {
         Queue<String> qRight = right != null 
                 ? right.toPrettyPrint()
                 : new LinkedList<String>();
-        Queue<String> qOutput = newQueue(qLeft, nodeLabel, qRight);
+        Queue<String> qOutput = initializeQueue(qLeft, nodeLabel, qRight);
         mergeQueues(qLeft, nodeLabel.length(), qRight, qOutput);
         return qOutput;
     }
