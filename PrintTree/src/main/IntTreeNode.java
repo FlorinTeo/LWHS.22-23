@@ -20,6 +20,12 @@ public class IntTreeNode {
         this.right = null;
     }
     
+    /**
+     * Returns a string containing a character repeated a given number of times.
+     * @param ch - character to be repeated.
+     * @param count - number of times to repeat the character. 
+     * @return string containing {ch} repeated {count} number of times.
+     */
     public static String newString(char ch, int count) {
         char[] chArr = new char[count];
         Arrays.fill(chArr, ch);
@@ -41,28 +47,49 @@ public class IntTreeNode {
         }
     }
     
-    public static Queue<String> initializeQueue(Queue<String> qLeft, String label, Queue<String>qRight) {
-        String strLeft = qLeft.isEmpty() ? "" : qLeft.peek();
-        String strRight = qRight.isEmpty() ? "" : qRight.peek();
-        int iLeft = strLeft.indexOf(']');
-        int iRight = strRight.indexOf('[');
+    /**
+     * Generates the top lines of the pretty print of this node, from the top lines
+     * of its left and right children. The resulting lines are added to a queue which
+     * is returned to the caller. For example:
+     * sLeft: "    [12]  " (length 10, with ']' at index 7)
+     * label: "[18]" (length 4)
+     * sRight:"  [23]   " (length 9, with '[' at index 2)
+     * then the method returns a new queue containing exactly two strings:
+     * ["        __[18]__       ", (length 10+4+9)
+     *  "       /        \\      " (length 10+4+9, with '/' at index 7
+     *                                             and '\\' at index 10+4+2)
+     * ]
+     * @param sLeft - left string; can be "" or contain "[number]"
+     * @param label - middle label
+     * @param sRight - right string; can be "" or contain "[number]"
+     * @return a new Queue<String> containing two lines combined from left and right.
+     */
+    public static Queue<String> topLines(String sLeft, String label, String sRight) {
+        int iLeft = sLeft.indexOf(']');
+        int iRight = sRight.indexOf('[');
         String line1 = "";
         String line2 = "";
         if (iLeft >= 0) {
-            line1 += newString(' ', iLeft) + " " + newString('_', strLeft.length() - iLeft - 1);
-            line2 += newString(' ', iLeft) + "/" + newString(' ', strLeft.length() - iLeft - 1);
+            line1 += newString(' ', iLeft) + " " + newString('_', sLeft.length() - iLeft - 1);
+            line2 += newString(' ', iLeft) + "/" + newString(' ', sLeft.length() - iLeft - 1);
         }
         line1 += label;
         line2 += newString(' ', label.length());
         if (iRight >= 0) {
-            line1 += newString('_', iRight) + " " + newString(' ', strRight.length() - iRight - 1);
-            line2 += newString(' ', iRight) + "\\" + newString(' ', strRight.length() - iRight - 1);
+            line1 += newString('_', iRight) + " " + newString(' ', sRight.length() - iRight - 1);
+            line2 += newString(' ', iRight) + "\\" + newString(' ', sRight.length() - iRight - 1);
         }
 
         Queue<String> queue = new LinkedList<String>();
         queue.add(line1);
         queue.add(line2);
         return queue;
+    }
+    
+    public static Queue<String> initializeQueue(Queue<String> qLeft, String label, Queue<String>qRight) {
+        String sLeft = qLeft.isEmpty() ? "" : qLeft.peek();
+        String sRight = qRight.isEmpty() ? "" : qRight.peek();       
+        return topLines(sLeft, label, sRight);
     }
     
     public void addValue(int data) {
