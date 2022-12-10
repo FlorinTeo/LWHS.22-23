@@ -32,10 +32,24 @@ public class IntTreeNode {
         return new String(chArr);
     }
     
-    public static void mergeQueues(Queue<String> qLeft, int sep, Queue<String> qRight, Queue<String> qMerged) {
+    /**
+     * Combines all the lines from two queues adding them to the end of the merged queue.
+     * The combined line contains the line from the left queue, followed by an empty string
+     * of the same length as label, followed by the line from the right queue. For example:
+     * If the top line from qLeft is "    [12]  " (length 10), the label is "[18]" (4 characters)
+     * and the top line from qRight is "  [23]   " (length 9) then the combined line is
+     * "    [12]        [23]   " (length 10 + 4 + 9).
+     * If the content of any of the two queues is finished ahead of the other, the remaining combined
+     * lines contain strings of spaces of the same length as the initial ones in the same queue.
+     * @param qLeft - queue with all pretty-printing lines of the left subtree.
+     * @param label - label of this node.
+     * @param qRight - queue with all pretty-printing lines of the right subtree.
+     * @param qMerged - queue with all pretty-printing lines of this subtree.
+     */
+    public static void mergeQueues(Queue<String> qLeft, String label, Queue<String> qRight, Queue<String> qMerged) {
         int len1 = qLeft.isEmpty() ? 0 : qLeft.peek().length();
         int len2 = qRight.isEmpty() ? 0 : qRight.peek().length();
-        String spaces = newString(' ', sep);
+        String spaces = newString(' ', label.length());
         while(!qLeft.isEmpty() && !qRight.isEmpty()) {
             qMerged.add(qLeft.remove() + spaces + qRight.remove());
         }
@@ -147,6 +161,12 @@ public class IntTreeNode {
         return output;
     }
     
+    /**
+     * Constructs all lines for the pretty-print of this node and
+     * add then to a queue. First line in the queue is the line 
+     * corresponding to the tree with the root in this node.
+     * @return - the queue with all pretty-print lines for this node.
+     */
     public Queue<String> toPrettyPrint() {
         String nodeLabel = toString();
         Queue<String> qLeft = left != null 
@@ -156,7 +176,7 @@ public class IntTreeNode {
                 ? right.toPrettyPrint()
                 : new LinkedList<String>();
         Queue<String> qOutput = initializeQueue(qLeft, nodeLabel, qRight);
-        mergeQueues(qLeft, nodeLabel.length(), qRight, qOutput);
+        mergeQueues(qLeft, nodeLabel, qRight, qOutput);
         return qOutput;
     }
     
