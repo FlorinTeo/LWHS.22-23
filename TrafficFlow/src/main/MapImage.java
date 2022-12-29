@@ -1,10 +1,14 @@
 package main;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -15,6 +19,8 @@ public class MapImage extends Drawing {
     private String _mapName;
     // Map<overlay_name, overlay_image> (i.e. {<"AB", imageAB>, <"AC", imageAC>, ..})
     private HashMap<String, BufferedImage> _mapOverlays;
+    // overlay_names to put on the map
+    private List<String> _overlays = new ArrayList<String>();
 
     /**
      * Reads a MapImage content from a folder. The folder is expected to contain
@@ -47,6 +53,10 @@ public class MapImage extends Drawing {
         return mapImage;
     }
     
+    public void setOverlays(String... overlays) {
+        _overlays = Arrays.asList(overlays);
+    }
+    
     /**
      * Default MapImage constructor
      */
@@ -60,19 +70,19 @@ public class MapImage extends Drawing {
         return _mapName;
     }
     
-    public BufferedImage getOverlay(String layerName) {
-        return _mapOverlays.get(layerName);
-    }
-    
-    public int getOverlaysCount() {
-        return _mapOverlays.size();
-    }
-    
-    public int getWidth() {
-        return _image.getWidth();
-    }
-    
-    public int getHeight() {
-        return _image.getHeight();
+    /**
+     * Rendering callback for this mapImage
+     */
+    @Override
+    public BufferedImage getImage() {
+        BufferedImage image = new BufferedImage(getWidth(),getHeight(),BufferedImage.TYPE_INT_ARGB);
+        Graphics g=image.getGraphics();
+        g.drawImage(_image,0,0,null);
+        for (String overlay : _overlays) {
+            if (_mapOverlays.containsKey(overlay)) {
+                g.drawImage(_mapOverlays.get(overlay),0,0,null);
+            }
+        }
+        return image;
     }
 }

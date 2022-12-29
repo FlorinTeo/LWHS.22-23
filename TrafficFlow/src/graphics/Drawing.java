@@ -19,22 +19,20 @@ public class Drawing {
     /**
      * Creates an instance of a Drawing object encapsulating the representation of 
      * the imageFile given as argument.
-     * @param imageFile - Filename of a drawing image.
-     * @throws IOException - the imageFile doesn't exist or cannot be read.
      */
-    public Drawing(String imageFile) throws IOException {
+    public static Drawing read(String imageFile) throws IOException {
         File drwFile = new File(imageFile);
         if (!drwFile.exists() || drwFile.isDirectory()) {
             throw new IOException();
         }
-        _image = ImageIO.read(drwFile);
+        return new Drawing(ImageIO.read(drwFile));
     }
     
     public Drawing(BufferedImage image) {
         _image = image;
     }
     
-    BufferedImage getImage() {
+    public BufferedImage getImage() {
         return _image;
     }
 

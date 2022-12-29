@@ -11,7 +11,7 @@ import java.util.HashMap;
  * implementing UI level debugging on 2 levels, Fast-Fwd and Quit.
  * @author Florin
  */
-class KeyInterceptor implements KeyListener {
+public class KeyInterceptor implements KeyListener {
     
     // To customize key hooks, consuming classes need to define their own
     // functional interface and pass it to one of the setKey**Hook() method
@@ -19,7 +19,7 @@ class KeyInterceptor implements KeyListener {
     // I.e:
     // KeyIterceptor.KeyHook onSTyped = (KeyEvent keyEvent) -> {..}
     // myKeyInterceptor.setKeyTypedHook('S', onSTyped)
-    interface KeyHook {
+    public interface KeyHook {
         public void keyHook(KeyEvent keyEvent);
     }
     
@@ -31,20 +31,20 @@ class KeyInterceptor implements KeyListener {
     private HashMap<Integer, KeyHook> _keyReleasedHooks = new HashMap<Integer, KeyHook>();
     // EndRegion: [Private] Data fields
     
-    // Region: [Internal] Keys hooking methods
-    void setKeyTypedHook(int keyEventKey, KeyHook keyHook) {
+    // Region: [Public] Keys hooking methods
+    public void setKeyTypedHook(int keyEventKey, KeyHook keyHook) {
         _keyTypedHooks.put(keyEventKey, keyHook);
     }
     
-    void setKeyPressedHook(int keyEventKey, KeyHook keyHook) {
+    public void setKeyPressedHook(int keyEventKey, KeyHook keyHook) {
         _keyPressedHooks.put(keyEventKey, keyHook);
     }
     
-    void setKeyReleasedHook(int keyEventKey, KeyHook keyHook) {
+    public void setKeyReleasedHook(int keyEventKey, KeyHook keyHook) {
         _keyReleasedHooks.put(keyEventKey, keyHook);
     }
     
-    void forwardKeyEvent(KeyEvent e, HashMap<Integer, KeyHook> keyHooks) {
+    public void forwardKeyEvent(KeyEvent e, HashMap<Integer, KeyHook> keyHooks) {
         int hookKey = e.getKeyCode();
         if (hookKey == KeyEvent.VK_UNDEFINED) {
             hookKey = Character.toUpperCase(e.getKeyChar());
@@ -57,7 +57,7 @@ class KeyInterceptor implements KeyListener {
             }
         }
     }
-    // EndRegion: [Internal] Keys hooking methods
+    // EndRegion: [Public] Keys hooking methods
     
     // Region: [Public] KeyListener overrides
     @Override

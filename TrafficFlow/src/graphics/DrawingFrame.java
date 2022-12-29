@@ -44,7 +44,7 @@ public class DrawingFrame implements
     private TextField _statusText = null;
     
     // Region: [Public] Execution control methods
-    private KeyInterceptor _keyInterceptor = new KeyInterceptor();
+    protected KeyInterceptor _keyInterceptor = new KeyInterceptor();
     
     /**
      * In "step-by-step" mode (default) it causes the execution to stop until user resumes.<br>
