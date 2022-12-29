@@ -1,4 +1,4 @@
-package main;
+package graphics;
 
 import java.awt.Component;
 import java.awt.event.KeyEvent;
@@ -11,7 +11,7 @@ import java.util.HashMap;
  * implementing UI level debugging on 2 levels, Fast-Fwd and Quit.
  * @author Florin
  */
-public class KeyInterceptor implements KeyListener {
+class KeyInterceptor implements KeyListener {
     
     // To customize key hooks, consuming classes need to define their own
     // functional interface and pass it to one of the setKey**Hook() method
@@ -19,32 +19,32 @@ public class KeyInterceptor implements KeyListener {
     // I.e:
     // KeyIterceptor.KeyHook onSTyped = (KeyEvent keyEvent) -> {..}
     // myKeyInterceptor.setKeyTypedHook('S', onSTyped)
-    public interface KeyHook {
+    interface KeyHook {
         public void keyHook(KeyEvent keyEvent);
     }
     
-    // Region: Data fields
+    // Region: [Private] Data fields
     private Object _sync = new Object();
     private Integer _keyStepLevel = Integer.MIN_VALUE;
     private HashMap<Integer, KeyHook> _keyTypedHooks = new HashMap<Integer, KeyHook>();
     private HashMap<Integer, KeyHook> _keyPressedHooks = new HashMap<Integer, KeyHook>();
     private HashMap<Integer, KeyHook> _keyReleasedHooks = new HashMap<Integer, KeyHook>();
-    // EndRegion: Data fields
+    // EndRegion: [Private] Data fields
     
-    // Region: Keys hooking methods
-    public void setKeyTypedHook(int keyEventKey, KeyHook keyHook) {
+    // Region: [Internal] Keys hooking methods
+    void setKeyTypedHook(int keyEventKey, KeyHook keyHook) {
         _keyTypedHooks.put(keyEventKey, keyHook);
     }
     
-    public void setKeyPressedHook(int keyEventKey, KeyHook keyHook) {
+    void setKeyPressedHook(int keyEventKey, KeyHook keyHook) {
         _keyPressedHooks.put(keyEventKey, keyHook);
     }
     
-    public void setKeyReleasedHook(int keyEventKey, KeyHook keyHook) {
+    void setKeyReleasedHook(int keyEventKey, KeyHook keyHook) {
         _keyReleasedHooks.put(keyEventKey, keyHook);
     }
     
-    private void forwardKeyEvent(KeyEvent e, HashMap<Integer, KeyHook> keyHooks) {
+    void forwardKeyEvent(KeyEvent e, HashMap<Integer, KeyHook> keyHooks) {
         int hookKey = e.getKeyCode();
         if (hookKey == KeyEvent.VK_UNDEFINED) {
             hookKey = Character.toUpperCase(e.getKeyChar());
@@ -57,9 +57,9 @@ public class KeyInterceptor implements KeyListener {
             }
         }
     }
-    // EndRegion: Keys hooking methods
+    // EndRegion: [Internal] Keys hooking methods
     
-    // Region: KeyListener overrides
+    // Region: [Public] KeyListener overrides
     @Override
     public void keyTyped(KeyEvent keyEvent) {
         synchronized (_sync) {
@@ -82,9 +82,8 @@ public class KeyInterceptor implements KeyListener {
                 _keyStepLevel = Integer.MAX_VALUE;
                 _sync.notifyAll();
                 break;
-            default:
-                forwardKeyEvent(keyEvent, _keyTypedHooks);
             }
+            forwardKeyEvent(keyEvent, _keyTypedHooks);
         }
     }
     
@@ -105,20 +104,30 @@ public class KeyInterceptor implements KeyListener {
     public void keyReleased(KeyEvent keyEvent) {
         forwardKeyEvent(keyEvent, _keyReleasedHooks);
     }
-    // EndRegion: KeyListener overrides
+    // EndRegion: [Public] KeyListener overrides
     
-    // Region: Public methods
-    public boolean blocksOnLevel(int level) {
+    // Region: [Internal] Control methods
+    boolean blocksOnLevel(int level) {
         return (level >= _keyStepLevel);
     }
     
-    public void step(int level) {
+    boolean isFastFwd() {
+        return (_keyStepLevel == Integer.MAX_VALUE);
+    }
+    
+    void step(int level) {
+        step(level, 0);
+    }
+    
+    void step(int level, long delay) {
         synchronized (_sync) {
             try {
                 // block if level is same or greater than the key-typed level.
                 // (i.e step_0 won't block if user typed 2)
                 if (blocksOnLevel(level)) {
                     _sync.wait();
+                } else if (!isFastFwd() && delay > 0) {
+                    Thread.sleep(delay);
                 }
             } catch (InterruptedException e) {
                 System.out.println(e.getMessage());
@@ -126,7 +135,7 @@ public class KeyInterceptor implements KeyListener {
         }
     }
     
-    public void simulateKeyTyped(Component source, int keyEventKey) {
+    void simulateKeyTyped(Component source, int keyEventKey) {
         KeyEvent keyEvent = new KeyEvent(
                 source,
                 0,
@@ -136,5 +145,5 @@ public class KeyInterceptor implements KeyListener {
                 (char)keyEventKey);
         keyTyped(keyEvent);
     }
-    // EndRegion: Public methods
+    // EndRegion: [Internal] Control methods
 }
