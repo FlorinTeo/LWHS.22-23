@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 
@@ -53,7 +54,17 @@ public class MapImage extends Drawing {
         return mapImage;
     }
     
-    public void setOverlays(String... overlays) {
+    /**
+     * Returns the full set of overlay names in this mapImage
+     */
+    public Set<String> getOverlays() {
+        return _mapOverlays.keySet();
+    }
+    
+    /**
+     * Shows the selected overlays on the image
+     */
+    public void showOverlays(String... overlays) {
         _overlays = Arrays.asList(overlays);
     }
     
