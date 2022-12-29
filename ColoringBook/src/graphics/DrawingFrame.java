@@ -16,7 +16,6 @@ import java.io.Closeable;
 import java.io.IOException;
 
 import graphics.DbgButton.BtnState;
-import main.Program;
 
 /**
  * Encapsulates a representation of a generic drawing image frame as a window that 
