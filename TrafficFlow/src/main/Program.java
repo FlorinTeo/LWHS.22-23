@@ -26,6 +26,8 @@ public class Program {
 
         mapFrame.setStatusMessage("f -> stop()");
         mapFrame.stop();
+        
+        System.out.println(mapImage.collide("AB", "DC"));
 
         mapFrame.close();
         System.out.println("Goodbye!");

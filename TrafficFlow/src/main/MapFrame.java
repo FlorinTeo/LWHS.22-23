@@ -74,6 +74,16 @@ public class MapFrame extends DrawingFrame {
         }
         showRoutes();
     };
+    
+    private KeyInterceptor.KeyHook _onKeyX = (keyEvent) -> {
+        List<String> routes = _mapImage.getOverlays();
+        if (routes.size() == 0) {
+            this.setStatusMessage("?");
+        } else {
+            boolean collide = _mapImage.collide(routes.stream().toArray(String[] ::new));
+            this.setStatusMessage(collide ? "collide" : "clear");            
+        }
+    };
     // EndRegion: KeyInterceptor hooks
     
     public MapFrame(MapImage mapImage) throws IOException {
@@ -87,6 +97,7 @@ public class MapFrame extends DrawingFrame {
         _keyInterceptor.setKeyTypedHook('C', _onKeyACDE);
         _keyInterceptor.setKeyTypedHook('D', _onKeyACDE);
         _keyInterceptor.setKeyTypedHook('E', _onKeyACDE);
+        _keyInterceptor.setKeyTypedHook('X', _onKeyX);
         _keyInterceptor.setKeyPressedHook(KeyEvent.VK_DELETE, _onKeyDelete);
     }
 }

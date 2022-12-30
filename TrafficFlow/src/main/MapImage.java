@@ -64,8 +64,8 @@ public class MapImage extends Drawing {
     /**
      * Shows the selected overlays on the image
      */
-    public void showRoutes(String... overlays) {
-        _overlays = Arrays.asList(overlays);
+    public void showRoutes(String... routes) {
+        _overlays = Arrays.asList(routes);
     }
     
     /**
@@ -79,6 +79,35 @@ public class MapImage extends Drawing {
     
     public String getMapName() {
         return _mapName;
+    }
+    
+    public List<String> getOverlays() {
+        return _overlays;
+    }
+    
+    public boolean collide(String... routes) {
+        List<BufferedImage> overlays = new ArrayList<BufferedImage>();
+        for(String route : routes) {
+            overlays.add(_mapOverlays.get(route));
+        }
+        
+        for (int x = 0; x < getWidth(); x++) {
+            for (int y = 0; y < getHeight(); y++) {
+                int aChannel = 0;
+                for(BufferedImage overlay : overlays) {
+                    int aC = overlay.getRGB(x, y) >>> 24;
+                    if (aC != 0) {
+                        if (aChannel != 0) {
+                            return true;
+                        } else {
+                            aChannel = aC;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return false;
     }
     
     /**
