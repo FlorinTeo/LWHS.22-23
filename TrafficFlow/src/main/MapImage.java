@@ -57,14 +57,14 @@ public class MapImage extends Drawing {
     /**
      * Returns the full set of overlay names in this mapImage
      */
-    public Set<String> getOverlays() {
+    public Set<String> getRoutes() {
         return _mapOverlays.keySet();
     }
     
     /**
      * Shows the selected overlays on the image
      */
-    public void showOverlays(String... overlays) {
+    public void showRoutes(String... overlays) {
         _overlays = Arrays.asList(overlays);
     }
     

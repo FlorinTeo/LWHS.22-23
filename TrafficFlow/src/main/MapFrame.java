@@ -14,65 +14,65 @@ public class MapFrame extends DrawingFrame {
 
     private MapImage _mapImage;
 
-    // Region: Overlays manual display
-    private class OverlayInfo {
-        private int _overlayIndex;
-        private ArrayList<String> _overlayNames; 
+    // Region: Routes manual display
+    private class RouteNodeInfo {
+        private int _index;
+        private ArrayList<String> _routes; 
         
-        public OverlayInfo() {
-            _overlayIndex = -1;
-            _overlayNames = new ArrayList<String>();
+        public RouteNodeInfo() {
+            _index = -1;
+            _routes = new ArrayList<String>();
         }
     }
-    private HashMap<Character, OverlayInfo> _overlayInfoMap = new HashMap<Character, OverlayInfo>();
+    private HashMap<Character, RouteNodeInfo> _routeInfoMap = new HashMap<Character, RouteNodeInfo>();
     
-    private void buildOverlayInfoMap() {
-        Set<String> overlays = _mapImage.getOverlays();
-        for(String overlayName : overlays) {
-            char key = Character.toUpperCase(overlayName.charAt(0));
-            OverlayInfo info = null;
-            if (_overlayInfoMap.containsKey(key)) {
-                info = _overlayInfoMap.get(key);
+    private void buildRouteInfoMap() {
+        Set<String> routes = _mapImage.getRoutes();
+        for(String routeName : routes) {
+            char key = Character.toUpperCase(routeName.charAt(0));
+            RouteNodeInfo info = null;
+            if (_routeInfoMap.containsKey(key)) {
+                info = _routeInfoMap.get(key);
             } else {
-                info = new OverlayInfo();
-                _overlayInfoMap.put(key, info);
+                info = new RouteNodeInfo();
+                _routeInfoMap.put(key, info);
             }
-            info._overlayNames.add(overlayName);
+            info._routes.add(routeName);
         }
     }
     
-    private void showOverlays() {
-        List<String> overlays = new ArrayList<String>();
-        for(OverlayInfo oi : _overlayInfoMap.values()) {
-            if (oi._overlayIndex >= 0) {
-                overlays.add(oi._overlayNames.get(oi._overlayIndex));
+    private void showRoutes() {
+        List<String> routes = new ArrayList<String>();
+        for(RouteNodeInfo rni : _routeInfoMap.values()) {
+            if (rni._index >= 0) {
+                routes.add(rni._routes.get(rni._index));
             }
         }
-        String[] overlaysArr = overlays.toArray(new String[overlays.size()]);
-        _mapImage.showOverlays(overlaysArr);
+        String[] routesArr = routes.toArray(new String[routes.size()]);
+        _mapImage.showRoutes(routesArr);
         repaint();
     }
-    // EndRegion: Overlays manual display
+    // EndRegion: Routes manual display
 
     // Region: KeyInterceptor hooks
     private KeyInterceptor.KeyHook _onKeyACDE = (keyEvent) -> {
         char key = Character.toUpperCase(keyEvent.getKeyChar());
-        if (!_overlayInfoMap.containsKey(key)) {
+        if (!_routeInfoMap.containsKey(key)) {
             return;
         }
-        OverlayInfo oInfo = _overlayInfoMap.get(key);
-        oInfo._overlayIndex++;
-        if (oInfo._overlayIndex == oInfo._overlayNames.size()) {
-            oInfo._overlayIndex = -1;
+        RouteNodeInfo oInfo = _routeInfoMap.get(key);
+        oInfo._index++;
+        if (oInfo._index == oInfo._routes.size()) {
+            oInfo._index = -1;
         }
-        showOverlays();
+        showRoutes();
     };
     
     private KeyInterceptor.KeyHook _onKeyDelete = (keyEvent) -> {
-        for(OverlayInfo oi : _overlayInfoMap.values()) {
-            oi._overlayIndex = -1;
+        for(RouteNodeInfo oi : _routeInfoMap.values()) {
+            oi._index = -1;
         }
-        showOverlays();
+        showRoutes();
     };
     // EndRegion: KeyInterceptor hooks
     
@@ -80,7 +80,7 @@ public class MapFrame extends DrawingFrame {
         super(mapImage);
         
         _mapImage = mapImage;
-        buildOverlayInfoMap();
+        buildRouteInfoMap();
         
         // hook in the key intercepts
         _keyInterceptor.setKeyTypedHook('A', _onKeyACDE);
