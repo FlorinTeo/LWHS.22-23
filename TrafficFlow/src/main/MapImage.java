@@ -54,6 +54,16 @@ public class MapImage extends Drawing {
         return image;
     }
     
+    private static byte[] toByteArray(BigInteger big, int minLength) {
+        byte[] base=big.toByteArray();
+        byte[] returnArray=new byte[Math.max(base.length, minLength)];
+        if ((base[0]&128)!=0) {
+            Arrays.fill(returnArray, (byte) 0xFF);
+        }
+        System.arraycopy(base,0,returnArray,returnArray.length-base.length,base.length);
+        return returnArray;
+    }
+    
     /**
      * Reads a MapImage content from a folder. The folder is expected to contain
      * the base map as a one-part name (i.e. "Ravenna.jpg") and a set of overlay
@@ -108,7 +118,7 @@ public class MapImage extends Drawing {
         Files.write(mapImagePath, mapImageBytes, StandardOpenOption.CREATE);
         byte[] mapRoutesBytes = jsonMapRoutes.getBytes();
         Files.write(mapImagePath, mapRoutesBytes, StandardOpenOption.APPEND);
-        byte[] mapImageLenBytes = BigInteger.valueOf(mapImageBytes.length).toByteArray();
+        byte[] mapImageLenBytes = toByteArray(BigInteger.valueOf(mapImageBytes.length), 4);
         Files.write(mapImagePath, mapImageLenBytes, StandardOpenOption.APPEND);
     }
     // EndRegion: FileIO
