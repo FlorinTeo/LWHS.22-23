@@ -5,7 +5,7 @@ public class Program {
     
     public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("Welcome to Traffic Flow Manager!");
-        MapImage mapImage = MapImage.read("Ravenna");
+        MapImage mapImage = MapImage.load("Ravenna");
         MapFrame mapFrame = new MapFrame(mapImage);
         mapFrame.open();
         
@@ -30,6 +30,7 @@ public class Program {
         System.out.println(mapImage.collide("AB", "DC"));
 
         mapFrame.close();
+        mapImage.save("Ravenna/Ravenna.jpeg");
         System.out.println("Goodbye!");
     }
 }
