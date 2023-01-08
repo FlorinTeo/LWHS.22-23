@@ -30,7 +30,7 @@ public class Program {
         System.out.println(mapImage.collide("AB", "DC"));
 
         mapFrame.close();
-        mapImage.save("Ravenna/Ravenna.jpeg");
+        mapImage.save("Ravenna/Ravenna.jpg");
         System.out.println("Goodbye!");
     }
 }
