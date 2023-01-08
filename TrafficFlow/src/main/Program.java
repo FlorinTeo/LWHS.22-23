@@ -5,30 +5,16 @@ public class Program {
     
     public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("Welcome to Traffic Flow Manager!");
-        MapImage mapImage = MapImage.load("maps/Ravenna.jpg");
+        MapImage mapImage = MapImage.load("maps/Woodlawn.jpg");
         MapFrame mapFrame = new MapFrame(mapImage);
         mapFrame.open();
         
-        mapFrame.setStatusMessage("a -> step()");
+        mapFrame.setStatusMessage("step()");
         mapFrame.step();
 
-        mapFrame.setStatusMessage("b -> stop()");
-        mapFrame.stop();
-
-        mapFrame.setStatusMessage("c -> step()");
-        mapFrame.step();
-
-        mapFrame.setStatusMessage("d -> step()");
-        mapFrame.step();
-
-        mapFrame.setStatusMessage("e -> step()");
-        mapFrame.step();
-
-        mapFrame.setStatusMessage("f -> stop()");
+        mapFrame.setStatusMessage("stop()");
         mapFrame.stop();
         
-        System.out.println(mapImage.collide("AB", "DC"));
-
         mapFrame.close();
         System.out.println("Goodbye!");
     }

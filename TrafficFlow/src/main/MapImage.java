@@ -153,7 +153,7 @@ public class MapImage extends Drawing {
         ByteArrayOutputStream mapImageStream = new ByteArrayOutputStream();
         ImageIO.write(this._image, "jpg", mapImageStream);
         byte[] mapImageBytes = mapImageStream.toByteArray();
-        Files.write(mapImagePath, mapImageBytes, StandardOpenOption.TRUNCATE_EXISTING);
+        Files.write(mapImagePath, mapImageBytes, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         byte[] mapRoutesBytes = jsonMapRoutes.getBytes();
         Files.write(mapImagePath, mapRoutesBytes, StandardOpenOption.APPEND);
         byte[] mapImageLenBytes = toByteArray(BigInteger.valueOf(mapImageBytes.length), 4);

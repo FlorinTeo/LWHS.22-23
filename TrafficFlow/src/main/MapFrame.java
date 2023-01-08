@@ -55,7 +55,7 @@ public class MapFrame extends DrawingFrame {
     // EndRegion: Routes manual display
 
     // Region: KeyInterceptor hooks
-    private KeyInterceptor.KeyHook _onKeyACDE = (keyEvent) -> {
+    private KeyInterceptor.KeyHook _onKeyABCDE = (keyEvent) -> {
         char key = Character.toUpperCase(keyEvent.getKeyChar());
         if (!_routeInfoMap.containsKey(key)) {
             return;
@@ -93,10 +93,11 @@ public class MapFrame extends DrawingFrame {
         buildRouteInfoMap();
         
         // hook in the key intercepts
-        _keyInterceptor.setKeyTypedHook('A', _onKeyACDE);
-        _keyInterceptor.setKeyTypedHook('C', _onKeyACDE);
-        _keyInterceptor.setKeyTypedHook('D', _onKeyACDE);
-        _keyInterceptor.setKeyTypedHook('E', _onKeyACDE);
+        _keyInterceptor.setKeyTypedHook('A', _onKeyABCDE);
+        _keyInterceptor.setKeyTypedHook('B', _onKeyABCDE);
+        _keyInterceptor.setKeyTypedHook('C', _onKeyABCDE);
+        _keyInterceptor.setKeyTypedHook('D', _onKeyABCDE);
+        _keyInterceptor.setKeyTypedHook('E', _onKeyABCDE);
         _keyInterceptor.setKeyTypedHook('X', _onKeyX);
         _keyInterceptor.setKeyPressedHook(KeyEvent.VK_DELETE, _onKeyDelete);
     }
