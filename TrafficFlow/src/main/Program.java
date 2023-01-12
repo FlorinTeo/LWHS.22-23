@@ -1,5 +1,6 @@
 package main;
 import java.io.IOException;
+import java.util.Set;
 
 public class Program {
     
@@ -9,12 +10,10 @@ public class Program {
         MapFrame mapFrame = new MapFrame(mapImage);
         mapFrame.open();
         
-        mapFrame.setStatusMessage("step()");
-        mapFrame.step();
-
-        mapFrame.setStatusMessage("stop()");
-        mapFrame.stop();
+        Set<String> routes = mapImage.getRoutes();
+        System.out.println(routes);
         
+        mapFrame.stop();
         mapFrame.close();
         System.out.println("Goodbye!");
     }
