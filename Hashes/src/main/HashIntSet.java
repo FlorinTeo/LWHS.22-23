@@ -1,3 +1,4 @@
+package main;
 // A HashIntSet object represents a set of integers using a hash table
 // as the internal data structure.
 // The hash table uses separate chaining (a linked list in each hash bucket
