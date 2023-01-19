@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 
@@ -21,10 +22,12 @@ class DbgButton extends Canvas {
     private int _crtFace;
     
     public DbgButton(char btnKey, int xAnchor, int yAnchor, String... btnFaceFiles) throws IOException {
+        ClassLoader cldr = this.getClass().getClassLoader();
         _btnKey = btnKey;
         _btnFaces = new BufferedImage[btnFaceFiles.length];
         for(int i = 0; i < _btnFaces.length; i++) {
-            _btnFaces[i] = ImageIO.read(new File(btnFaceFiles[i]));
+            URL url = cldr.getResource(btnFaceFiles[i]);
+            _btnFaces[i] = ImageIO.read(url);
         }
         _crtFace = 0;
         this.setBounds(
