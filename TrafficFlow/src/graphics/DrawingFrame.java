@@ -14,7 +14,6 @@ import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.Closeable;
 import java.io.IOException;
-import java.net.URL;
 
 import graphics.DbgButton.BtnState;
 
