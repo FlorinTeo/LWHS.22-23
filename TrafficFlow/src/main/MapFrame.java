@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import graphics.DrawingFrame;
-import graphics.KeyInterceptor;
+import drawing.DrawingFrame;
+import drawing.KeyInterceptor;
 
 public class MapFrame extends DrawingFrame {
 

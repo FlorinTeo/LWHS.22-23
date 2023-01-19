@@ -25,7 +25,7 @@ import javax.imageio.ImageIO;
 
 import com.google.gson.Gson;
 
-import graphics.Drawing;
+import drawing.Drawing;
 
 public class MapImage extends Drawing {
     // File name for the base map image (i.e. "Ravenna")
