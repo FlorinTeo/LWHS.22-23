@@ -12,6 +12,7 @@ public class Program {
         
         Set<String> routes = mapImage.getRoutes();
         System.out.println(routes);
+        System.out.println(mapImage.collide("AB", "AC"));
         
         mapFrame.stop();
         mapFrame.close();

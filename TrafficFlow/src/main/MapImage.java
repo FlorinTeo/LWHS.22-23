@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,10 +33,14 @@ public class MapImage extends Drawing {
     private String _mapName;
     // Map<overlay_name, overlay_image> (i.e. {<"AB", imageAB>, <"AC", imageAC>, ..})
     private HashMap<String, BufferedImage> _mapOverlays;
-    // overlay_names to put on the map
-    private List<String> _overlays = new ArrayList<String>();
+    // Routes to be overlaid on the map
+    private Set<String> _overlays = new HashSet<String>();
 
-    // Region: File IO
+    // Region: [private] File IO
+    /**
+     * Private class definition used for serialization/deserialization of the
+     * MapImage object to/from an enhanced .jpeg file.
+     */
     private class MapMetadata {
         private String _mapName = "";
         private HashMap<String, String> _mapOverlaysRaw = new HashMap<String, String>();
@@ -107,17 +112,21 @@ public class MapImage extends Drawing {
         // return the newly created and loaded mapImage
         return mapImage;
     }
+    // EndRegion: [private] File IO
 
+    // Region: [public] File IO
     /**
-     * Reads a MapImage content from a folder or a file.
-     * <p>If mapImagePath points to a folder, the folder is expected to contain
+     * Loads the content of a folder or a file into a new MapImage object.<p>
+     * If mapImagePath points to a folder, the folder is expected to contain
      * the base map as a one-part name (i.e. "Ravenna_.jpg") and a set of overlay
-     * file names as a two-parts names (i.e. "Ravenna_AB.png").</p>
-     * <p>If mapImagePath points to a file, the file is expected to be a jpeg image
-     * enriched with route overlay.
-     * </p>
-     * @param mapImagePath - path to a folder or to an enriched .jpg file
+     * file names as a two-parts names (i.e. "Ravenna_AB.png").<p>
+     * If mapImagePath points to a file, the file is expected to be an enhanced .jpg
+     * image, embedding route overlays.
+     * @param mapImagePath - path to an existing folder or an enhanced .jpg file<br>
+     * e.g.: "C:/MyFolder/Ravenna" or "C:/MyFolder/Ravenna/Ravenna.jpg"<br>
      * @returns a new MapImage object containing the map.
+     * @throws IOException - failure locating or loading data from the disk.
+     * @see #save(String)
      */
     public static MapImage load(String mapImagePath) throws IOException {
         File file = new File(mapImagePath);
@@ -133,10 +142,13 @@ public class MapImage extends Drawing {
     }
     
     /**
-     * Saves the map image in the given file. The file is a custom format,
-     * containing the base map jpeg, followed by a json serialized object
-     * containing a map with all routes for this map.
-     * @throws IOException
+     * Saves the content of this MapImage object into an enhanced .jpeg file.
+     * The resulting .jpeg file is an image of the base map followed by a 
+     * JSON serialized object containing the routes overlays.
+     * @param mapImageFileName - the name of the .jpg file to be created.<br>
+     * e.g.: "Ravenna.jpg"
+     * @throws IOException - failure in writing to the disk.
+     * @see #load(String)
      */
     public void save(String mapImageFileName) throws IOException {
         MapMetadata mapMetadata = new MapMetadata();
@@ -159,10 +171,13 @@ public class MapImage extends Drawing {
         byte[] mapImageLenBytes = toByteArray(BigInteger.valueOf(mapImageBytes.length), 4);
         Files.write(mapImagePath, mapImageLenBytes, StandardOpenOption.APPEND);
     }
-    // EndRegion: FileIO
+    // EndRegion: [public] FileIO
     
     /**
-     * Default MapImage constructor
+     * Creates a new MapImage object for a given map name and image.
+     * @param mapName - the name of the map to be created.
+     * @param baseMap - the pixels (BufferedImage) for the map.
+     * @see #MapImage.load(String)
      */
     public MapImage(String mapName, BufferedImage baseMap) {
         super(baseMap);
@@ -170,28 +185,61 @@ public class MapImage extends Drawing {
         _mapOverlays = new HashMap<String, BufferedImage>();
     }
     
+    /**
+     * Gets the name of the map in this MapImage.
+     * @return The name of the map.
+     * @see #MapImage(String, BufferedImage)
+     * @see #load(String)
+     */
     public String getMapName() {
         return _mapName;
     }
     
-    List<String> getOverlays() {
-        return _overlays;
-    }
-    
     /**
-     * Returns the full set of overlay names in this mapImage
+     * Gets the set of all the routes, given by name, embedded in this map.
+     * @return The names of all the routes embedded with this map.<br>
+     * e.g.: {"AB", "AC", "AD", "BA", "BC", "BD", ...}
      */
     public Set<String> getRoutes() {
         return _mapOverlays.keySet();
     }
     
     /**
-     * Shows the selected overlays on the image
+     * Gets the set of routes overlaid on the map. This is a subset
+     * of all the routes embedded in this map.
+     * @return The names of the routes overlayed on the map.<br>
+     * e.g.: {"AB", "AC", "CB", ...}
+     * @see #setOverlays(String...)
+     * @see #getRoutes()
      */
-    public void showRoutes(String... routes) {
-        _overlays = Arrays.asList(routes);
+    Set<String> getOverlays() {
+        return _overlays;
     }
     
+    /**
+     * Sets the routes to be overlaid on the map. This is expected
+     * to be a subset of all the routes embedded in this map.
+     * @param routes - the names of the routes to be overlaid on the map.
+     * @see #getOverlays()
+     * @see #getRoutes()
+     */
+    public void setOverlays(String... routes) {
+        _overlays.clear();
+        _overlays.addAll(Arrays.asList(routes));
+    }
+    
+    /**
+     * Indicates whether any of the given routes are colliding with any other.
+     * A collision is detected if any of the route overlays have non-transparent
+     * pixels of different colors at the same coordinates on the map <br>
+     * <p><u>Examples:</u><br>
+     * assuming "AB" and "AC" have same color, collide("AB", "AC")
+     * returns false<br>
+     * assuming "AB" and "CA" have different colors and have overlapping pixels,
+     * collide("AB","CA") returns true. 
+     * @param routes - the list of route names to be tested.
+     * @return True if the routes do not collide, false otherwise.
+     */
     public boolean collide(String... routes) {
         List<BufferedImage> overlays = new ArrayList<BufferedImage>();
         for(String route : routes) {
@@ -218,7 +266,10 @@ public class MapImage extends Drawing {
     }
     
     /**
-     * Rendering callback for this mapImage
+     * Gets the buffered image composing the map with all the requested overlays.
+     * @return The bufferd image for the composited map.
+     * @see #getOverlays()
+     * @see #setOverlays(String...)
      */
     @Override
     public BufferedImage getImage() {

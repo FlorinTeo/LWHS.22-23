@@ -14,7 +14,7 @@ public class MapFrame extends DrawingFrame {
 
     private MapImage _mapImage;
 
-    // Region: Routes manual display
+    // Region: [private] Routes manual display
     private class RouteNodeInfo {
         private int _index;
         private ArrayList<String> _routes; 
@@ -49,12 +49,12 @@ public class MapFrame extends DrawingFrame {
             }
         }
         String[] routesArr = routes.toArray(new String[routes.size()]);
-        _mapImage.showRoutes(routesArr);
+        _mapImage.setOverlays(routesArr);
         repaint();
     }
-    // EndRegion: Routes manual display
+    // EndRegion [private]: Routes manual display
 
-    // Region: KeyInterceptor hooks
+    // Region: [private] KeyInterceptor hooks
     private KeyInterceptor.KeyHook _onKeyABCDE = (keyEvent) -> {
         char key = Character.toUpperCase(keyEvent.getKeyChar());
         if (!_routeInfoMap.containsKey(key)) {
@@ -76,7 +76,7 @@ public class MapFrame extends DrawingFrame {
     };
     
     private KeyInterceptor.KeyHook _onKeyX = (keyEvent) -> {
-        List<String> routes = _mapImage.getOverlays();
+        Set<String> routes = _mapImage.getOverlays();
         if (routes.size() == 0) {
             this.setStatusMessage("?");
         } else {
@@ -84,8 +84,14 @@ public class MapFrame extends DrawingFrame {
             this.setStatusMessage(collide ? "collide" : "clear");            
         }
     };
-    // EndRegion: KeyInterceptor hooks
+    // EndRegion: [private] KeyInterceptor hooks
     
+    /**
+     * Constructs a new MapFrame and loads it with a given MapImage.
+     * @param mapImage - MapImage object to be loaded in the frame
+     * @throws IOException resources needed to display the MapFrame,
+     * such as bitmaps for the control buttons cannot be loaded from the disk.
+     */
     public MapFrame(MapImage mapImage) throws IOException {
         super(mapImage);
         
