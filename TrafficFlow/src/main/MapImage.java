@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -241,21 +242,17 @@ public class MapImage extends Drawing {
      * @return True if the routes do not collide, false otherwise.
      */
     public boolean collide(String... routes) {
-        List<BufferedImage> overlays = new ArrayList<BufferedImage>();
-        for(String route : routes) {
-            overlays.add(_mapOverlays.get(route));
-        }
-        
         for (int x = 0; x < getWidth(); x++) {
             for (int y = 0; y < getHeight(); y++) {
-                int aChannel = 0;
-                for(BufferedImage overlay : overlays) {
-                    int aC = overlay.getRGB(x, y) >>> 24;
-                    if (aC != 0) {
-                        if (aChannel != 0) {
+                String lastOpaque = null;
+                for(String route : routes) {
+                    int overlayPix = _mapOverlays.get(route).getRGB(x, y);
+                    if ((overlayPix >> 24) != 0) {
+                        if (lastOpaque == null) {
+                            lastOpaque = route;
+                        }
+                        if (route.charAt(0) != lastOpaque.charAt(0)) {
                             return true;
-                        } else {
-                            aChannel = aC;
                         }
                     }
                 }
