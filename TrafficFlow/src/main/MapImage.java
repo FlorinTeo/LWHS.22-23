@@ -29,6 +29,13 @@ import com.google.gson.Gson;
 
 import drawing.Drawing;
 
+/**
+ * Class representing a map image enhanced with intersection routes.
+ * @see #load(String)
+ * @see #getMapName()
+ * @see #getRoutes()
+ * @see #setOverlays(String...)
+ */
 public class MapImage extends Drawing {
     // File name for the base map image (i.e. "Ravenna")
     private String _mapName;

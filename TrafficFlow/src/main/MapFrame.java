@@ -10,6 +10,16 @@ import java.util.Set;
 import drawing.DrawingFrame;
 import drawing.KeyInterceptor;
 
+/**
+ * Class provide GUI functionality for interacting with a MapImage.
+ * Allows the user to pan and zoom over the map, overlay
+ * the embedded routes and control the execution flow. 
+ * @see MapImage
+ * @see #MapFrame(MapImage)
+ * @see #step()
+ * @see #stop()
+ * @see #setStatusMessage(String)
+ */
 public class MapFrame extends DrawingFrame {
 
     private MapImage _mapImage;
