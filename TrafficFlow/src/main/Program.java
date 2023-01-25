@@ -12,7 +12,9 @@ public class Program {
         
         Set<String> routes = mapImage.getRoutes();
         System.out.println(routes);
+        mapFrame.step();
         mapFrame.setStatusMessage("collide(AB, AC) = " + mapImage.collide("AB", "AC"));
+        mapFrame.step();
         mapImage.setOverlays("AB", "AC");
         mapFrame.stop();
         mapFrame.close();
