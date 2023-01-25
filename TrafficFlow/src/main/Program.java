@@ -12,8 +12,8 @@ public class Program {
         
         Set<String> routes = mapImage.getRoutes();
         System.out.println(routes);
-        System.out.println(mapImage.collide("AB", "AC"));
-        
+        mapFrame.setStatusMessage("collide(AB, AC) = " + mapImage.collide("AB", "AC"));
+        mapImage.setOverlays("AB", "AC");
         mapFrame.stop();
         mapFrame.close();
         System.out.println("Goodbye!");
