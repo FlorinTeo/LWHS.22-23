@@ -1,6 +1,5 @@
 package main;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -14,12 +13,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,6 +32,7 @@ import drawing.Drawing;
  * @see #getMapName()
  * @see #getRoutes()
  * @see #setOverlays(String...)
+ * @see #collide(String...)
  */
 public class MapImage extends Drawing {
     // File name for the base map image (i.e. "Ravenna")
