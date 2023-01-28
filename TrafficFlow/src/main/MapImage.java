@@ -218,7 +218,7 @@ public class MapImage extends Drawing {
      * @see #setOverlays(String...)
      * @see #getRoutes()
      */
-    Set<String> getOverlays() {
+    public Set<String> getOverlays() {
         return _overlays;
     }
     
