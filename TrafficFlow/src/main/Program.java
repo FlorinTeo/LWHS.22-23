@@ -1,4 +1,5 @@
 package main;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,7 +31,7 @@ public class Program {
         }
     }
     
-    private static KeyHook _onNodeTyped = (keyEvent) -> {
+    private static KeyHook _onNodeTyped = (KeyEvent keyEvent) -> {
         // clear the status message and the overlays, if any
         _mapFrame.setStatusMessage("");
         _mapImage.setOverlays();
