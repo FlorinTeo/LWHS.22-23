@@ -79,6 +79,7 @@ public class MapFrame extends DrawingFrame {
     };
     
     private KeyInterceptor.KeyHook _onKeyDelete = (keyEvent) -> {
+        System.out.println("delete was pressed!");
         for(RouteNodeInfo oi : _routeInfoMap.values()) {
             oi._index = -1;
         }
@@ -95,7 +96,7 @@ public class MapFrame extends DrawingFrame {
         }
     };
     // EndRegion: [private] KeyInterceptor hooks
-    
+
     /**
      * Constructs a new MapFrame and loads it with a given MapImage.
      * @param mapImage - MapImage object to be loaded in the frame
@@ -109,12 +110,12 @@ public class MapFrame extends DrawingFrame {
         buildRouteInfoMap();
         
         // hook in the key intercepts
-        _keyInterceptor.setKeyTypedHook('A', _onKeyABCDE);
-        _keyInterceptor.setKeyTypedHook('B', _onKeyABCDE);
-        _keyInterceptor.setKeyTypedHook('C', _onKeyABCDE);
-        _keyInterceptor.setKeyTypedHook('D', _onKeyABCDE);
-        _keyInterceptor.setKeyTypedHook('E', _onKeyABCDE);
-        _keyInterceptor.setKeyTypedHook('X', _onKeyX);
-        _keyInterceptor.setKeyPressedHook(KeyEvent.VK_DELETE, _onKeyDelete);
+        setKeyTypedHook('A', _onKeyABCDE);
+        setKeyTypedHook('B', _onKeyABCDE);
+        setKeyTypedHook('C', _onKeyABCDE);
+        setKeyTypedHook('D', _onKeyABCDE);
+        setKeyTypedHook('E', _onKeyABCDE);
+        setKeyTypedHook('X', _onKeyX);
+        setKeyTypedHook(KeyEvent.VK_DELETE, _onKeyDelete);
     }
 }
