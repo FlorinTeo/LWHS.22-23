@@ -30,6 +30,7 @@ public class Program {
             }
             nodeRoutes.add(route);
         }
+        _mapFrame.setKeyPressedHook('T', _onTextTyped);
     }
     
     private static KeyHook _onNodeTyped = (KeyEvent keyEvent) -> {
@@ -49,18 +50,22 @@ public class Program {
         _mapFrame.repaint();
     };
     
+    private static KeyHook _onTextTyped = (KeyEvent keyEvent) -> {
+        _mapFrame.setStatusMessage(_mapImage.getRoutes().toString());
+    };
+    
     public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("Welcome to Traffic Flow Manager!");
-        _mapImage = MapImage.load("maps/Sheridan.jpg");
+        _mapImage = MapImage.load("maps/Ravenna.jpg");
         _mapFrame = new MapFrame(_mapImage);
         _mapFrame.open();
         
         // EXplore individual node routes by pressing the node keys.
-        _mapFrame.setStatusMessage("Idividual node routes");
+        _mapFrame.setStatusMessage("All routes: " + _mapImage.getRoutes());
         _mapFrame.stop();
 
         // Explore all node egress routes by pressing the node keys.
-        _mapFrame.setStatusMessage("All node egress routes");
+        _mapFrame.setStatusMessage("All routes: " + _mapImage.getRoutes());
         _mapImage.setOverlays();
         mapNodes();
         _mapFrame.stop();
