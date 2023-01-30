@@ -50,7 +50,7 @@ public class Program {
     
     public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("Welcome to Traffic Flow Manager!");
-        _mapImage = MapImage.load("maps/Woodlawn.jpg");
+        _mapImage = MapImage.load("maps/Sheridan.jpg");
         _mapFrame = new MapFrame(_mapImage);
         _mapFrame.open();
         
