@@ -13,19 +13,20 @@ public class Program {
     private static MapFrame _mapFrame;
     
     // Region: Determine and overlay node routes
-    private static HashMap<String, Set<String>> _mapNodeRoutes;
+    private static HashMap<Character, Set<String>> _mapNodeRoutes;
     
     private static void mapNodes() {
-        _mapNodeRoutes = new HashMap<String, Set<String>>();
+        _mapNodeRoutes = new HashMap<Character, Set<String>>();
         for(String route: _mapImage.getRoutes()) {
-            String node = route.substring(0, 1);
+            char from = route.charAt(0);
+            char to = route.charAt(1); 
             Set<String> nodeRoutes;
-            nodeRoutes = _mapNodeRoutes.get(node);
+            nodeRoutes = _mapNodeRoutes.get(from);
             if (nodeRoutes == null) {
                 nodeRoutes = new HashSet<String>();
-                _mapNodeRoutes.put(node, nodeRoutes);
-                _mapFrame.setKeyTypedHook(route.charAt(0), _onNodeTyped);
-                _mapFrame.setKeyTypedHook(route.charAt(1), _onNodeTyped);
+                _mapNodeRoutes.put(from, nodeRoutes);
+                _mapFrame.setKeyTypedHook(from, _onNodeTyped);
+                _mapFrame.setKeyTypedHook(to, _onNodeTyped);
             }
             nodeRoutes.add(route);
         }
@@ -37,7 +38,7 @@ public class Program {
         _mapImage.setOverlays();
         // get the key from the keyEvent, indicating which node should be displayed
         char key = Character.toUpperCase(keyEvent.getKeyChar());
-        Set<String> nodeRoutes = _mapNodeRoutes.get(""+key);
+        Set<String> nodeRoutes = _mapNodeRoutes.get(key);
         if (nodeRoutes != null) {
             // get the routes corresponding to the selected node
             String[] nrArr = nodeRoutes.toArray(new String[nodeRoutes.size()]);
