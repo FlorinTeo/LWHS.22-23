@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import drawing.KeyInterceptor.KeyHook;
+import mapFramework.MapFrame;
+import mapFramework.MapImage;
 
 public class Program {
     
@@ -54,13 +56,38 @@ public class Program {
         _mapFrame.setStatusMessage(_mapImage.getRoutes().toString());
     };
     
+    public static void codeDemo() throws IOException, InterruptedException {
+        // loads an intersection image file and displays it in a map frame.
+        MapImage mapImage = MapImage.load("maps/Woodlawn.jpg");
+        MapFrame mapFrame = new MapFrame(mapImage);
+        mapFrame.open();
+        
+        // gets all available routes in the map and prints them out.
+        Set<String> routes = mapImage.getRoutes();
+        // line below prints: "[CD, DE, BD, CE, AD, BE, AE, DA, CA, BA]"
+        System.out.println(routes.toString());
+        
+        // tests whether there's any collision in subsets of routes
+        boolean test1 = mapImage.collide("CD", "BE");
+        boolean test2 = mapImage.collide("BE","CD","AE"); // BE and AE collide!
+        // line below prints: "false true"
+        System.out.println(test1 + " " + test2);
+        
+        // overlays three routes on the map then stops before closing the window.
+        mapImage.setOverlays("AE", "BE", "CD");
+        mapFrame.stop();
+        mapFrame.close();
+    }
+    
     public static void main(String[] args) throws IOException, InterruptedException {
-        System.out.println("Welcome to Traffic Flow Manager!");
-        _mapImage = MapImage.load("maps/Ravenna.jpg");
+        //codeDemo();
+        
+        System.out.println("Welcome to TrafficRoute manager!");
+        _mapImage = MapImage.load("maps/Woodlawn.jpg");
         _mapFrame = new MapFrame(_mapImage);
         _mapFrame.open();
         
-        // EXplore individual node routes by pressing the node keys.
+        // Explore individual node routes by pressing the node keys.
         _mapFrame.setStatusMessage("All routes: " + _mapImage.getRoutes());
         _mapFrame.stop();
 

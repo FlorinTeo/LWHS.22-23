@@ -1,4 +1,4 @@
-package main;
+package mapFramework;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -251,6 +251,10 @@ public class MapImage extends Drawing {
             for (int y = 0; y < getHeight(); y++) {
                 String lastOpaque = null;
                 for(String route : routes) {
+                    if (!_mapOverlays.containsKey(route)) {
+                        continue;
+                    }
+                    
                     int overlayPix = _mapOverlays.get(route).getRGB(x, y);
                     if ((overlayPix >> 24) != 0) {
                         if (lastOpaque == null) {
