@@ -62,16 +62,16 @@ public class Program {
         MapFrame mapFrame = new MapFrame(mapImage);
         mapFrame.open();
         
-        // gets all available routes in the map and prints them out.
+        // gets all available routes and displays them in the status bar.
         Set<String> routes = mapImage.getRoutes();
-        // line below prints: "[CD, DE, BD, CE, AD, BE, AE, DA, CA, BA]"
-        System.out.println(routes.toString());
+        // line below displays "[AB, CD, AC, AD, EA, DA, EB, CA, DB, EC, CB, DC, ED]" in the status bar
+        mapFrame.setStatusMessage(routes.toString());
         
-        // tests whether there's any collision in subsets of routes
+        // tests for collisions in a few sets of routes
         boolean test1 = mapImage.collide("CD", "BE");
         boolean test2 = mapImage.collide("BE","CD","AE"); // BE and AE collide!
-        // line below prints: "false true"
-        System.out.println(test1 + " " + test2);
+        // line below displays "false true" in the status bar
+        mapFrame.setStatusMessage(test1 + " " + test2);
         
         // overlays three routes on the map then stops before closing the window.
         mapImage.setOverlays("AE", "BE", "CD");
@@ -83,8 +83,10 @@ public class Program {
         //codeDemo();
         
         System.out.println("Welcome to TrafficRoute manager!");
-        _mapImage = MapImage.load("maps/Woodlawn.jpg");
+        _mapImage = MapImage.load("maps/Ravenna.jpg");
         _mapFrame = new MapFrame(_mapImage);
+        _mapFrame.setKeyTypedHook('T', _onTextTyped);
+        _mapFrame.setTitle("maps/Ravenna.jpg");
         _mapFrame.open();
         
         // Explore individual node routes by pressing the node keys.

@@ -106,6 +106,9 @@ public class MapFrame extends DrawingFrame {
     public MapFrame(MapImage mapImage) throws IOException {
         super(mapImage);
         
+        // adjust window title
+        setTitle("Map Framework GUI");
+        
         _mapImage = mapImage;
         buildRouteInfoMap();
         
