@@ -79,7 +79,6 @@ public class MapFrame extends DrawingFrame {
     };
     
     private KeyInterceptor.KeyHook _onKeyDelete = (keyEvent) -> {
-        System.out.println("delete was pressed!");
         for(RouteNodeInfo oi : _routeInfoMap.values()) {
             oi._index = -1;
         }
