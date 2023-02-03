@@ -1,0 +1,16 @@
+package frq;
+
+public class ListNode {
+
+    private int _data;
+    public ListNode _next;
+    
+    public ListNode(int data, ListNode next) {
+        _data = data;
+        _next = next;
+    }
+    
+    public int getData() {
+        return _data;
+    }
+}

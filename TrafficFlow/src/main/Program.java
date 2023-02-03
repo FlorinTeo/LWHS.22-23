@@ -1,20 +1,45 @@
 package main;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+import drawing.KeyInterceptor.KeyHook;
+import mapFramework.MapFrame;
+import mapFramework.MapImage;
 
 public class Program {
     
+    private static MapImage _mapImage;
+    private static MapFrame _mapFrame;
+    
+    /**
+     * Lambda method which will be called each time the user
+     * is pressing the key 'T'.
+     * @param keyEvent - details about the key which was pressed.
+     */
+    private static KeyHook _onKeyT = (KeyEvent keyEvent) -> {
+        String statusText = "Key: '" + keyEvent.getKeyChar() + "'; ";
+        statusText += "Routes: " + _mapImage.getRoutes();
+        _mapFrame.setStatusMessage(statusText);
+    };
+    
     public static void main(String[] args) throws IOException, InterruptedException {
-        System.out.println("Welcome to Traffic Flow Manager!");
-        MapImage mapImage = new MapImage("Ravenna");
-        MapFrame mainFrame = new MapFrame(mapImage);
-        mainFrame.open();
-
-        System.out.println("-> step()");
-        mainFrame.step();
-        System.out.println("-> step(2)");
-        mainFrame.step(2);
-
-        mainFrame.close();
-        System.out.println("DONE");
+        // loads an intersection image file and displays it in a map frame.
+        _mapImage = MapImage.load("maps/Woodlawn.jpg");
+        _mapFrame = new MapFrame(_mapImage);
+        
+        // registers the key T with the method _onKeyT
+        _mapFrame.setKeyTypedHook('T', _onKeyT);
+        
+        // opens the GUI window
+        _mapFrame.open();
+        
+        // stops, waiting for user action
+        _mapFrame.stop();
+        
+        // close the window and terminate the program
+        _mapFrame.close();
     }
 }
