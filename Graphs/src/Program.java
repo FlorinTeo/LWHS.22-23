@@ -6,6 +6,8 @@ public class Program {
         g.addNode("abc");
         g.addNode("def");
         g.addEdge("abc", "def");
+        g.addNode("xyz");
+        g.addEdge("xyz", "def");
         System.out.println(g);
     }
 

@@ -31,6 +31,10 @@ public class Graph<T> {
     @Override
     public String toString() {
         String output = "#Nodes: " + _nodes.size();
+        for(Node<?> n : _nodes.values()) {
+            output += "\n" + n.toString(); 
+        }
+        
         return output;
     }
 }

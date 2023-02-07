@@ -1,7 +1,7 @@
 import java.util.HashSet;
 import java.util.Set;
 
-public class Node<T> {
+public class Node<T> implements Comparable {
     private Set<Node<T>> _edges;
     private T _data;
     
@@ -16,6 +16,24 @@ public class Node<T> {
     
     @Override
     public String toString() {
-        return _data.toString();
+        String output = _data.toString() + " > [";
+        boolean first = true;
+        for(Node<?> n : _edges) {
+            if (!first) {
+                output += ", ";
+            }
+            output += n._data.toString();
+            first = false;
+        }
+        output += "]";
+        return output;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if (!(o instanceof Node<?>)) {
+            throw new RuntimeException("Invalid comparison!");
+        }
+        return ((Comparable) _data).compareTo(((Node<?>)o)._data);
     }
 }
