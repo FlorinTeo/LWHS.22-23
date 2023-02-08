@@ -58,8 +58,7 @@ public class MapFrame extends DrawingFrame {
                 routes.add(rni._routes.get(rni._index));
             }
         }
-        String[] routesArr = routes.toArray(new String[routes.size()]);
-        _mapImage.setOverlays(routesArr);
+        _mapImage.setOverlays(routes);
         repaint();
     }
     // EndRegion [private]: Routes manual display

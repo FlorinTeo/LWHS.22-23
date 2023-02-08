@@ -85,7 +85,7 @@ public class Program {
         System.out.println("Welcome to TrafficRoute manager!");
         _mapImage = MapImage.load("maps/Loyal.jpg");
         _mapFrame = new MapFrame(_mapImage);
-        _mapFrame.setKeyTypedHook('T', _onTextTyped);
+        _mapFrame.setKeyTypedHook('t', _onTextTyped);
         _mapFrame.setTitle("maps/Ravenna.jpg");
         _mapFrame.open();
         

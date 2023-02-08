@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -225,13 +226,24 @@ public class MapImage extends Drawing {
     /**
      * Sets the routes to be overlaid on the map. This is expected
      * to be a subset of all the routes embedded in this map.
-     * @param routes - the names of the routes to be overlaid on the map.
+     * @param routes - var arg array with the routes to be overlaid on the map.
      * @see #getOverlays()
      * @see #getRoutes()
      */
     public void setOverlays(String... routes) {
+        setOverlays(Arrays.asList(routes));
+    }
+    
+    /**
+     * Sets the routes to be overlaid on the map. This is expected
+     * to be a subset of all the routes embedded in this map.
+     * @param routes - collection (List, or Set) with the routes to be overlaid on the map.
+     * @see #getOverlays()
+     * @see #getRoutes()
+     */
+    public void setOverlays(Collection<String> routes) {
         _overlays.clear();
-        _overlays.addAll(Arrays.asList(routes));
+        _overlays.addAll(routes);
     }
     
     /**
