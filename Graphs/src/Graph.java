@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
 
-public class Graph<T> {
+public class Graph<T extends Comparable<T>> {
     private Map<Integer, Node<T>> _nodes;
     
     public Graph() {

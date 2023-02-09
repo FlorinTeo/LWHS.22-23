@@ -1,39 +1,35 @@
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Node<T> implements Comparable {
-    private Set<Node<T>> _edges;
+public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
+    private Map<Integer, Node<T>> _edges;
     private T _data;
     
     public Node(T data) {
         _data = data;
-        _edges = new HashSet<Node<T>>();
+        _edges = new HashMap<Integer, Node<T>>();
     }
     
     public void addEdge(Node<T> otherNode) {
-        _edges.add(otherNode);
+        _edges.put(otherNode._data.hashCode(), otherNode);
     }
     
     @Override
     public String toString() {
-        String output = _data.toString() + " > [";
+        String output = _data.toString() + " > ";
         boolean first = true;
-        for(Node<?> n : _edges) {
+        for(Node<?> n : _edges.values()) {
             if (!first) {
-                output += ", ";
+                output += " ";
             }
             output += n._data.toString();
             first = false;
         }
-        output += "]";
         return output;
     }
 
     @Override
-    public int compareTo(Object o) {
-        if (!(o instanceof Node<?>)) {
-            throw new RuntimeException("Invalid comparison!");
-        }
-        return ((Comparable) _data).compareTo(((Node<?>)o)._data);
+    public int compareTo(Node<T> o) {
+        return _data.compareTo(o._data);
     }
 }
