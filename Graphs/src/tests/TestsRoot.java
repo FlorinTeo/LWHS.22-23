@@ -8,7 +8,7 @@ import java.util.*;
 
 import main.Graph;
 
-public class Helper {
+public class TestsRoot {
     
     public static <T extends Comparable<T>> T parseT(String s, Class<T> realType) {
         if (realType == Integer.class) {

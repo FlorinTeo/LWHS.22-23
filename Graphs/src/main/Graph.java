@@ -1,10 +1,6 @@
 package main;
-import java.lang.reflect.ParameterizedType;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 public class Graph<T extends Comparable<T>> {
     private Map<Integer, Node<T>> _nodes;
@@ -31,6 +27,10 @@ public class Graph<T extends Comparable<T>> {
         
         fromNode.addEdge(toNode);
         toNode.addEdge(fromNode);
+    }
+    
+    public int size() {
+        return _nodes.size();
     }
     
     @Override
