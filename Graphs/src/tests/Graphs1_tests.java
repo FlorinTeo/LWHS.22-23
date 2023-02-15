@@ -1,12 +1,13 @@
 package tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.FileNotFoundException;
 import org.junit.jupiter.api.Test;
 import main.DGraph;
 
-class Basic_tests extends TestsRoot {
+class Graphs1_tests extends TestsCore {
 
     @Test
     void test_addNode() {
@@ -40,4 +41,29 @@ class Basic_tests extends TestsRoot {
         assertEquals(5, g.size());
         assertSame("data/basic1_out.txt", g);
     }    
+
+    @Test
+    void test_isUGraph() throws FileNotFoundException {
+        fail("Not yet implemented");
+    }
+    
+    @Test
+    void test_isDAGraph() throws FileNotFoundException {
+        fail("Not yet implemented");
+    }
+    
+    @Test
+    void test_isEulerian() throws FileNotFoundException {
+        fail("Not yet implemented");
+    }
+    
+    @Test
+    void test_isConnected() throws FileNotFoundException {
+        fail("Not yet implemented");
+    }
+    
+    @Test
+    void test_deepCopy() throws FileNotFoundException {
+        fail("Not yet implemented");
+    }
 }

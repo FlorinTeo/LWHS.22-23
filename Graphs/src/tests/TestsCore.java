@@ -8,7 +8,7 @@ import java.util.*;
 
 import main.DGraph;
 
-public class TestsRoot {
+public class TestsCore {
     
     public static <T extends Comparable<T>> T parseT(String s, Class<T> realType) {
         if (realType == Integer.class) {
