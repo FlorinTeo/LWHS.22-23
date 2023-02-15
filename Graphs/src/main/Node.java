@@ -13,6 +13,14 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
         _marker = 0;
     }
     
+    public T getData() {
+        return _data;
+    }
+    
+    public int getMarker() {
+        return _marker;
+    }
+    
     public void addEdge(Node<T> otherNode) {
         _edges.put(otherNode._data.hashCode(), otherNode);
     }

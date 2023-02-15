@@ -2,10 +2,10 @@ package main;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Graph<T extends Comparable<T>> {
+public class DGraph<T extends Comparable<T>> {
     private Map<Integer, Node<T>> _nodes;
     
-    public Graph() {
+    public DGraph() {
         _nodes = new HashMap<Integer, Node<T>>();
     }
         
@@ -26,7 +26,6 @@ public class Graph<T extends Comparable<T>> {
         }
         
         fromNode.addEdge(toNode);
-        toNode.addEdge(fromNode);
     }
     
     public int size() {

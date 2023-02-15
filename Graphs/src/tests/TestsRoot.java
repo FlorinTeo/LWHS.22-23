@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-import main.Graph;
+import main.DGraph;
 
 public class TestsRoot {
     
@@ -22,7 +22,7 @@ public class TestsRoot {
         }
     }
 
-    public static <T extends Comparable<T>> Graph<T> readGraph(String graphFile, Class<T> realType) throws FileNotFoundException {
+    public static <T extends Comparable<T>> DGraph<T> readGraph(String graphFile, Class<T> realType) throws FileNotFoundException {
         Scanner input = new Scanner(new File(graphFile));
         Map<String, List<String>> map = new HashMap<String, List<String>>();
         while(input.hasNextLine()) {
@@ -36,7 +36,7 @@ public class TestsRoot {
                     Arrays.asList(Arrays.copyOfRange(tokens, 2, tokens.length)));
         }
         
-        Graph<T> graph = new Graph<T>();
+        DGraph<T> graph = new DGraph<T>();
         for(String node : map.keySet()) {
             T n = parseT(node, realType);
             graph.addNode(n);
@@ -53,11 +53,11 @@ public class TestsRoot {
         return graph;
     }
 
-    public static Graph<String> readGraph(String graphFile) throws FileNotFoundException {
+    public static DGraph<String> readGraph(String graphFile) throws FileNotFoundException {
         return readGraph(graphFile, String.class);
     }
     
-    public static void assertSame(String graphFile, Graph<?> g) throws FileNotFoundException {
+    public static void assertSame(String graphFile, DGraph<?> g) throws FileNotFoundException {
         String expected = "";
         boolean first = true;
         Scanner parser = new Scanner(new File(graphFile));

@@ -3,25 +3,25 @@ package main;
 public class Program {
 
     public static void main(String[] args) {
-        Graph<String> gs = new Graph<String>();
-        gs.addNode("abc");
-        gs.addNode("def");
-        gs.addEdge("abc", "def");
-        gs.addNode("xyz");
-        gs.addEdge("xyz", "def");
-        System.out.println(gs);
+        DGraph<String> dgs = new DGraph<String>();
+        dgs.addNode("abc");
+        dgs.addNode("def");
+        dgs.addEdge("abc", "def");
+        dgs.addNode("xyz");
+        dgs.addEdge("xyz", "def");
+        System.out.println(dgs);
         
-        Graph<Integer> gi = new Graph<Integer>();
-        gi.addNode(1);
-        gi.addNode(2);
-        gi.addNode(3);
-        gi.addNode(4);
-        gi.addNode(5);
-        gi.addEdge(1, 2);
-        gi.addEdge(2, 3);
-        gi.addEdge(3, 1);
-        gi.addEdge(4, 5);
-        System.out.println(gi);
+        DGraph<Integer> dgi = new DGraph<Integer>();
+        dgi.addNode(1);
+        dgi.addNode(2);
+        dgi.addNode(3);
+        dgi.addNode(4);
+        dgi.addNode(5);
+        dgi.addEdge(1, 2);
+        dgi.addEdge(2, 3);
+        dgi.addEdge(3, 1);
+        dgi.addEdge(4, 5);
+        System.out.println(dgi);
     }
 
 }
