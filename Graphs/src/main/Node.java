@@ -1,13 +1,16 @@
+package main;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
     private Map<Integer, Node<T>> _edges;
     private T _data;
+    private int _marker;
     
     public Node(T data) {
         _data = data;
         _edges = new HashMap<Integer, Node<T>>();
+        _marker = 0;
     }
     
     public void addEdge(Node<T> otherNode) {
@@ -16,7 +19,7 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
     
     @Override
     public String toString() {
-        String output = _data.toString() + " > ";
+        String output = "[" + _marker + "] " + _data.toString() + " > ";
         boolean first = true;
         for(Node<?> n : _edges.values()) {
             if (!first) {

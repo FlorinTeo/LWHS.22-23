@@ -1,5 +1,10 @@
+package main;
+import java.lang.reflect.ParameterizedType;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Graph<T extends Comparable<T>> {
     private Map<Integer, Node<T>> _nodes;
@@ -7,7 +12,7 @@ public class Graph<T extends Comparable<T>> {
     public Graph() {
         _nodes = new HashMap<Integer, Node<T>>();
     }
-    
+        
     public void addNode(T data) {
         int nodeHash = data.hashCode();
         if (_nodes.containsKey(nodeHash)) {
@@ -30,9 +35,14 @@ public class Graph<T extends Comparable<T>> {
     
     @Override
     public String toString() {
-        String output = "#Nodes: " + _nodes.size();
+        String output = "";
+        boolean first = true;
         for(Node<?> n : _nodes.values()) {
-            output += "\n" + n.toString(); 
+            if (!first) {
+                output += "\n";
+            }
+            output += n.toString();
+            first = false;
         }
         
         return output;
