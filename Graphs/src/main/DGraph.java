@@ -5,6 +5,7 @@ import java.util.Map;
 public class DGraph<T extends Comparable<T>> {
     private Map<Integer, Node<T>> _nodes;
     
+    // Region: Core Directed Graph methods
     public DGraph() {
         _nodes = new HashMap<Integer, Node<T>>();
     }
@@ -32,6 +33,16 @@ public class DGraph<T extends Comparable<T>> {
         return _nodes.size();
     }
     
+    public boolean checkState(int marker) {
+        for (Node<?> n : _nodes.values()) {
+            if (marker != n.getState()) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
     @Override
     public String toString() {
         String output = "";
@@ -45,5 +56,25 @@ public class DGraph<T extends Comparable<T>> {
         }
         
         return output;
+    }
+    // EndRegion: Core Directed Graph methods
+    
+    public void reset() {
+        for(Node<?> node : _nodes.values()) {
+            node.reset();
+        }
+    }
+    
+    public boolean isUGraph() {
+        boolean uGraph = true;
+        for(Node<?> node : _nodes.values()) {
+            if (!node.isUNode()) {
+                uGraph = false;
+                break;
+            }
+        }
+        
+        reset();
+        return uGraph;
     }
 }
