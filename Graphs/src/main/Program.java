@@ -3,6 +3,14 @@ package main;
 public class Program {
 
     public static void main(String[] args) {
+        /*
+         * The following demonstrates how to create a
+         * Graph with String nodes:
+         * abc   def
+         *   \   /
+         *    v v
+         *    xyz
+         */
         Graph<String> dgs = new Graph<String>();
         dgs.addNode("abc");
         dgs.addNode("def");
@@ -11,6 +19,14 @@ public class Program {
         dgs.addEdge("xyz", "def");
         System.out.println(dgs);
         
+        /*
+         * The following demonstrates how to create a
+         * Graph with Integer nodes, containing partitions partitions:
+         * 1 --> 2
+         *  \   /        4 --> 5
+         *   v v
+         *    3
+         */
         Graph<Integer> dgi = new Graph<Integer>();
         dgi.addNode(1);
         dgi.addNode(2);
@@ -23,5 +39,4 @@ public class Program {
         dgi.addEdge(4, 5);
         System.out.println(dgi);
     }
-
 }
