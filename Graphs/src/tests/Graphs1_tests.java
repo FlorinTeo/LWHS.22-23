@@ -7,14 +7,14 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.FileNotFoundException;
 import org.junit.jupiter.api.Test;
-import main.DGraph;
+import main.Graph;
 
 class Graphs1_tests extends TestsCore {
 
     // Region: Core tests
     @Test
     void test_addNode() {
-        DGraph<Integer> g = new DGraph<Integer>();
+        Graph<Integer> g = new Graph<Integer>();
         g.addNode(1);
         g.addNode(2);
         assertEquals(2, g.size());
@@ -26,7 +26,7 @@ class Graphs1_tests extends TestsCore {
     
     @Test
     void test_addEdge() {
-        DGraph<String> g = new DGraph<String>();
+        Graph<String> g = new Graph<String>();
         g.addNode("abc");
         g.addNode("def");
         g.addNode("xyz");
@@ -43,43 +43,82 @@ class Graphs1_tests extends TestsCore {
     
     @Test
     void test_readGraph() throws FileNotFoundException {
-        DGraph<String> g = readGraph("data/basic1.txt");
+        Graph<String> g = readGraph("data/basic1.txt");
         assertEquals(5, g.size());
         assertTrue(g.checkState(0));
         assertSame("data/basic1.txt", g);
     }
-    // EndRegion: Core tests
+
+    @Test
+    void test_removeEdge() throws FileNotFoundException {
+        Graph<Character> g = new Graph<Character>();
+        g.addNode('A');
+        g.addNode('B');
+        g.addEdge('A', 'B');
+        assertEquals(2, g.size());
+        String expected = "A > B\n"
+                        + "B > ";
+        assertEquals(expected, g.toString());
+        
+        g.removeEdge('A', 'B');
+        expected = "A > \n"
+                 + "B > ";
+        assertEquals(expected, g.toString());
+    }
     
     @Test
-    void test_deepCopy() throws FileNotFoundException {
-        fail("Not yet implemented");
+    void test_removeNode() throws FileNotFoundException {
+        Graph<String> g = readGraph("data/basic0.txt");
+        assertSame("data/basic0.txt", g);
+        g.removeNode("three");
+        String expected = "one > two\n"
+                        + "two > ";
+        assertEquals(expected, g.toString());
+
+        g.removeNode("two");
+        expected = "one > ";
+        assertEquals(expected, g.toString());
+
+        g.removeNode("one");
+        assertEquals("", g.toString());
     }
+    // EndRegion: Core tests
 
     @Test
     void test_isUGraph() throws FileNotFoundException {
-        DGraph<Integer> g1 = readGraph("data/basic1.txt", Integer.class);
+        Graph<Integer> g1 = readGraph("data/basic1.txt", Integer.class);
         assertTrue(g1.isUGraph());
         assertTrue(g1.checkState(0));
         assertSame("data/basic1.txt", g1);
         
-        DGraph<String> g2 = readGraph("data/basic2.txt");
+        Graph<String> g2 = readGraph("data/basic2.txt");
         assertFalse(g2.isUGraph());
         assertTrue(g2.checkState(0));
         assertSame("data/basic2.txt", g2);
     }
     
-    @Test
-    void test_isDAGraph() throws FileNotFoundException {
-        fail("Not yet implemented");
-    }
     
     @Test
     void test_isConnected() throws FileNotFoundException {
-        fail("Not yet implemented");
+        Graph<Character> g = new Graph<Character>();
+        assertTrue(g.isConnected());
+        g = readGraph("data/basic3.txt", Character.class);
+        assertFalse(g.isConnected());
+        
+        g.addEdge('B', 'E');
+        g.addEdge('D', 'C');
+        assertTrue(g.isConnected());
     }
     
     @Test
-    void test_isEulerian() throws FileNotFoundException {
-        fail("Not yet implemented");
+    void test_isDAGraph() throws FileNotFoundException {
+        Graph<String> g = readGraph("data/basic4.txt");
+        assertTrue(g.isDAGraph());
+        
+        g.addEdge("a2", "b3");
+        assertTrue(g.isDAGraph());
+        
+        g.addEdge("b4", "a2");
+        assertFalse(g.isDAGraph());
     }
 }

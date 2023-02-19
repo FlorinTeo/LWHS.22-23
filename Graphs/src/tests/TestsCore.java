@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-import main.DGraph;
+import main.Graph;
 
 public class TestsCore {
     
@@ -17,12 +17,17 @@ public class TestsCore {
             return realType.cast(s);
         } else if (realType == Double.class) {
             return realType.cast(Double.parseDouble(s));
+        } else if (realType == Character.class) {
+            if (s.length() != 1) {
+                throw new RuntimeException("Invalid format in graph parsing!");
+            }
+            return realType.cast(s.charAt(0));
         } else {
             throw new RuntimeException("Unsupported type in graph parsing!");
         }
     }
 
-    public static <T extends Comparable<T>> DGraph<T> readGraph(String graphFile, Class<T> realType) throws FileNotFoundException {
+    public static <T extends Comparable<T>> Graph<T> readGraph(String graphFile, Class<T> realType) throws FileNotFoundException {
         Scanner input = new Scanner(new File(graphFile));
         Map<String, List<String>> map = new HashMap<String, List<String>>();
         while(input.hasNextLine()) {
@@ -36,7 +41,7 @@ public class TestsCore {
                     Arrays.asList(Arrays.copyOfRange(tokens, 2, tokens.length)));
         }
         
-        DGraph<T> graph = new DGraph<T>();
+        Graph<T> graph = new Graph<T>();
         for(String node : map.keySet()) {
             T n = parseT(node, realType);
             graph.addNode(n);
@@ -53,11 +58,11 @@ public class TestsCore {
         return graph;
     }
 
-    public static DGraph<String> readGraph(String graphFile) throws FileNotFoundException {
+    public static Graph<String> readGraph(String graphFile) throws FileNotFoundException {
         return readGraph(graphFile, String.class);
     }
     
-    public static void assertSame(String graphFile, DGraph<?> g) throws FileNotFoundException {
+    public static void assertSame(String graphFile, Graph<?> g) throws FileNotFoundException {
         String expected = "";
         boolean first = true;
         Scanner parser = new Scanner(new File(graphFile));

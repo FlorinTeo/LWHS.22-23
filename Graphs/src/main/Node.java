@@ -26,6 +26,10 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
         _edges.put(otherNode._data.hashCode(), otherNode);
     }
     
+    public void removeEdge(Node<T> otherNode) {
+        _edges.remove(otherNode.getData().hashCode());
+    }
+    
     @Override
     public String toString() {
         String output = _data.toString() + " > ";
@@ -60,5 +64,24 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
         }
         _state = 1;
         return uNode;
+    }
+    
+    public void traverse() {
+        _state = 1;
+        for (Node<?> n : _edges.values()) {
+            if (n.getState() == 0) {
+                n.traverse();
+            }
+        }
+    }
+    
+    public boolean loops(Node<T> root) {
+        _state = 1;
+        for (Node<T> n : _edges.values()) {
+            if (n == root || (n._state == 0 && n.loops(root))) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -3,7 +3,7 @@ package main;
 public class Program {
 
     public static void main(String[] args) {
-        DGraph<String> dgs = new DGraph<String>();
+        Graph<String> dgs = new Graph<String>();
         dgs.addNode("abc");
         dgs.addNode("def");
         dgs.addEdge("abc", "def");
@@ -11,7 +11,7 @@ public class Program {
         dgs.addEdge("xyz", "def");
         System.out.println(dgs);
         
-        DGraph<Integer> dgi = new DGraph<Integer>();
+        Graph<Integer> dgi = new Graph<Integer>();
         dgi.addNode(1);
         dgi.addNode(2);
         dgi.addNode(3);
