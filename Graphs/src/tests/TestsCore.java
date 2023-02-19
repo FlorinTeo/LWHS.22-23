@@ -62,7 +62,7 @@ public class TestsCore {
         return readGraph(graphFile, String.class);
     }
     
-    public static void assertSame(String graphFile, Graph<?> g) throws FileNotFoundException {
+    public static void assertSameGraph(String graphFile, Graph<?> g) throws FileNotFoundException {
         String expected = "";
         boolean first = true;
         Scanner parser = new Scanner(new File(graphFile));

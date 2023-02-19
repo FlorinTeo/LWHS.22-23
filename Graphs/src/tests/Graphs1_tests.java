@@ -3,7 +3,6 @@ package tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.FileNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -46,7 +45,7 @@ class Graphs1_tests extends TestsCore {
         Graph<String> g = readGraph("data/basic1.txt");
         assertEquals(5, g.size());
         assertTrue(g.checkState(0));
-        assertSame("data/basic1.txt", g);
+        assertSameGraph("data/basic1.txt", g);
     }
 
     @Test
@@ -69,7 +68,7 @@ class Graphs1_tests extends TestsCore {
     @Test
     void test_removeNode() throws FileNotFoundException {
         Graph<String> g = readGraph("data/basic0.txt");
-        assertSame("data/basic0.txt", g);
+        assertSameGraph("data/basic0.txt", g);
         g.removeNode("three");
         String expected = "one > two\n"
                         + "two > ";
@@ -89,12 +88,12 @@ class Graphs1_tests extends TestsCore {
         Graph<Integer> g1 = readGraph("data/basic1.txt", Integer.class);
         assertTrue(g1.isUGraph());
         assertTrue(g1.checkState(0));
-        assertSame("data/basic1.txt", g1);
+        assertSameGraph("data/basic1.txt", g1);
         
         Graph<String> g2 = readGraph("data/basic2.txt");
         assertFalse(g2.isUGraph());
         assertTrue(g2.checkState(0));
-        assertSame("data/basic2.txt", g2);
+        assertSameGraph("data/basic2.txt", g2);
     }
     
     
