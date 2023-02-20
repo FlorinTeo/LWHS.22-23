@@ -27,7 +27,7 @@ class Graphs0_tests extends TestsCore {
     }
     
     /**
-     * Unit test for creating a Graph linking its nodes with directed Edges.
+     * Unit test for creating a Graph and linking its nodes with directed Edges.
      */
     @Test
     void test_addEdge() {
@@ -71,7 +71,7 @@ class Graphs0_tests extends TestsCore {
      * @throws FileNotFoundException
      */
     @Test
-    void test_removeEdge() throws FileNotFoundException {
+    void test_removeEdge() {
         Graph<Character> g = new Graph<Character>();
         g.addNode('A');
         g.addNode('B');

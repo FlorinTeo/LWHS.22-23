@@ -1,6 +1,7 @@
 package main;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Class definition for a generic (Directed) Graph.
@@ -16,8 +17,9 @@ public class Graph<T extends Comparable<T>> {
 
     /**
      * Private Map keying each Node in the Graph by the hashCode of its data
-     * E.g: Given Node<String> n = new Node<String>("abc") added to the graph,
-     * the _nodes map contains a Map.Entry with key="abc".hashCode() and value=n.
+     * E.g: Given <pre>Node<String> n = new Node<String>("abc");</pre> added to the graph,
+     * the _nodes map contains a Map.Entry with
+     * <pre>key="abc".hashCode()<br>value=n<pre>
      * @see java.lang.Object#hashCode()
      */
     private Map<Integer, Node<T>> _nodes;
@@ -28,7 +30,7 @@ public class Graph<T extends Comparable<T>> {
      * @see Node
      */
     public Graph() {
-        _nodes = new HashMap<Integer, Node<T>>();
+        _nodes = new TreeMap<Integer, Node<T>>();
     }
     
     /**
