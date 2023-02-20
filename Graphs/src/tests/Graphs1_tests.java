@@ -13,7 +13,7 @@ class Graphs1_tests extends TestsCore {
      * Unit tests for checking if a Graph is undirected.
      * 
      * A generic Graph is undirected if and only if for any Edge linking 
-     * any nodes, A and B, there is an Edge linking back B to A.
+     * two nodes A and B, there is an Edge linking back B to A.
      */
     @Test
     void test_isUGraph() throws FileNotFoundException {
