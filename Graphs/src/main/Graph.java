@@ -1,5 +1,6 @@
 package main;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -109,8 +110,13 @@ public class Graph<T extends Comparable<T>> {
      * @see Graph#addEdge(Comparable, Comparable)
      */
     public void removeEdge(T from, T to) {
-        // TODO: Implement this method according to
-        // TODO: the specification in javadocs
+        Node<T> fromNode = _nodes.get(from.hashCode());
+        Node<T> toNode = _nodes.get(to.hashCode());
+        if (fromNode == null || toNode == null) {
+            throw new RuntimeException("Node(s) not in the graph!");
+        }
+        
+        fromNode.removeEdge(toNode);
     }
     
     /**
@@ -121,8 +127,11 @@ public class Graph<T extends Comparable<T>> {
      * @param data - Node to be removed from the Graph.
      */
     public void removeNode(T data) {
-        // TODO: Implement this method according to
-        // TODO: the specification in javadocs
+        Node<T> node = _nodes.get(data.hashCode());
+        for(Node<T> n : _nodes.values()) {
+            n.removeEdge(node);
+        }
+        _nodes.remove(data.hashCode());
     }
     
     /**
@@ -153,5 +162,69 @@ public class Graph<T extends Comparable<T>> {
         }
         
         return output;
+    }
+    
+    public void reset() {
+        for(Node<?> node : _nodes.values()) {
+            node.reset();
+        }
+    }
+    
+    public boolean isUGraph() {
+        boolean uGraph = true;
+        for(Node<?> node : _nodes.values()) {
+            if (!node.isUNode()) {
+                uGraph = false;
+                break;
+            }
+        }
+        
+        reset();
+        return uGraph;
+    }
+    
+    public boolean isConnected() {
+        boolean connected = true;
+        Iterator<Node<T>> iNodes = _nodes.values().iterator();
+        while(connected && iNodes.hasNext()) {
+            Node<T> node = iNodes.next();
+            node.traverse();
+            for (Node<?> n : _nodes.values()) {
+                if (n.getState() != 1) {
+                    connected = false;
+                    break;
+                }
+            }
+            reset();
+        }
+        return connected;
+    }
+    
+    public boolean isDAGraph() {
+        boolean dag = true;
+        Iterator<Node<T>> iNodes = _nodes.values().iterator();
+        while(dag && iNodes.hasNext()) {
+            Node<T> n = iNodes.next();
+            dag = !n.loops(n);
+            reset();
+        }        
+        return dag;
+    }
+
+    public int[][] getAdjacencyMatrix() {
+        int[][] arr = new int[this.size()][this.size()];
+        Map<Node<T>, Integer> map = new HashMap<Node<T>, Integer>();
+        int iN = 0;
+        for(Node<T> n : _nodes.values()) {
+            map.put(n, iN++);
+        }
+        for(Node<T> n : _nodes.values()) {
+            int i = map.get(n);
+            for(Node<T> nn : n.getNeighbors()) {
+                int j = map.get(nn);
+                arr[i][j] = 1;
+            }
+        }
+        return arr;
     }
 }

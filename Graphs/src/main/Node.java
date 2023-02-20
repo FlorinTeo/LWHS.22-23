@@ -100,6 +100,17 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
     }
     
     /**
+     * Removes the directed graph Edge linking this Node to the otherNode.
+     * <br><u>Note:</u> The <i>otherNode</i> does not get removed from the Graph, nor does
+     * an Edge that may link <i>otherNode</i> (as an origin) and this Node (as a target).
+     * @param otherNode - reference to The node at the other end of the Edge.
+     * @see Node#addEdge(Node)
+     */
+    public void removeEdge(Node<T> otherNode) {
+        _edges.remove(otherNode.getData().hashCode());
+    }
+    
+    /**
      * Gives a String representation of this Node as a space-separated sequence of token:
      * The string representation of the <i>_data</i> followed by ' > ' followed by a space
      * separated sequence of tokens, one for each of this Node's neighbors.
@@ -132,5 +143,40 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
     @Override
     public int compareTo(Node<T> other) {
         return _data.compareTo(other._data);
+    }
+
+    public boolean isUNode() {
+        boolean uNode = true;
+        for (Node<?> n : _edges.values()) {
+            if (n._state != 1 && n._edges.get(_data.hashCode()) != this) {
+                uNode = false;
+                break;
+            }
+        }
+        _state = 1;
+        return uNode;
+    }
+    
+    public void traverse() {
+        _state = 1;
+        for (Node<?> n : _edges.values()) {
+            if (n.getState() == 0) {
+                n.traverse();
+            }
+        }
+    }
+    
+    public boolean loops(Node<T> root) {
+        _state = 1;
+        for (Node<T> n : _edges.values()) {
+            if (n == root || (n._state == 0 && n.loops(root))) {
+                return true;
+            }
+        }
+        return false;
+    }
+        
+    public Collection<Node<T>> getNeighbors() {
+        return _edges.values();
     }
 }
