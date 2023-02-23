@@ -188,13 +188,13 @@ public class Graph<T extends Comparable<T>> {
             return true;
         }
         
-        Node<T>[] nodeArr = _nodes.values().toArray(new Node[size()]);
+        Node<?>[] nodeArr = _nodes.values().toArray(new Node[size()]);
         nodeArr[0].traverse();
         
         int nFlipped;
         do {
             nFlipped = 0;
-            for (Node n : nodeArr) {
+            for (Node<?> n : nodeArr) {
                 if (n.getState() == 0 && n.expand()) {
                     nFlipped++;
                 }
