@@ -166,6 +166,16 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
         }
     }
     
+    public boolean expand() {
+        for (Node<?> n : _edges.values()) {
+            if (n.getState() == 1) {
+                _state = 1;
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public boolean loops(Node<T> root) {
         _state = 1;
         for (Node<T> n : _edges.values()) {

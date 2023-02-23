@@ -184,19 +184,32 @@ public class Graph<T extends Comparable<T>> {
     }
     
     public boolean isConnected() {
-        boolean connected = true;
-        Iterator<Node<T>> iNodes = _nodes.values().iterator();
-        while(connected && iNodes.hasNext()) {
-            Node<T> node = iNodes.next();
-            node.traverse();
-            for (Node<?> n : _nodes.values()) {
-                if (n.getState() != 1) {
-                    connected = false;
-                    break;
+        if (size() < 2) {
+            return true;
+        }
+        
+        Node<T>[] nodeArr = _nodes.values().toArray(new Node[size()]);
+        nodeArr[0].traverse();
+        
+        int nFlipped;
+        do {
+            nFlipped = 0;
+            for (Node n : nodeArr) {
+                if (n.getState() == 0 && n.expand()) {
+                    nFlipped++;
                 }
             }
-            reset();
+        } while(nFlipped > 0);
+        
+        boolean connected = true;
+        for (Node<?> n : _nodes.values()) {
+            if (n.getState() == 0) {
+                connected = false;
+                break;
+            }
         }
+        
+        reset();
         return connected;
     }
     

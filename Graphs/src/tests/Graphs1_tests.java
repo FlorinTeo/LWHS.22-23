@@ -57,6 +57,16 @@ class Graphs1_tests extends TestsCore {
         g.addEdge('B', 'E');
         g.addEdge('D', 'C');
         assertTrue(g.isConnected());
+        Graph<String> g2 = readGraph("data/basic4.txt");
+        assertFalse(g2.isConnected());
+        g2.addEdge("a4", "b4");
+        assertTrue(g2.isConnected());
+        Graph<Integer> g3 = new Graph<Integer>();
+        g3.addNode(10);
+        g3.addNode(20);
+        assertFalse(g3.isConnected());
+        g3.addEdge(20, 10);
+        assertTrue(g3.isConnected());
     }
     
     /**____ DIRECTED ACYCLIC GRAPH (DAG) ____<br>
