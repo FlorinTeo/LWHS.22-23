@@ -35,12 +35,25 @@ class Graphs1_tests extends TestsCore {
     }
     
     /**____ CONNECTED GRAPH _____<br>
-     * Unit tests for checking if a Graph is connected.
+     * Unit tests for checking if a Graph is weakly-connected.
      * 
      * A connected Graph is a Graph in which every pair of vertices 
-     * is connected by a path. A Graph that is not connected is said 
-     * to be disconnected. A Graph with zero or just one vertex is 
-     * connected.
+     * is connected by a path. The Graph is strongly-connected if the
+     * path is respecting the direction of the Edge and weakly-connected
+     * if the Edge direction does not matter.
+     * For instance:
+     *     A > B
+     *     B > C 
+     *     C > A
+     * is a strongly connected graph: From every node you can reach 
+     * any other node. But:
+     *     A > B C
+     * is a weakly connected graph: following the direction of the edges you
+     * cannot reach A starting from C. But if the direction is ignored,
+     * every node can reach the other nodes.
+     * 
+     * A Graph that is not connected is said to be disconnected.
+     * A Graph with zero or just one vertex is connected.
      */
     @Test
     void test_isConnected() throws FileNotFoundException {
@@ -53,9 +66,14 @@ class Graphs1_tests extends TestsCore {
         g = readGraph("data/basic3.txt", Character.class);
         assertFalse(g.isConnected());
         
-        // Add a few Edges to make it connected and verify again.
+        // Add a few Edges to make it strongly-connected and verify again.
         g.addEdge('B', 'E');
         g.addEdge('D', 'C');
+        assertTrue(g.isConnected());
+        
+        // Change the orientation of an edge to check weakly-connected.
+        g.removeEdge('D', 'C');
+        g.addEdge('C', 'D');
         assertTrue(g.isConnected());
     }
     

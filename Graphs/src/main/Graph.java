@@ -188,7 +188,20 @@ public class Graph<T extends Comparable<T>> {
         Iterator<Node<T>> iNodes = _nodes.values().iterator();
         while(connected && iNodes.hasNext()) {
             Node<T> node = iNodes.next();
+            // traverse the grap starting from node
             node.traverse();
+            
+            // expand the visited nodes based on proximity
+            // to other visited nodes. Stop when no expansion happened.
+            boolean again = true;
+            while (again) {
+                again = false;
+                for (Node<?> n : _nodes.values()) {
+                    again = again || n.expand();
+                }
+            }
+            
+            // verify if any node was left not visited
             for (Node<?> n : _nodes.values()) {
                 if (n.getState() != 1) {
                     connected = false;
