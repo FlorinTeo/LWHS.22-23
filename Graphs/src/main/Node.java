@@ -192,4 +192,17 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
     public Collection<Node<T>> getNeighbors() {
         return _edges.values();
     }
+    
+    public int getTopologicalSort() {
+        
+        if (_state == 0) {
+            int topoSort = 0;
+            for(Node<?> n : _edges.values()) {
+                topoSort = Math.max(topoSort, n.getTopologicalSort());
+            }
+            _state = topoSort + 1;
+        }
+        
+        return _state;
+    }
 }
