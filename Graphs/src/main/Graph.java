@@ -209,14 +209,6 @@ public class Graph<T extends Comparable<T>> {
                     break;
                 }
             }
-        } while(nFlipped > 0);
-        
-        boolean connected = true;
-        for (Node<?> n : _nodes.values()) {
-            if (n.getState() == 0) {
-                connected = false;
-                break;
-            }
         }
         
         reset();

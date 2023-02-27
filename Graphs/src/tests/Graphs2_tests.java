@@ -1,6 +1,5 @@
 package tests;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,7 +13,7 @@ import main.Graph;
 
 class Graphs2_tests extends TestsCore {
     
-    //____ OUT-DEGREES ____<br>
+    //____ OUT-DEGREES ____
     /** The out-degree of a Node is the number of Edges leading out from it.<br>
      * Code the following method in the Graph class:
      * <pre>TreeMap&lt;Integer, TreeSet&lt;String>> getOutDegrees() {...}</pre>
