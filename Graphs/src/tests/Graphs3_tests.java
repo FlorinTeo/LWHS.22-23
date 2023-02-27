@@ -7,7 +7,12 @@ import org.junit.jupiter.api.Test;
 class Graphs3_tests {
 
     @Test
-    void test_topoSort() {
+    void test_partitionsCount() {
+        fail("Not yet implemented");
+    }
+    
+    @Test
+    void test_dijkstra() {
         fail("Not yet implemented");
     }
     

@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * Class definition for a generic (Directed) Graph.
@@ -239,5 +240,63 @@ public class Graph<T extends Comparable<T>> {
             }
         }
         return arr;
+    }
+    
+    public TreeMap<Integer, TreeSet<T>> getOutDegrees() {
+        TreeMap<Integer, TreeSet<T>> map = new TreeMap<Integer, TreeSet<T>>();
+        for(Node<T> n : _nodes.values()) {
+            int outDegree = n.getNeighbors().size();
+            TreeSet<T> set = map.get(outDegree);
+            if (set == null) {
+                set = new TreeSet<T>();
+                map.put(outDegree, set);
+            }
+            set.add(n.getData());
+        }
+        return map;
+    }
+    
+    public TreeMap<Integer, TreeSet<T>> getInDegrees() {
+        TreeMap<Integer, TreeSet<T>> map = new TreeMap<Integer, TreeSet<T>>();
+        for(Node<T> node : _nodes.values()) {
+            int inDegree = 0;
+            for (Node<T> other : _nodes.values()) {
+                if (node == other) {
+                    continue;
+                }
+                if (other.getNeighbors().contains(node)) {
+                    inDegree++;
+                }
+            }
+            
+            TreeSet<T> set = map.get(inDegree);
+            if (set == null) {
+                set = new TreeSet<T>();
+                map.put(inDegree, set);
+            }
+            set.add(node.getData());
+        }
+        
+        return map;
+    }
+    
+    public TreeMap<Integer, TreeSet<T>> getTopologicalSort() {
+        if (!this.isDAGraph()) {
+            return null;
+        }
+        
+        TreeMap<Integer, TreeSet<T>> mapTopoSort = new TreeMap<Integer, TreeSet<T>>();
+        int index = 0;
+        while(size() > 0) {
+            TreeMap<Integer, TreeSet<T>> mapInDeg = this.getInDegrees();
+            TreeSet<T> set = mapInDeg.get(0);
+            mapTopoSort.put(index, set);
+            index++;
+            for(T data : set) {
+                removeNode(data);
+            }
+        }
+        
+        return mapTopoSort;
     }
 }
