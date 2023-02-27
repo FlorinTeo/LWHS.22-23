@@ -171,7 +171,7 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
             return false;
         }
         for (Node<?> n : _edges.values()) {
-            if (n._state == 1) {
+            if (n.getState() == 1) {
                 _state = 1;
                 return true;
             }

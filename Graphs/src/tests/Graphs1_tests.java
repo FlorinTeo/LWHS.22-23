@@ -70,7 +70,6 @@ class Graphs1_tests extends TestsCore {
         g.addEdge('B', 'E');
         g.addEdge('D', 'C');
         assertTrue(g.isConnected());
-        
         // Change the orientation of an edge to check weakly-connected.
         g.removeEdge('D', 'C');
         g.addEdge('C', 'D');
