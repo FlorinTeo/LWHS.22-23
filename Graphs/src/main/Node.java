@@ -1,4 +1,5 @@
 package main;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,6 +100,17 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
     }
     
     /**
+     * Removes the directed graph Edge linking this Node to the otherNode.
+     * <br><u>Note:</u> The <i>otherNode</i> does not get removed from the Graph, nor does
+     * an Edge that may link <i>otherNode</i> (as an origin) and this Node (as a target).
+     * @param otherNode - reference to The node at the other end of the Edge.
+     * @see Node#addEdge(Node)
+     */
+    public void removeEdge(Node<T> otherNode) {
+        _edges.remove(otherNode.getData().hashCode());
+    }
+    
+    /**
      * Gives a String representation of this Node as a space-separated sequence of token:
      * The string representation of the <i>_data</i> followed by ' > ' followed by a space
      * separated sequence of tokens, one for each of this Node's neighbors.
@@ -131,5 +143,27 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
     @Override
     public int compareTo(Node<T> other) {
         return _data.compareTo(other._data);
+    }
+
+    public void traverse() {
+        _state = 1;
+        for (Node<?> n : _edges.values()) {
+            if (n.getState() == 0) {
+                n.traverse();
+            }
+        }
+    }
+    
+    public boolean expand() {
+        if (_state == 1) {
+            return false;
+        }
+        for (Node<?> n : _edges.values()) {
+            if (n.getState() == 1) {
+                _state = 1;
+                return true;
+            }
+        }
+        return false;
     }
 }

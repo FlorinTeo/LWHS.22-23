@@ -1,6 +1,9 @@
 package main;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * Class definition for a generic (Directed) Graph.
@@ -108,8 +111,13 @@ public class Graph<T extends Comparable<T>> {
      * @see Graph#addEdge(Comparable, Comparable)
      */
     public void removeEdge(T from, T to) {
-        // TODO: Implement this method according to
-        // TODO: the specification in javadocs
+        Node<T> fromNode = _nodes.get(from.hashCode());
+        Node<T> toNode = _nodes.get(to.hashCode());
+        if (fromNode == null || toNode == null) {
+            throw new RuntimeException("Node(s) not in the graph!");
+        }
+        
+        fromNode.removeEdge(toNode);
     }
     
     /**
@@ -120,8 +128,11 @@ public class Graph<T extends Comparable<T>> {
      * @param data - Node to be removed from the Graph.
      */
     public void removeNode(T data) {
-        // TODO: Implement this method according to
-        // TODO: the specification in javadocs
+        Node<T> node = _nodes.get(data.hashCode());
+        for(Node<T> n : _nodes.values()) {
+            n.removeEdge(node);
+        }
+        _nodes.remove(data.hashCode());
     }
     
     /**
@@ -152,5 +163,42 @@ public class Graph<T extends Comparable<T>> {
         }
         
         return output;
+    }
+    
+    public void reset() {
+        for(Node<?> node : _nodes.values()) {
+            node.reset();
+        }
+    }
+    
+    public boolean isConnected() {
+        boolean connected = true;
+        Iterator<Node<T>> iNodes = _nodes.values().iterator();
+        while(connected && iNodes.hasNext()) {
+            Node<T> node = iNodes.next();
+            // traverse the grap starting from node
+            node.traverse();
+            
+            // expand the visited nodes based on proximity
+            // to other visited nodes. Stop when no expansion happened.
+            boolean again = true;
+            while (again) {
+                again = false;
+                for (Node<?> n : _nodes.values()) {
+                    again = again || n.expand();
+                }
+            }
+            
+            // verify if any node was left not visited
+            for (Node<?> n : _nodes.values()) {
+                if (n.getState() != 1) {
+                    connected = false;
+                    break;
+                }
+            }
+        }
+        
+        reset();
+        return connected;
     }
 }
