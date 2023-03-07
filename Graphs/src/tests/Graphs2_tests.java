@@ -16,7 +16,7 @@ class Graphs2_tests extends TestsCore {
     //____ OUT-DEGREES ____
     /** The out-degree of a Node is the number of Edges leading out from it.<br>
      * Code the following method in the Graph class:
-     * <pre>TreeMap&lt;Integer, TreeSet&lt;String>> getOutDegrees() {...}</pre>
+     * <pre>TreeMap&lt;Integer, TreeSet&lt;T>> getOutDegrees() {...}</pre>
      * It returns a TreeMap associating each out-degree count (key) to the 
      * set of Nodes having that out-degree (value).
      */
@@ -30,7 +30,7 @@ class Graphs2_tests extends TestsCore {
     //____ IN-DEGREES ____
     /** The in-degree of a Node is the number of Edges leading into it.<br>
      * Code the following method in the Graph class:
-     * <pre>TreeMap&lt;Integer, TreeSet&lt;String>> getInDegrees() {...}</pre>
+     * <pre>TreeMap&lt;Integer, TreeSet&lt;T>> getInDegrees() {...}</pre>
      * It returns a TreeMap associating each in-degree count (key) to the 
      * set of Nodes having that in-degree (value).
      */
@@ -38,7 +38,6 @@ class Graphs2_tests extends TestsCore {
     void test_inDegrees() throws FileNotFoundException {
         Graph<String> g = readGraph("data/medium1.txt");
         TreeMap<Integer, TreeSet<String>> mapInDeg = g.getInDegrees();
-        System.out.println(mapInDeg);
         assertEquals("{0=[A], 1=[D], 2=[B, F], 3=[C, E]}", mapInDeg.toString());
     }
     
@@ -47,7 +46,7 @@ class Graphs2_tests extends TestsCore {
      * is a linear ordering of its vertices such that for every directed edge uv 
      * from vertex u to vertex v, u comes before v in the ordering.<br>
      * Code the following method in the Graph class:
-     * <pre>TreeMap&lt;Integer, TreeSet&lt;String>> topoSort() {...}</pre>
+     * <pre>TreeMap&lt;Integer, TreeSet&lt;T>> topoSort() {...}</pre>
      * It returns a TreeMap associating each position in the topological sort (key)
      * with the set of Nodes at that position (value). If the Graph is not DAG, the method 
      * returns null.

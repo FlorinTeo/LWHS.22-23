@@ -1,7 +1,9 @@
 package main;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -307,5 +309,49 @@ public class Graph<T extends Comparable<T>> {
 
         reset();
         return map;
+    }
+    
+    private void expand() {
+        boolean again = true;
+        while (again){
+            again = false;
+            for(Node<T> n : _nodes.values()) {
+                if (n.getState() == 0 && n.expand()) {
+                    again = true;
+                }
+            } 
+        }
+    }
+    
+    public int countPartitions() {
+        // counter to receive the final number of partitions
+        int count = 0;
+        
+        // Put all the graph's nodes in a queue
+        Queue<Node<T>> q = new LinkedList<Node<T>>();
+        q.addAll(_nodes.values());
+
+        // Loop through the queue until all nodes have been visited
+        while(!q.isEmpty()) {
+            Node<T> n = q.remove();
+            // a node already visited is just dropped from the queue
+            if (n.getState() != 0) {
+                continue;
+            }
+            
+            // here we have n as not visited yet, for sure it indicates
+            // a new partition.
+            count++;
+            
+            // traverse all the nodes starting from n then
+            // expand the traversal to all the other nodes not visited
+            // yet which may be connected to any of the visited nodes.
+            n.traverse();
+            expand();
+        }
+        
+        reset();
+        
+        return count;
     }
 }

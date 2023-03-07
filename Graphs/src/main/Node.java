@@ -166,13 +166,19 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
         }
     }
     
+    /**
+     * Expand the marking in any of the children of this node
+     * (if any) to this node itself, then propagate it further 
+     * in the graph through traversal.
+     * @return true of the state of this node has changed.
+     */
     public boolean expand() {
         if (_state == 1) {
             return false;
         }
         for (Node<?> n : _edges.values()) {
             if (n.getState() == 1) {
-                _state = 1;
+                traverse();
                 return true;
             }
         }
