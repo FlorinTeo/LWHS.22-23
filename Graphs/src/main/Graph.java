@@ -147,13 +147,15 @@ public class Graph<T extends Comparable<T>> {
         // TODO: the specification in javadocs
     	Node dataNode = null;
     	for(Node n: _nodes.values()) {
-    		if(n.getData() == data) {
+    		if(n.getData().hashCode() == data.hashCode()) {
     			dataNode = n;
     		}
     	}
     	if(dataNode != null) {
-    		dataNode.removeEdges();
-    		_nodes.remove(dataNode);
+    	    for (Node<T> n : _nodes.values()) {
+    	        n.removeEdges(dataNode);
+    	    }
+    		_nodes.remove(dataNode.getData().hashCode());
     	}
     	
     	

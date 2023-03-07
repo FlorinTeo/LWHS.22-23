@@ -149,16 +149,7 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
     }
     
     public void removeEdgeFromNode(Node<T> to) {
-    	if(this._edges.containsValue(to)) {
-    		for(Integer n: _edges.keySet()) {
-    			if(to._data.hashCode() == n) {
-    				_edges.remove(n);
-    			}
-    		}
-    		
-    	}
-    	
-    	
+        _edges.remove(to.getData().hashCode());
     }
     
     /**returns true if there are cycles from the original....false otherwise
@@ -188,8 +179,8 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
     	return false;
     }
     
-    public void removeEdges() {
-    	this._edges.clear();
+    public void removeEdges(Node<T> other) {
+    	this._edges.remove(other._data.hashCode());
     }
     
     public boolean isUndirectedNode() {
