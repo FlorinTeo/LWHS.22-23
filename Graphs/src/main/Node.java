@@ -100,17 +100,6 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
     }
     
     /**
-     * Removes the directed graph Edge linking this Node to the otherNode.
-     * <br><u>Note:</u> The <i>otherNode</i> does not get removed from the Graph, nor does
-     * an Edge that may link <i>otherNode</i> (as an origin) and this Node (as a target).
-     * @param otherNode - reference to The node at the other end of the Edge.
-     * @see Node#addEdge(Node)
-     */
-    public void removeEdge(Node<T> otherNode) {
-        _edges.remove(otherNode.getData().hashCode());
-    }
-    
-    /**
      * Gives a String representation of this Node as a space-separated sequence of token:
      * The string representation of the <i>_data</i> followed by ' > ' followed by a space
      * separated sequence of tokens, one for each of this Node's neighbors.
@@ -144,65 +133,79 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
     public int compareTo(Node<T> other) {
         return _data.compareTo(other._data);
     }
-
-    public boolean isUNode() {
-        boolean uNode = true;
-        for (Node<?> n : _edges.values()) {
-            if (n._state != 1 && n._edges.get(_data.hashCode()) != this) {
-                uNode = false;
-                break;
-            }
-        }
-        _state = 1;
-        return uNode;
+    
+    //recursively marks itself with the value of n (if not marked) 
+    //and then calls the same function on neighbors
+    
+    public void markSelfAndNeighbors(int n) {
+    	if(_state == n) {
+    		return;
+    	}
+    	
+    	_state = n;
+    	for(Node neighbor: _edges.values()) {
+    		neighbor.markSelfAndNeighbors(n); 
+    	}
     }
     
-    public void traverse() {
-        _state = 1;
-        for (Node<?> n : _edges.values()) {
-            if (n.getState() == 0) {
-                n.traverse();
-            }
-        }
+    public void removeEdgeFromNode(Node<T> to) {
+    	if(this._edges.containsValue(to)) {
+    		for(Integer n: _edges.keySet()) {
+    			if(to._data.hashCode() == n) {
+    				_edges.remove(n);
+    			}
+    		}
+    		
+    	}
+    	
+    	
     }
     
-    public boolean expand() {
-        if (_state == 1) {
-            return false;
-        }
-        for (Node<?> n : _edges.values()) {
-            if (n.getState() == 1) {
-                _state = 1;
-                return true;
-            }
-        }
-        return false;
+    /**returns true if there are cycles from the original....false otherwise
+     * 
+     * @return
+     */
+    public boolean hasCycles(Node<T> originalNode) {
+    	//Have we already visited this node and it is the original 
+    	if(getState()>0) {
+    		if(originalNode == this) {
+    			return true;
+    		}
+    	}else {
+    		//mark the node
+    		this._state = 1;
+    		//recursively call this on neighbors
+    		for(Node<T> neighbor : _edges.values()) {
+    			if(neighbor.hasCycles(originalNode)) {
+    				//we were able to go back to the original node
+    				return true;
+    			}
+    		}
+    		
+    	}
+    	
+    	//We didn't get back to the original node..
+    	return false;
     }
     
-    public boolean loops(Node<T> root) {
-        _state = 1;
-        for (Node<T> n : _edges.values()) {
-            if (n == root || (n._state == 0 && n.loops(root))) {
-                return true;
-            }
-        }
-        return false;
-    }
-        
-    public Collection<Node<T>> getNeighbors() {
-        return _edges.values();
+    public void removeEdges() {
+    	this._edges.clear();
     }
     
-    public int getTopologicalSort() {
-        
-        if (_state == 0) {
-            int topoSort = 0;
-            for(Node<?> n : _edges.values()) {
-                topoSort = Math.max(topoSort, n.getTopologicalSort());
-            }
-            _state = topoSort + 1;
-        }
-        
-        return _state;
+    public boolean isUndirectedNode() {
+    	for(Node<T> n :this._edges.values()) {
+    		if(!n._edges.containsValue(this)) {
+    			return false;
+    		}
+    	}
+    	return true;
+    }
+    public boolean isNeighbor(Node<T> otherNode) {
+    	return this._edges.containsValue(otherNode);
+    }
+    
+    public int OutDegress() {
+		return _edges.values().size();
+    	
     }
 }

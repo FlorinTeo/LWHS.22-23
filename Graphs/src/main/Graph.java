@@ -1,6 +1,6 @@
 package main;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -111,13 +111,28 @@ public class Graph<T extends Comparable<T>> {
      * @see Graph#addEdge(Comparable, Comparable)
      */
     public void removeEdge(T from, T to) {
-        Node<T> fromNode = _nodes.get(from.hashCode());
-        Node<T> toNode = _nodes.get(to.hashCode());
-        if (fromNode == null || toNode == null) {
-            throw new RuntimeException("Node(s) not in the graph!");
-        }
-        
-        fromNode.removeEdge(toNode);
+        // TODO: Implement this method according to
+        // TODO: the specification in javadocs
+ 
+    	Node fromNode = null;
+    	Node toNode = null;
+    	for(Node n : _nodes.values()) {
+    		if(n.getData() == from) {
+    			fromNode = n;
+    			
+    		}
+    		
+    		if(n.getData() == to) {
+    			toNode = n;
+    		}
+    	}
+    	if(fromNode == null || toNode == null) {
+    		throw new RuntimeException();
+    	}else {
+    		fromNode.removeEdgeFromNode(toNode);
+    	}
+    	
+    	
     }
     
     /**
@@ -128,12 +143,23 @@ public class Graph<T extends Comparable<T>> {
      * @param data - Node to be removed from the Graph.
      */
     public void removeNode(T data) {
-        Node<T> node = _nodes.get(data.hashCode());
-        for(Node<T> n : _nodes.values()) {
-            n.removeEdge(node);
-        }
-        _nodes.remove(data.hashCode());
+        // TODO: Implement this method according to
+        // TODO: the specification in javadocs
+    	Node dataNode = null;
+    	for(Node n: _nodes.values()) {
+    		if(n.getData() == data) {
+    			dataNode = n;
+    		}
+    	}
+    	if(dataNode != null) {
+    		dataNode.removeEdges();
+    		_nodes.remove(dataNode);
+    	}
+    	
+    	
     }
+    
+    
     
     /**
      * Gives a multi-line String representation of this Graph. Each line in the returned
@@ -165,147 +191,114 @@ public class Graph<T extends Comparable<T>> {
         return output;
     }
     
-    public void reset() {
-        for(Node<?> node : _nodes.values()) {
-            node.reset();
-        }
+    //Checks to see if the graph is strongly connected (You can traverse to every node from each node)
+    //returns true if strongly connected, false if not
+    
+    public boolean isConnected() {
+    	// if the graph is less than two nodes...it is strongly connected
+    	if(size() < 2) {
+    		return true;
+    	}
+    	
+    	int currentMark = 1;
+    	//loop through all the nodes
+    	for(Node n: _nodes.values()) {
+    		
+    		//recursively flood the other nodes
+    		n.markSelfAndNeighbors(currentMark); 
+    		//did we mark everything? if not..false
+    		if(!checkState(currentMark)) {
+    			resetMarks();
+    			return false;
+    		}
+    		
+    		currentMark++;
+    	}
+    	resetMarks();
+    	return true;
+    }
+    
+    //resets the state of all marks to the default value 
+    public void resetMarks() {
+    	for(Node n : _nodes.values()) {
+    		n.reset();
+    	}
+    }
+    
+    /** 
+     * 
+     * @return
+     */
+    public boolean isDAGraph() {
+    	boolean allTrue = true;// each node has returned true so far
+    	
+    	// loop through each node 
+    	for(Node<T> n: _nodes.values()) {
+    		    	
+    	//test whether each node has a cycle back to itself
+    		if(n.hasCycles(n)) {
+    			allTrue = false;
+    			break;
+    		}else {
+    			this.resetMarks();	
+    		}
+    	}
+    	//we made it to the end...return the result after resetting
+    	this.resetMarks();	
+    	return allTrue;
+    	
     }
     
     public boolean isUGraph() {
-        boolean uGraph = true;
-        for(Node<?> node : _nodes.values()) {
-            if (!node.isUNode()) {
-                uGraph = false;
-                break;
-            }
-        }
-        
-        reset();
-        return uGraph;
+    	boolean isUGraph = true;
+    	for(Node<T> n: _nodes.values()) {
+    		if(!n.isUndirectedNode()) {
+    			isUGraph = false;
+    			break;
+    		}
+    		
+    	}
+    	this.resetMarks();
+		return isUGraph;
     }
     
-    public boolean isConnected() {
-        boolean connected = true;
-        Iterator<Node<T>> iNodes = _nodes.values().iterator();
-        while(connected && iNodes.hasNext()) {
-            Node<T> node = iNodes.next();
-            // traverse the grap starting from node
-            node.traverse();
-            
-            // expand the visited nodes based on proximity
-            // to other visited nodes. Stop when no expansion happened.
-            boolean again = true;
-            while (again) {
-                again = false;
-                for (Node<?> n : _nodes.values()) {
-                    again = again || n.expand();
-                }
-            }
-            
-            // verify if any node was left not visited
-            for (Node<?> n : _nodes.values()) {
-                if (n.getState() != 1) {
-                    connected = false;
-                    break;
-                }
-            }
-        }
-        
-        reset();
-        return connected;
-    }
-    
-    public boolean isDAGraph() {
-        boolean dag = true;
-        Iterator<Node<T>> iNodes = _nodes.values().iterator();
-        while(dag && iNodes.hasNext()) {
-            Node<T> n = iNodes.next();
-            dag = !n.loops(n);
-            reset();
-        }        
-        return dag;
+    public int[][] getAdjacencyMatrix(){
+    	int[][] matrix = new int[_nodes.size()][_nodes.size()];
+    	Collection<Node<T>> nodes = _nodes.values();
+    	Node<T>[] arrayOfNodes = new Node[nodes.size()];
+    	nodes.toArray(arrayOfNodes);
+    	for(int i =0; i < arrayOfNodes.length; i++) {
+    		for(int j = 0; j < arrayOfNodes.length; j++) {
+    			if(arrayOfNodes[i].isNeighbor(arrayOfNodes[j])) {
+    				matrix[i][j] = 1;
+    			}
+    		}
+    	}
+    	
+    	return matrix;
     }
 
-    public int[][] getAdjacencyMatrix() {
-        int[][] arr = new int[this.size()][this.size()];
-        Map<Node<T>, Integer> map = new HashMap<Node<T>, Integer>();
-        int iN = 0;
-        for(Node<T> n : _nodes.values()) {
-            map.put(n, iN++);
-        }
-        for(Node<T> n : _nodes.values()) {
-            int i = map.get(n);
-            for(Node<T> nn : n.getNeighbors()) {
-                int j = map.get(nn);
-                arr[i][j] = 1;
-            }
-        }
-        return arr;
-    }
-    
-    public TreeMap<Integer, TreeSet<T>> getOutDegrees() {
-        TreeMap<Integer, TreeSet<T>> map = new TreeMap<Integer, TreeSet<T>>();
-        for(Node<T> n : _nodes.values()) {
-            int outDegree = n.getNeighbors().size();
-            TreeSet<T> set = map.get(outDegree);
-            if (set == null) {
-                set = new TreeSet<T>();
-                map.put(outDegree, set);
-            }
-            set.add(n.getData());
-        }
-        return map;
-    }
-    
-    public TreeMap<Integer, TreeSet<T>> getInDegrees() {
-        TreeMap<Integer, TreeSet<T>> map = new TreeMap<Integer, TreeSet<T>>();
-        for(Node<T> node : _nodes.values()) {
-            int inDegree = 0;
-            for (Node<T> other : _nodes.values()) {
-                if (node == other) {
-                    continue;
-                }
-                if (other.getNeighbors().contains(node)) {
-                    inDegree++;
-                }
-            }
-            
-            TreeSet<T> set = map.get(inDegree);
-            if (set == null) {
-                set = new TreeSet<T>();
-                map.put(inDegree, set);
-            }
-            set.add(node.getData());
-        }
-        
-        return map;
-    }
-    
-    public TreeMap<Integer, TreeSet<T>> getTopologicalSort() {
-        if (!this.isDAGraph()) {
-            return null;
-        }
-        
-        int maxTopo = 0;
-        for(Node<?> n : _nodes.values()) {
-            if (n.getState() == 0) {
-                maxTopo = Math.max(maxTopo, n.getTopologicalSort());
-            }
-            
-        }
-        
-        TreeMap<Integer, TreeSet<T>> map = new TreeMap<Integer, TreeSet<T>>();
-        for (Node<T> n : _nodes.values()) {
-            int topoSort = maxTopo - n.getState();
-            TreeSet<T> set = map.get(topoSort);
-            if (set == null) {
-                set = new TreeSet<T>();
-                map.put(topoSort, set);
-            }
-            set.add(n.getData());
-        }
+	public TreeMap<Integer, TreeSet<T>> getOutDegrees() {
+		// TODO Auto-generated method stub
+		TreeMap<Integer, TreeSet<T>> map = new TreeMap<Integer, TreeSet<T>>();
+		for(Node<T> n: _nodes.values()) {
+			Integer key = n.OutDegress();
+			TreeSet<T> values = map.get(key);
+			if(values == null) {
+				values = new TreeSet<T>();
+				map.put(key, values);
+			}
+			values.add(n.getData());
+			
+		}
+		return map;
+	}
 
-        reset();
-        return map;
-    }
+	public TreeMap<Integer, TreeSet<String>> getInDegrees() {
+		// TODO Auto-generated method stub
+		TreeMap<Integer, TreeSet<T>> map = new TreeMap<Integer, TreeSet<T>>();
+		
+		return null;
+	}
+    
 }
