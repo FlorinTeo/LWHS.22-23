@@ -3,6 +3,7 @@ package tests;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.FileNotFoundException;
+import java.util.TreeMap;
 
 import org.junit.jupiter.api.Test;
 
@@ -45,9 +46,44 @@ class Graphs3_tests extends TestsCore {
         assertEquals(3, g.countPartitions());
     }
     
+    //____ DIJKSTRA DISTANCES ____
+    /**In a Graph, the Dijkstra distances algorithm is finding the <b>shortest</b> distances
+     * between a given (source) node and all the other nodes that can be reached from the source.
+     * There are many flavors of this algorithm, in its simplest form, consider the distance
+     * between two nodes u and v as the number of edges that can be followed starting from
+     * u in order to reach v.
+     * <p>
+     * Code the following method in the Graph class returning the Dijkstra distances
+     * from the node given as parameter to all the other nodes in the Graph:
+     * <pre>TreeMap&lt;T, Integer> dijkstra(T source) {...}</pre>
+     * The method returns a TreeMap where the key is each Node in the Graph (given by its data)
+     * and the value is the Dijkstra distance from the <i>source</i> Node to that node.
+     * <p>
+     * Special cases:<br>
+     * - the Dijkstra distance between a node and itself is 0.<br>
+     * - if a node v cannot be reached from the source node, its dijkstra distance is -1.
+     * <p>
+     * For instance, given the following Graph:
+     * <pre>
+     * A > B C
+     * B > C
+     * C > A
+     * D > </pre>
+     * Should return the following map:
+     * <pre>{A=2, B=0, C=1, D=-1}</pre>
+     * @throws FileNotFoundException 
+     */
     @Test
-    void test_dijkstra() {
-        fail("Not yet implemented");
+    void test_dijkstra() throws FileNotFoundException {
+        Graph<String> g = readGraph("data/basic2.txt");
+        TreeMap<String, Integer> dm = g.dijkstra("X");
+        assertEquals("{A=1, B=1, C=1, X=0}", dm.toString());
+        g = readGraph("data/medium2.txt");
+        dm = g.dijkstra("E");
+        assertEquals("{A=-1, B=-1, C=2, D=3, E=0, F=1, G=1, X=-1, Y=-1, Z=-1}", dm.toString());
+        g = readGraph("data/complex1.txt");
+        dm = g.dijkstra("A");
+        assertEquals("{A=0, B=1, C=2, D=2, E=3, F=2, G=1}", dm.toString());
     }
     
     @Test

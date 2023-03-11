@@ -91,6 +91,15 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
     }
     
     /**
+     * Resets the state of this Node to a given value.
+     * @param value - the value to be set into the _state
+     * @see Node#_state
+     */
+    public void reset(int value) {
+        _state = value;
+    }
+    
+    /**
      * Adds a new directed graph Edge linking this Node to the otherNode.
      * @param otherNode - reference to the Node at the other end of the Edge.
      * @see Node#removeEdge(Node)
@@ -210,5 +219,15 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
         }
         
         return _state;
+    }
+    
+    public void dijkstra(int distance) {
+        if (_state <= distance) {
+            return;
+        }
+        _state = distance;
+        for(Node<T> neighbor : _edges.values()) {
+            neighbor.dijkstra(distance+1);
+        }
     }
 }

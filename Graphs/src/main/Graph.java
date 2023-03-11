@@ -168,8 +168,12 @@ public class Graph<T extends Comparable<T>> {
     }
     
     public void reset() {
-        for(Node<?> node : _nodes.values()) {
-            node.reset();
+        reset(0);
+    }
+    
+    public void reset(int value) {
+        for(Node<T> node : _nodes.values()) {
+            node.reset(value);
         }
     }
     
@@ -353,5 +357,26 @@ public class Graph<T extends Comparable<T>> {
         reset();
         
         return count;
+    }
+    
+    public TreeMap<T, Integer> dijkstra(T fromData) {
+        TreeMap<T, Integer> distances = null;
+        Node<T> fromNode = _nodes.get(fromData.hashCode());
+        if (fromNode != null) {
+            reset(Integer.MAX_VALUE);
+            distances = new TreeMap<T, Integer>();
+            // calculate dijkstra distances starting fromNode
+            fromNode.dijkstra(0);
+            // build map
+            for(Node<T> n : _nodes.values()) {
+                int distance = n.getState();
+                if (distance == Integer.MAX_VALUE) {
+                    distance = -1;
+                }
+                distances.put(n.getData(), distance);
+            }
+            reset();
+        }
+        return distances;
     }
 }
