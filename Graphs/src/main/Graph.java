@@ -287,7 +287,7 @@ public class Graph<T extends Comparable<T>> {
         return map;
     }
     
-    public TreeMap<Integer, TreeSet<T>> getTopologicalSort() {
+    public TreeMap<Integer, TreeSet<T>> topoSort() {
         if (!this.isDAGraph()) {
             return null;
         }
@@ -295,9 +295,9 @@ public class Graph<T extends Comparable<T>> {
         int maxTopo = 0;
         for(Node<?> n : _nodes.values()) {
             if (n.getState() == 0) {
-                maxTopo = Math.max(maxTopo, n.getTopologicalSort());
+                n.topoSort();
+                maxTopo = Math.max(maxTopo, n.getState());
             }
-            
         }
         
         TreeMap<Integer, TreeSet<T>> map = new TreeMap<Integer, TreeSet<T>>();

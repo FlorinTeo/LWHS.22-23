@@ -61,16 +61,16 @@ class Graphs2_tests extends TestsCore {
     void test_topologicalSort() throws FileNotFoundException {
         Graph<Integer> g = readGraph("data/basic1.txt", Integer.class);
         assertFalse(g.isDAGraph());
-        assertEquals(null, g.getTopologicalSort());
+        assertEquals(null, g.topoSort());
         
         Graph<String> g1 = readGraph("data/medium1.txt");
         assertTrue(g1.isDAGraph());
-        TreeMap<Integer, TreeSet<String>> mapTopoSort1 = g1.getTopologicalSort();
+        TreeMap<Integer, TreeSet<String>> mapTopoSort1 = g1.topoSort();
         assertEquals("{0=[A], 1=[D], 2=[B], 3=[C], 4=[F], 5=[E]}", mapTopoSort1.toString());
         
         Graph<String> g2= readGraph("data/medium2.txt");
         assertTrue(g2.isDAGraph());
-        TreeMap<Integer, TreeSet<String>> mapTopoSort2 = g2.getTopologicalSort();
+        TreeMap<Integer, TreeSet<String>> mapTopoSort2 = g2.topoSort();
         assertEquals("{0=[A, E], 1=[B, F], 2=[C, X], 3=[D, G, Y, Z]}", mapTopoSort2.toString());
     }
 }

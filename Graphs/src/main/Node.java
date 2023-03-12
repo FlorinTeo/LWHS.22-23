@@ -208,17 +208,14 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
         return _edges.values();
     }
     
-    public int getTopologicalSort() {
-        
+    public void topoSort() {
         if (_state == 0) {
-            int topoSort = 0;
             for(Node<?> n : _edges.values()) {
-                topoSort = Math.max(topoSort, n.getTopologicalSort());
+                n.topoSort();
+                _state = Math.max(_state, n.getState());
             }
-            _state = topoSort + 1;
+            _state++;
         }
-        
-        return _state;
     }
     
     public void dijkstra(int distance) {
