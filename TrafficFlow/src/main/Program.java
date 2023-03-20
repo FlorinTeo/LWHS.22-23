@@ -1,6 +1,7 @@
 package main;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,25 +15,25 @@ public class Program {
     private static MapImage _mapImage;
     private static MapFrame _mapFrame;
     
+    private static HashMap<Character, Set<String>> _locationsMap;
+
     // Region: Determine and overlay node routes
-    private static HashMap<Character, Set<String>> _mapNodeRoutes;
-    
-    private static void mapNodes() {
-        _mapNodeRoutes = new HashMap<Character, Set<String>>();
+    private static void buildLocationsMap() {
+        _locationsMap = new HashMap<Character, Set<String>>();
         for(String route: _mapImage.getRoutes()) {
             char from = route.charAt(0);
             char to = route.charAt(1); 
             Set<String> nodeRoutes;
-            nodeRoutes = _mapNodeRoutes.get(from);
+            nodeRoutes = _locationsMap.get(from);
             if (nodeRoutes == null) {
                 nodeRoutes = new HashSet<String>();
-                _mapNodeRoutes.put(from, nodeRoutes);
+                _locationsMap.put(from, nodeRoutes);
                 _mapFrame.setKeyTypedHook(from, _onNodeTyped);
                 _mapFrame.setKeyTypedHook(to, _onNodeTyped);
             }
             nodeRoutes.add(route);
         }
-        _mapFrame.setKeyPressedHook('T', _onTextTyped);
+        _mapFrame.setKeyPressedHook('T', _onKeyT);
     }
     
     private static KeyHook _onNodeTyped = (KeyEvent keyEvent) -> {
@@ -41,7 +42,7 @@ public class Program {
         _mapImage.setOverlays();
         // get the key from the keyEvent, indicating which node should be displayed
         char key = Character.toUpperCase(keyEvent.getKeyChar());
-        Set<String> nodeRoutes = _mapNodeRoutes.get(key);
+        Set<String> nodeRoutes = _locationsMap.get(key);
         if (nodeRoutes != null) {
             // get the routes corresponding to the selected node
             String[] nrArr = nodeRoutes.toArray(new String[nodeRoutes.size()]);
@@ -51,56 +52,35 @@ public class Program {
         // do not forget to repaint the window!
         _mapFrame.repaint();
     };
+    // EndRegion: Determine and overlay node routes
     
-    private static KeyHook _onTextTyped = (KeyEvent keyEvent) -> {
+    private static KeyHook _onKeyT = (KeyEvent keyEvent) -> {
         _mapFrame.setStatusMessage(_mapImage.getRoutes().toString());
     };
     
-    public static void codeDemo() throws IOException, InterruptedException {
-        // loads an intersection image file and displays it in a map frame.
-        MapImage mapImage = MapImage.load("maps/Woodlawn.jpg");
-        MapFrame mapFrame = new MapFrame(mapImage);
-        mapFrame.open();
-        
-        // gets all available routes and displays them in the status bar.
-        Set<String> routes = mapImage.getRoutes();
-        // line below displays "[AB, CD, AC, AD, EA, DA, EB, CA, DB, EC, CB, DC, ED]" in the status bar
-        mapFrame.setStatusMessage(routes.toString());
-        
-        // tests for collisions in a few sets of routes
-        boolean test1 = mapImage.collide("CD", "BE");
-        boolean test2 = mapImage.collide("BE","CD","AE"); // BE and AE collide!
-        // line below displays "false true" in the status bar
-        mapFrame.setStatusMessage(test1 + " " + test2);
-        
-        // overlays three routes on the map then stops before closing the window.
-        mapImage.setOverlays("AE", "BE", "CD");
-        mapFrame.stop();
-        mapFrame.close();
-    }
-    
     public static void main(String[] args) throws IOException, InterruptedException {
-        //codeDemo();
-        
-        System.out.println("Welcome to TrafficRoute manager!");
+        // loads an intersection image file and displays it in a map frame.
         _mapImage = MapImage.load("maps/Loyal.jpg");
         _mapFrame = new MapFrame(_mapImage);
-        _mapFrame.setKeyTypedHook('t', _onTextTyped);
-        _mapFrame.setTitle("maps/Ravenna.jpg");
+        
+        // registers the key T with the method _onKeyT
+        _mapFrame.setKeyTypedHook('T', _onKeyT);
+
+        // opens the GUI window
         _mapFrame.open();
         
-        // Explore individual node routes by pressing the node keys.
-        _mapFrame.setStatusMessage("All routes: " + _mapImage.getRoutes());
+        // stops, waiting for user action
+        _mapFrame.setStatusMessage("inspect individual routes for each location");
         _mapFrame.stop();
 
-        // Explore all node egress routes by pressing the node keys.
-        _mapFrame.setStatusMessage("All routes: " + _mapImage.getRoutes());
-        _mapImage.setOverlays();
-        mapNodes();
+        // builds the locationsMap, and re-registers the locations keys
+        buildLocationsMap();
+        
+        // stops again, waiting for user action
+        _mapFrame.setStatusMessage("inspect egress routes for each location");
         _mapFrame.stop();
         
-        // cleanup and goodbye
+        // close the window and terminate the program
         _mapFrame.close();
-        System.out.println("Goodbye!");
     }
 }
