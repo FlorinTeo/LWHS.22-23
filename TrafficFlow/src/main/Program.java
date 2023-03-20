@@ -1,6 +1,7 @@
 package main;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,9 +15,10 @@ public class Program {
     private static MapImage _mapImage;
     private static MapFrame _mapFrame;
     
-    // Region: Determine and overlay node routes
     private static HashMap<Character, Set<String>> _locationsMap;
-    
+    private static Graph<String> _collisionsGraph;
+
+    // Region: Determine and overlay node routes
     private static void buildLocationsMap() {
         _locationsMap = new HashMap<Character, Set<String>>();
         for(String route: _mapImage.getRoutes()) {
@@ -51,6 +53,53 @@ public class Program {
         // do not forget to repaint the window!
         _mapFrame.repaint();
     };
+    // EndRegion: Determine and overlay node routes
+    
+    // Region: Determine and overlay collision routes
+    private static void buildCollisionsGraph() {
+        _collisionsGraph = new Graph<String>();
+        for(String route : _mapImage.getRoutes()) {
+            _collisionsGraph.addNode(route);
+        }
+        
+        for(String route1 : _mapImage.getRoutes()) {
+            for (String route2 : _mapImage.getRoutes()) {
+                _mapFrame.setStatusMessage(route1 + " & " + route2);
+                if (_mapImage.collide(route1, route2)) {
+                    _collisionsGraph.addEdge(route1, route2);
+                    _collisionsGraph.addEdge(route2, route1);
+                }
+            }
+        }
+        
+        _mapFrame.setKeyTypedHook('X', _onCollisionTyped);
+    }
+    
+    private static String _lastOverlay = null;
+    
+    private static KeyHook _onCollisionTyped = (KeyEvent keyEvent) -> {
+        if (_lastOverlay != null) {
+            _mapImage.setOverlays(_lastOverlay);
+            _mapFrame.setStatusMessage("");
+            _lastOverlay = null;
+        } else {
+            Set<String> overlays = _mapImage.getOverlays();
+            if (overlays.size() != 1) {
+                return;
+            }
+            
+            _lastOverlay = _mapImage.getOverlays().iterator().next();
+            Set<String> collisions = _collisionsGraph.getNeighbors(_lastOverlay);
+            overlays.addAll(collisions);
+            String[] overlaysArr = new String[overlays.size()];
+            overlays.toArray(overlaysArr);
+            _mapImage.setOverlays(overlaysArr);
+            _mapFrame.setStatusMessage(collisions.toString());
+        }
+        // do not forget to repaint the window!
+        _mapFrame.repaint();
+    };
+    // EndRegion: Determine and overlay collision routes
     
     private static KeyHook _onKeyT = (KeyEvent keyEvent) -> {
         _mapFrame.setStatusMessage(_mapImage.getRoutes().toString());
@@ -68,14 +117,23 @@ public class Program {
         _mapFrame.open();
         
         // stops, waiting for user action
+        _mapFrame.setStatusMessage("inspect individual routes for each location");
         _mapFrame.stop();
 
         // builds the locationsMap, and re-registers the locations keys
-        buildLocationsMap();
+        //buildLocationsMap();
         
         // stops again, waiting for user action
+        //_mapFrame.setStatusMessage("inspect egress routes for each location");
+        //_mapFrame.stop();
+        
+        // builds the collisions graph, and registers the collision inspection key ('X')
+        buildCollisionsGraph();
+        
+        // stops again, waiting for user action
+        _mapFrame.setStatusMessage("inspect collisions for each location");
         _mapFrame.stop();
-
+        
         // close the window and terminate the program
         _mapFrame.close();
     }
