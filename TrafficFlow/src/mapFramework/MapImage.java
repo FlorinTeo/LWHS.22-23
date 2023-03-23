@@ -220,7 +220,7 @@ public class MapImage extends Drawing {
      * @see #getRoutes()
      */
     public Set<String> getOverlays() {
-        return _overlays;
+        return new HashSet<String>(_overlays);
     }
     
     /**

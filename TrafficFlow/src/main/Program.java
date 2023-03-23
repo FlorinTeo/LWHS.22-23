@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Set;
 
 import drawing.KeyInterceptor.KeyHook;
@@ -75,27 +77,40 @@ public class Program {
         _mapFrame.setKeyTypedHook('X', _onCollisionTyped);
     }
     
-    private static String _lastOverlay = null;
+    private static Queue<String> _lastCollisions = new LinkedList<String>();
     
     private static KeyHook _onCollisionTyped = (KeyEvent keyEvent) -> {
-        if (_lastOverlay != null) {
-            _mapImage.setOverlays(_lastOverlay);
-            _mapFrame.setStatusMessage("");
-            _lastOverlay = null;
-        } else {
-            Set<String> overlays = _mapImage.getOverlays();
-            if (overlays.size() != 1) {
-                return;
+        Set<String> overlays = _mapImage.getOverlays();
+        
+        // if no previous colliding routes are overlaid and there's only one
+        // route displayed, extract and display its collisions and mark it as the _testRoute.
+        if (_lastCollisions.isEmpty()) {
+            if (overlays.size() == 1) {
+                String testRoute = overlays.iterator().next();
+                Set<String> collidingRoutes = _collisionsGraph.getNeighbors(testRoute);
+                
+                overlays.addAll(collidingRoutes);
+                _mapImage.setOverlays(overlays);
+                _mapFrame.setStatusMessage(collidingRoutes.toString());
+                
+                _lastCollisions.add(testRoute);
+                _lastCollisions.addAll(collidingRoutes);
+            } else {
+                // no collisions displayed previously, but more than one
+                // route on the map => do nothing
             }
-            
-            _lastOverlay = _mapImage.getOverlays().iterator().next();
-            Set<String> collisions = _collisionsGraph.getNeighbors(_lastOverlay);
-            overlays.addAll(collisions);
-            String[] overlaysArr = new String[overlays.size()];
-            overlays.toArray(overlaysArr);
-            _mapImage.setOverlays(overlaysArr);
-            _mapFrame.setStatusMessage(collisions.toString());
+        } else {
+            // Previous collisions were displayed.
+            // If they match what's overlaid now, just clear them out and leave only
+            // the test route. 
+            if (_lastCollisions.containsAll(overlays) && overlays.containsAll(_lastCollisions)) {
+                _mapImage.setOverlays(_lastCollisions.remove());
+                _mapFrame.setStatusMessage("");
+            }
+            // In all cases, clear out the history
+            _lastCollisions.clear();
         }
+        
         // do not forget to repaint the window!
         _mapFrame.repaint();
     };
@@ -107,7 +122,7 @@ public class Program {
     
     public static void main(String[] args) throws IOException, InterruptedException {
         // loads an intersection image file and displays it in a map frame.
-        _mapImage = MapImage.load("maps/Loyal.jpg");
+        _mapImage = MapImage.load("maps/Woodlawn.jpg");
         _mapFrame = new MapFrame(_mapImage);
         
         // registers the key T with the method _onKeyT
