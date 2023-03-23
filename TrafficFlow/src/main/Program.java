@@ -74,7 +74,7 @@ public class Program {
             }
         }
         
-        _mapFrame.setKeyTypedHook('X', _onCollisionTyped);
+        _mapFrame.setKeyTypedHook('X', _onKeyX);
     }
     
     private static Queue<String> _lastCollisions = new LinkedList<String>();
@@ -84,7 +84,7 @@ public class Program {
              && overlays.containsAll(_lastCollisions);
     }
     
-    private static KeyHook _onCollisionTyped = (KeyEvent keyEvent) -> {
+    private static KeyHook _onKeyX = (KeyEvent keyEvent) -> {
         Set<String> overlays = _mapImage.getOverlays();
         // user typed 'X' and ...
         if (overlays.size() == 1) {
