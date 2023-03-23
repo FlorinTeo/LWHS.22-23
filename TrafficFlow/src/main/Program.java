@@ -79,35 +79,31 @@ public class Program {
     
     private static Queue<String> _lastCollisions = new LinkedList<String>();
     
+    private static boolean sameAsLast(Set<String> overlays) {
+        return _lastCollisions.containsAll(overlays)
+             && overlays.containsAll(_lastCollisions);
+    }
+    
     private static KeyHook _onCollisionTyped = (KeyEvent keyEvent) -> {
         Set<String> overlays = _mapImage.getOverlays();
-        
-        // if no previous colliding routes are overlaid and there's only one
-        // route displayed, extract and display its collisions and mark it as the _testRoute.
-        if (_lastCollisions.isEmpty()) {
-            if (overlays.size() == 1) {
-                String testRoute = overlays.iterator().next();
-                Set<String> collidingRoutes = _collisionsGraph.getNeighbors(testRoute);
-                
-                overlays.addAll(collidingRoutes);
-                _mapImage.setOverlays(overlays);
-                _mapFrame.setStatusMessage(collidingRoutes.toString());
-                
-                _lastCollisions.add(testRoute);
-                _lastCollisions.addAll(collidingRoutes);
-            } else {
-                // no collisions displayed previously, but more than one
-                // route on the map => do nothing
-            }
+        // user typed 'X' and ...
+        if (overlays.size() == 1) {
+            // ... there's one route on the map => overlay its collisions
+            String testRoute = overlays.iterator().next();
+            Set<String> collidingRoutes = _collisionsGraph.getNeighbors(testRoute);
+            
+            overlays.addAll(collidingRoutes);
+            _mapImage.setOverlays(overlays);
+            _mapFrame.setStatusMessage(collidingRoutes.toString());
+            _lastCollisions.clear();
+            _lastCollisions.add(testRoute);
+            _lastCollisions.addAll(collidingRoutes);
+        } else if (sameAsLast(overlays)){
+            // ... the overlays match the last state => restore the original route
+            _mapImage.setOverlays(_lastCollisions.remove());
+            _lastCollisions.clear();
         } else {
-            // Previous collisions were displayed.
-            // If they match what's overlaid now, just clear them out and leave only
-            // the test route. 
-            if (_lastCollisions.containsAll(overlays) && overlays.containsAll(_lastCollisions)) {
-                _mapImage.setOverlays(_lastCollisions.remove());
-                _mapFrame.setStatusMessage("");
-            }
-            // In all cases, clear out the history
+            // ... map changed in a different way => clear the history
             _lastCollisions.clear();
         }
         
