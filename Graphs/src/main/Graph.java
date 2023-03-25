@@ -379,4 +379,23 @@ public class Graph<T extends Comparable<T>> {
         }
         return distances;
     }
+    
+    /**
+     * Determines if a path exists between the nodes containing
+     * fromData and toData.
+     * @param fromData - data value of the origin node.
+     * @param toData - data value of the target node.
+     * @return true if a path exists, false otherwise
+     * @throws RuntimeException if a node cannot be found in the graph.
+     */
+    public boolean hasPath(T fromData, T toData) throws RuntimeException {
+        Node<T> fromNode = _nodes.get(fromData.hashCode());
+        Node<T> toNode = _nodes.get(toData.hashCode());
+        if (fromNode == null || toNode == null) {
+            throw new RuntimeException("Node(s) in the graph!");
+        }
+        
+        reset();
+        return fromNode.hasPath(toNode);
+    }
 }
