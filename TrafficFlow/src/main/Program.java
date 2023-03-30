@@ -122,7 +122,7 @@ public class Program {
     private static int _phase = 0;
     private static KeyHook _onKeyW = (KeyEvent keyEvent) -> {
         _phase++;
-        if (_phase == _nColors) {
+        if (_phase == _nColors+1) {
             _phase = 1;
         }
         Set<String> routes = _collisionsGraph.getColoredData(_phase);
@@ -138,7 +138,7 @@ public class Program {
     
     public static void main(String[] args) throws IOException, InterruptedException {
         // loads an intersection image file and displays it in a map frame.
-        _mapImage = MapImage.load("maps/Woodlawn.jpg");
+        _mapImage = MapImage.load("maps/Sheridan.jpg");
         _mapFrame = new MapFrame(_mapImage);
         
         // registers the key T with the method _onKeyT
