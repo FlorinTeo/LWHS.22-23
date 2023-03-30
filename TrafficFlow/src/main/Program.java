@@ -113,15 +113,22 @@ public class Program {
     // EndRegion: Determine and overlay collision routes
     
     // Region: Color the graph and start traffic flow
+    private static int _nColors = 0;
     private static void startTrafficFlow() {
-        _collisionsGraph.colorNodes();
+        _nColors = _collisionsGraph.colorNodes();
         _mapFrame.setKeyTypedHook('W', _onKeyW);
     }
     
     private static int _phase = 0;
     private static KeyHook _onKeyW = (KeyEvent keyEvent) -> {
+        _phase++;
+        if (_phase == _nColors) {
+            _phase = 1;
+        }
+        Set<String> routes = _collisionsGraph.getColoredData(_phase);
+        _mapImage.setOverlays(routes);
+        _mapFrame.repaint();
         _mapFrame.setStatusMessage("Phase: " + _phase);
-        _phase = (_phase+1) % 5;
     };
     // EndRegion: Color the graph and start traffic flow
     

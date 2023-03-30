@@ -429,7 +429,7 @@ public class Graph<T extends Comparable<T>> {
         }
     }
     
-    public void colorNodes() {
+    public int colorNodes() {
         // we start with all nodes having the "color" (or state) set to 0.
         // in the end we want all nodes to have a "color" (state) set to 1 or greater.
         this.reset(0);
@@ -447,5 +447,17 @@ public class Graph<T extends Comparable<T>> {
             greedy(color, uncoloredNodes);
             color++;
         }
+        
+        return color-1;
+    }
+    
+    public Set<T> getColoredData(int color) {
+        Set<T> colors = new HashSet<T>();
+        for(Node<T> n : _nodes.values()) {
+            if (n.getState() == color) {
+                colors.add(n.getData());
+            }
+        }
+        return colors;
     }
 }
