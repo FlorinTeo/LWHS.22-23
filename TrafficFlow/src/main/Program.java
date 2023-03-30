@@ -112,6 +112,19 @@ public class Program {
     };
     // EndRegion: Determine and overlay collision routes
     
+    // Region: Color the graph and start traffic flow
+    private static void startTrafficFlow() {
+        _collisionsGraph.colorNodes();
+        _mapFrame.setKeyTypedHook('W', _onKeyW);
+    }
+    
+    private static int _phase = 0;
+    private static KeyHook _onKeyW = (KeyEvent keyEvent) -> {
+        _mapFrame.setStatusMessage("Phase: " + _phase);
+        _phase = (_phase+1) % 5;
+    };
+    // EndRegion: Color the graph and start traffic flow
+    
     private static KeyHook _onKeyT = (KeyEvent keyEvent) -> {
         _mapFrame.setStatusMessage(_mapImage.getRoutes().toString());
     };
@@ -128,8 +141,8 @@ public class Program {
         _mapFrame.open();
         
         // stops, waiting for user action
-        _mapFrame.setStatusMessage("inspect individual routes for each location");
-        _mapFrame.stop();
+        //_mapFrame.setStatusMessage("inspect individual routes for each location");
+        //_mapFrame.stop();
 
         // builds the locationsMap, and re-registers the locations keys
         //buildLocationsMap();
@@ -140,6 +153,7 @@ public class Program {
         
         // builds the collisions graph, and registers the collision inspection key ('X')
         buildCollisionsGraph();
+        startTrafficFlow();
         
         // stops again, waiting for user action
         _mapFrame.setStatusMessage("inspect collisions for each location");

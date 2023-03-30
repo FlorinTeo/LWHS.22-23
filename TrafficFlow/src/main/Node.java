@@ -208,6 +208,10 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
         return _edges.values();
     }
     
+    public boolean hasNeighbor(Node<T> other) {
+        return _edges.containsKey(other.getData().hashCode());
+    }
+    
     public void topoSort() {
         if (_state == 0) {
             for(Node<?> n : _edges.values()) {

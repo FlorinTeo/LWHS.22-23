@@ -393,4 +393,59 @@ public class Graph<T extends Comparable<T>> {
         }
         return distances;
     }
+    
+    private void greedy(int color, Queue<Node<T>> uncoloredNodes) {
+        // set of nodes colored in this iteration. Initially empty.
+        Set<Node<T>> coloredNodes = new HashSet<Node<T>>();
+        
+        // iterate through each of the nodes in the uncolored queue.
+        // If a node can be colored, it'll be removed from the queue,
+        // otherwise it will be added back for a future iteration.
+        int uncoloredCount = uncoloredNodes.size();
+        while(uncoloredCount > 0) {
+            Node<T> uncoloredNode = uncoloredNodes.remove();
+            uncoloredCount--;
+            
+            // check if *any* of the currently colored nodes has this
+            // uncolored node as a neighbor.
+            boolean canColor = true;
+            for(Node<T> coloredNode : coloredNodes) {
+                if (coloredNode.hasNeighbor(uncoloredNode)) {
+                    canColor = false;
+                    break;
+                }
+            }
+            
+            // if no colored nodes have this uncolored node as a neighbor ...
+            if (canColor) {
+                // ... the uncolored node can be tagged with "color" and added
+                // to the set.
+                uncoloredNode.reset(color);
+                coloredNodes.add(uncoloredNode);
+            } else {
+                // ... otherwise it needs to be put back in the uncolored queue
+                uncoloredNodes.add(uncoloredNode);
+            }
+        }
+    }
+    
+    public void colorNodes() {
+        // we start with all nodes having the "color" (or state) set to 0.
+        // in the end we want all nodes to have a "color" (state) set to 1 or greater.
+        this.reset(0);
+        
+        // initially all nodes are uncolored
+        Queue<Node<T>> uncoloredNodes = new LinkedList<Node<T>>(_nodes.values());
+
+        // loop through the set uncolored nodes until it is exhausted.
+        // (all nodes get a "color" - state of value 1 or greater)
+        // at each iteration the greedy algorithm is applied tagging some nodes with
+        // "color" until it is no longer possible. Next iteration does the same
+        // for a new color.
+        int color = 1;
+        while(!uncoloredNodes.isEmpty()) {
+            greedy(color, uncoloredNodes);
+            color++;
+        }
+    }
 }
