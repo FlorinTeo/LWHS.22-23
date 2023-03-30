@@ -227,4 +227,20 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
             neighbor.dijkstra(distance+1);
         }
     }
+    
+    public boolean hasPath(Node<T> toNode) {
+        if (this == toNode) {
+            return true;
+        }
+        _state = 1;
+        for(Node<T> node : _edges.values()) {
+            if (node._state == 0) {
+                if (node.hasPath(toNode)) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
 }
