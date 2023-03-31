@@ -25,4 +25,28 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
 	public int compareTo(Node<T> other) {
         return _data.compareTo(other._data);
     }
+	
+    /**
+     * Gives a String representation of this Node as a space-separated sequence of token:
+     * The string representation of the <i>_data</i> followed by ' > ' followed by a space
+     * separated sequence of tokens, one for each of this Node's neighbors.
+     * <br>E.g: If this node is A and is linked to nodes B and C, this method returns:
+     * <pre>"A > B C"</pre>
+     * If this node is A and has no neighbors (no outogoing / egress Edges), this method returns:
+     * <pre>"A > "</pre>
+     * @return String reflecting the content and structure of this Node.
+     */
+    @Override
+    public String toString() {
+        String output = _data.toString() + " > ";
+        boolean first = true;
+        for(Node<?> n : _edges.values()) {
+            if (!first) {
+                output += " ";
+            }
+            output += n._data.toString();
+            first = false;
+        }
+        return output;
+    }
 }

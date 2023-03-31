@@ -76,7 +76,7 @@ public class Program {
         // close the window and terminate the program
         _mapFrame.close();
         
-        buildTrafficGraph();
+
     }
     
     /**Hooks up the x key and build a collision graph so we can show
@@ -84,6 +84,21 @@ public class Program {
      */
     
     private static void buildCollingGraph() {
+        Graph<String> graph = new Graph<String>();
+        Set<String> allRoutes= _mapImage.getRoutes();
+        for(String s: allRoutes) {
+            graph.addNode(s);
+        }
+        
+        for(String from: allRoutes) {
+            for(String to: allRoutes) {
+                if(_mapImage.collide(from, to)) {
+                    graph.addEdge(from, to);
+                }
+            }
+        }
+        
+        System.out.println(graph.toString());
 		_mapFrame.setKeyTypedHook('X', _onKeyX);
 		
 	}
@@ -144,47 +159,5 @@ public class Program {
 		return map;
     	
     }
-    
-    public static void buildTrafficGraph() {
-    	Graph<String> graph = new Graph<String>();
-    	Set<String> allRoutes= _mapImage.getRoutes();
-    	for(String s: allRoutes) {
-    		graph.addNode(s);
-    	}
-    	
-    	for(String from: allRoutes) {
-    		for(String to: allRoutes) {
-    			if(_mapImage.collide(from, to)) {
-    				graph.addEdge(from, to);
-    			}
-    		}
-    	}
-    	
-    	System.out.println(graph.toString());
-    	
-    	
-    	/*
-    	//adding edges to AD and backwards 
-    	graph.addEdge("AD", "CD");
-    	graph.addEdge("AD", "BD");
-    	graph.addEdge("AD", "CE");
-    	graph.addEdge("AD", "DE");
-    	graph.addEdge("AD", "BE");
-    	//adding edges to BE and backwards
-    	graph.addEdge("BE", "DA");
-    	graph.addEdge("BE", "CE");
-    	graph.addEdge("BE", "CA");
-    	graph.addEdge("BE", "DE");
-    	graph.addEdge("BE", "AE");
-    	//adding edges to AE and backwards
-    	graph.addEdge("AE", );
-    	graph.addEdge("AE", );
-    	graph.addEdge("AE", );
-    	graph.addEdge("AE", );
-    	graph.addEdge("AE", );
-    	*/
-    
-    }
-    
-    
+        
 }
