@@ -436,6 +436,11 @@ public class Graph<T extends Comparable<T>> {
         
         // initially all nodes are uncolored
         Queue<Node<T>> uncoloredNodes = new LinkedList<Node<T>>(_nodes.values());
+        
+        // add some randomization
+        for(int i = (int)(Math.random()*uncoloredNodes.size()); i >= 0; i--) {
+            uncoloredNodes.add(uncoloredNodes.remove());
+        }
 
         // loop through the set uncolored nodes until it is exhausted.
         // (all nodes get a "color" - state of value 1 or greater)
