@@ -99,6 +99,15 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
     }
     
     /**
+     * Checks if the otherNode is a neighbor of this node.
+     * @param otherNode - node to be tested.
+     * @return true if otherNode is a neighbor of this node, false otherwise.
+     */
+    public boolean hasNeighbor(Node<T> otherNode) {
+        return _edges.get(otherNode._data.hashCode()) != null;
+    }
+    
+    /**
      * Adds a new directed graph Edge linking this Node to the otherNode.
      * @param otherNode - reference to the Node at the other end of the Edge.
      * @see Node#removeEdge(Node)
@@ -152,4 +161,34 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
     public int compareTo(Node<T> other) {
         return _data.compareTo(other._data);
     }
+    
+    public int countUndirected() {
+        int count = 0;
+        for(Node<T> n : _edges.values()) {
+            if (n.hasNeighbor(this)) {
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    private int _hops;
+    public int countHops(Node<T> otherN) {
+      if (_state == 1) {
+        return _hops;
+      }
+      if (otherN == this) {
+        return 0;
+      }
+      _state = 1;
+      _hops = Integer.MAX_VALUE;
+      for (Node<T> n : _edges.values()) {
+        int otherH = n.countHops(otherN);
+          if (otherH != Integer.MAX_VALUE) {
+            _hops = Math.min(_hops, otherH + 1);
+          }
+      }        
+      return _hops;
+    }
+
 }

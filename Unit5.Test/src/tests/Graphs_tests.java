@@ -117,4 +117,26 @@ class Graphs_tests extends TestsCore {
         g.removeNode("one");
         assertEquals("", g.toString());
     }
+    
+    @Test
+    void test_q3() throws FileNotFoundException {
+        Graph<String> g = readGraph("data/test_q2.txt");
+        assertEquals(1, g.countUndirected());
+    }
+    
+    @Test
+    void test_q5_q6() throws FileNotFoundException {
+        Graph<String> g = readGraph("data/test_q2.txt");
+        assertEquals(2, g.countHops("A", "D"));
+        assertEquals(2, g.countHops("C", "D"));
+        assertEquals(1, g.countHops("B", "D"));
+        g = readGraph("data/test_q5.txt");
+        assertEquals(-1, g.countHops("A", "X"));
+        assertEquals(0, g.countHops("A", "A"));
+        assertEquals(1, g.countHops("A", "B"));
+        assertEquals(2, g.countHops("B", "C"));
+        assertEquals(3, g.countHops("C", "F"));
+        assertEquals(4, g.countHops("D", "F"));
+        assertEquals(3, g.countHops("E", "F"));
+    }
 }

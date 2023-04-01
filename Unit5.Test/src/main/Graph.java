@@ -172,4 +172,24 @@ public class Graph<T extends Comparable<T>> {
             node.reset(value);
         }
     }
+    
+    public int countUndirected() {
+        int count = 0;
+        for(Node<T> n : _nodes.values()) {
+            count += n.countUndirected();
+        }
+        
+        return count/2;   
+    }
+    
+    public int countHops(T from, T to) {
+        Node<T> fromN = _nodes.get(from.hashCode());
+        Node<T> toN = _nodes.get(to.hashCode());
+        if (fromN == null || toN == null) {
+            return -1;
+        } else {
+            reset(0);
+            return fromN.countHops(toN);
+        }
+    }
 }
