@@ -1,7 +1,9 @@
 package main;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
 	private Map<Integer, Node<T>> _edges;
@@ -26,17 +28,7 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
         return _data.compareTo(other._data);
     }
 	
-    /**
-     * Gives a String representation of this Node as a space-separated sequence of token:
-     * The string representation of the <i>_data</i> followed by ' > ' followed by a space
-     * separated sequence of tokens, one for each of this Node's neighbors.
-     * <br>E.g: If this node is A and is linked to nodes B and C, this method returns:
-     * <pre>"A > B C"</pre>
-     * If this node is A and has no neighbors (no outogoing / egress Edges), this method returns:
-     * <pre>"A > "</pre>
-     * @return String reflecting the content and structure of this Node.
-     */
-    @Override
+	@Override
     public String toString() {
         String output = _data.toString() + " > ";
         boolean first = true;
@@ -49,4 +41,17 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
         }
         return output;
     }
+	
+	public T getData() {
+        return _data;
+    }
+	
+	public Set<String> getCollidingRoutes(){
+		Set<String> collidingR = new HashSet<String>();
+		for(Node<T> n: _edges.values()) {
+			collidingR.add((String) n.getData());
+		}
+		return collidingR;
+		
+	}
 }

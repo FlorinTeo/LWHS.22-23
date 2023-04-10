@@ -1,6 +1,7 @@
 package main;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 public class Graph<T extends Comparable<T>>{
@@ -42,5 +43,17 @@ public class Graph<T extends Comparable<T>>{
         
         return output;
     }
+	
+	public Set<String> getNeighbors(String route) {
+		Node<T> routeNode = null;
+		for(Node<T> n: _nodes.values()) {
+			if((String)n.getData().equals(route)) {
+				routeNode = n;
+			}
+		}
+		
+		return routeNode.getCollidingRoutes();
+		
+	}
 	
 }

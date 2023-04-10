@@ -65,7 +65,7 @@ public class Program {
         
         
         //Build's a colliding graph 
-        buildCollingGraph();
+        trafficGraph = buildCollingGraph();
         
         // opens the GUI window
         _mapFrame.open();
@@ -76,46 +76,49 @@ public class Program {
         // close the window and terminate the program
         _mapFrame.close();
         
-
+        
     }
     
     /**Hooks up the x key and build a collision graph so we can show
      * collisions when hitting the key X
      */
     
-    private static void buildCollingGraph() {
-        Graph<String> graph = new Graph<String>();
-        Set<String> allRoutes= _mapImage.getRoutes();
-        for(String s: allRoutes) {
-            graph.addNode(s);
-        }
-        
-        for(String from: allRoutes) {
-            for(String to: allRoutes) {
-                if(_mapImage.collide(from, to)) {
-                    graph.addEdge(from, to);
-                }
-            }
-        }
-        
-        System.out.println(graph.toString());
+    private static Graph<String> buildCollingGraph() {
+    	Graph<String> graph = new Graph<String>();
+    	Set<String> allRoutes= _mapImage.getRoutes();
+    	for(String s: allRoutes) {
+    		graph.addNode(s);
+    	}
+    	
+    	for(String from: allRoutes) {
+    		for(String to: allRoutes) {
+    			if(_mapImage.collide(from, to)) {
+    				graph.addEdge(from, to);
+    			}
+    		}
+    	}
+    	//System.out.println(graph.toString()); 
 		_mapFrame.setKeyTypedHook('X', _onKeyX);
-		
+		return graph;
+				
 	}
     
     private static KeyHook _onKeyX = (KeyEvent keyEvent) -> {
         String statusText = "Key: '" + keyEvent.getKeyChar() + "'; ";
-        Set<String> overlays = _mapImage.getOverlays();
-                
+        Set<String> overlays = _mapImage.getOverlays();    
         
         if(overlays.size() == 1) {
         	statusText += overlays.toString();
-        	overlays.add("AD");
+        	String route = overlays.toString();
+        	for(String r: trafficGraph.getNeighbors(route)) {
+        		overlays.add(r);
+        	}
+        	//overlays.add("AD");
         	_mapImage.setOverlays(overlays);
         	_mapFrame.repaint();
         	displayed = true;
         }else if(displayed){
-        	overlays.remove("AD");
+        	overlays.clear();
         	_mapImage.setOverlays(overlays);
         	_mapFrame.repaint();
         	displayed = false;
@@ -159,5 +162,4 @@ public class Program {
 		return map;
     	
     }
-        
 }
