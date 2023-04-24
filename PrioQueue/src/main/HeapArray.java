@@ -3,7 +3,7 @@ package main;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
-public class HeapPriorityQueue<E extends Comparable<E>> implements PriorityQueue<E> {
+public class HeapArray<E extends Comparable<E>> implements PriorityQueue<E> {
 
     private E[] elements;
     private int size;
@@ -46,7 +46,7 @@ public class HeapPriorityQueue<E extends Comparable<E>> implements PriorityQueue
     }
     // EndRegion: Helper methods
     
-    public HeapPriorityQueue(Class<E> eClass) {
+    public HeapArray(Class<E> eClass) {
         elements = (E[]) Array.newInstance(eClass, 2);
         size = 0;
     }

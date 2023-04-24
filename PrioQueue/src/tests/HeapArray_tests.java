@@ -3,14 +3,14 @@ package tests;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import main.HeapPriorityQueue;
+import main.HeapArray;
+import main.HeapTree;
 import main.PriorityQueue;
 
-class PriorityQueue_tests {
-
+class HeapArray_tests {
     @Test
-    void test_pqStrings() {
-        PriorityQueue<String> pq = new HeapPriorityQueue<String>(String.class);
+    void test_HeapArrayStrings() {
+        PriorityQueue<String> pq = new HeapArray<String>(String.class);
         pq.add("abc");
         assertEquals(1,  pq.size());
         pq.add("xyz");
@@ -22,8 +22,8 @@ class PriorityQueue_tests {
     }
     
     @Test
-    void test_pqIntegers() {
-        PriorityQueue<Integer> pq = new HeapPriorityQueue<Integer>(Integer.class);
+    void test_HeapArrayIntegers() {
+        PriorityQueue<Integer> pq = new HeapArray<Integer>(Integer.class);
         pq.add(9);
         pq.add(23);
         pq.add(8);
