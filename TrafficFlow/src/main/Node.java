@@ -63,7 +63,7 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
 					return true;
 				}
 			}
-			return true;
+			return false;
 		}
 		
 		

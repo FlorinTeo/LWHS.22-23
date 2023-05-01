@@ -67,6 +67,7 @@ public class Program {
         
         //Build's a colliding graph 
         trafficGraph = buildCollingGraph();
+        trafficGraph.graphColoring();
         System.out.println(trafficGraph);
         // opens the GUI window
         _mapFrame.open();
