@@ -83,4 +83,13 @@ public class Graph<T extends Comparable<T>>{
 		}
 	}
 	
+	public Set<T> getLabeledData(int label) {
+	    Set<T> labeledDataSet = new HashSet<T>();
+	    for(Node<T> node : _nodes.values()) {
+	        if (node.getLabel() == label) {
+	            labeledDataSet.add(node.getData());
+	        }
+	    }
+	    return labeledDataSet;
+	}
 }

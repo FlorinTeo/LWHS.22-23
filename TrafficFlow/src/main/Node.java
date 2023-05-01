@@ -72,4 +72,8 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
 	public void label(int label) {
 		this._state = label;
 	}
+	
+	public int getLabel() {
+	    return this._state;
+	}
 }
