@@ -1,6 +1,8 @@
 package main;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -44,16 +46,36 @@ public class Graph<T extends Comparable<T>>{
         return output;
     }
 	
-	public Set<String> getNeighbors(String route) {
-		Node<T> routeNode = null;
-		for(Node<T> n: _nodes.values()) {
-			if((String)n.getData().equals(route)) {
-				routeNode = n;
-			}
+	public Set<T> getNeighbors(T route) {
+		Node<T> routeNode = _nodes.get(route.hashCode());
+		if(routeNode == null) {
+			return new HashSet<T>();
 		}
+	
 		
 		return routeNode.getCollidingRoutes();
 		
+	}
+	public void graphColoring() {
+		Queue<Node<T>> unlabeledQueue = (Queue<Node<T>>) _nodes.values();
+		int label = 1;
+		while(!unlabeledQueue.isEmpty()) {
+			greedy(label, unlabeledQueue);
+			label++;
+			
+		}
+		
+	}
+	
+	public void greedy(int label, Queue<Node<T>> unlabeledQ) {
+		Set<Node<T>> labelSet = new HashSet<Node<T>>();
+		for(Node<T> node: unlabeledQ) {
+			if(!node.isConnected(labelSet)) {
+				node.label(label);
+				unlabeledQ.remove(node);
+				labelSet.add(node);
+			}
+		}
 	}
 	
 }

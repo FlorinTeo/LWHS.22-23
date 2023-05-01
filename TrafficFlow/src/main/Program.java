@@ -51,6 +51,7 @@ public class Program {
     	
     	
     };
+	private static String displayedRoute;
     
     public static void main(String[] args) throws IOException, InterruptedException {
         // loads an intersection image file and displays it in a map frame.
@@ -66,7 +67,7 @@ public class Program {
         
         //Build's a colliding graph 
         trafficGraph = buildCollingGraph();
-        
+        System.out.println(trafficGraph);
         // opens the GUI window
         _mapFrame.open();
         
@@ -109,8 +110,8 @@ public class Program {
         
         if(overlays.size() == 1) {
         	statusText += overlays.toString();
-        	String route = overlays.toString();
-        	for(String r: trafficGraph.getNeighbors(route)) {
+        	displayedRoute = overlays.iterator().next();
+        	for(String r: trafficGraph.getNeighbors(displayedRoute)) {
         		overlays.add(r);
         	}
         	//overlays.add("AD");
@@ -119,6 +120,7 @@ public class Program {
         	displayed = true;
         }else if(displayed){
         	overlays.clear();
+        	overlays.add(displayedRoute);
         	_mapImage.setOverlays(overlays);
         	_mapFrame.repaint();
         	displayed = false;
@@ -128,6 +130,10 @@ public class Program {
         	statusText += "Only works with one route selected. (" + overlays.size() + "selected)";
         }
         _mapFrame.setStatusMessage(statusText);
+    };
+    
+    private static KeyHook _onKeyW = (KeyEvent keyEvent) -> {
+    	
     };
 
 	/*public static void buildLocationsMap() {

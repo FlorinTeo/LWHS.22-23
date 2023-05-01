@@ -46,12 +46,30 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
         return _data;
     }
 	
-	public Set<String> getCollidingRoutes(){
-		Set<String> collidingR = new HashSet<String>();
+	public Set<T> getCollidingRoutes(){
+		Set<T> collidingR = new HashSet<T>();
 		for(Node<T> n: _edges.values()) {
-			collidingR.add((String) n.getData());
+			collidingR.add(n.getData());
 		}
 		return collidingR;
 		
+	}
+	public boolean isConnected(Set<Node<T>> routes) {
+		if(routes.isEmpty()) {
+			return false;
+		}else {
+			for(Node<T> node: routes) {
+				if(this._edges.containsValue(node)){
+					return true;
+				}
+			}
+			return true;
+		}
+		
+		
+	}
+	
+	public void label(int label) {
+		this._state = label;
 	}
 }
