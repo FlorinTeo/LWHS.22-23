@@ -67,8 +67,7 @@ public class Program {
         
         //Build's a colliding graph 
         trafficGraph = buildCollingGraph();
-        trafficGraph.graphColoring();
-        _mapFrame.setKeyTypedHook('W', _onKeyW);
+        
         // opens the GUI window
         _mapFrame.open();
         
@@ -129,20 +128,12 @@ public class Program {
         }else{
         	displayed = false;
         	statusText += "Only works with one route selected. (" + overlays.size() + "selected)";
-        };
+        }
         _mapFrame.setStatusMessage(statusText);
     };
     
-    private static int crtPhase = 1;
     private static KeyHook _onKeyW = (KeyEvent keyEvent) -> {
-    	Set<String> routes = trafficGraph.getLabeledData(crtPhase);
-    	if (routes.isEmpty()) {
-    	    crtPhase = 1;
-    	    routes = trafficGraph.getLabeledData(crtPhase);
-    	}
-    	_mapImage.setOverlays(routes);
-    	_mapFrame.repaint();
-        crtPhase++;
+    	
     };
 
 	/*public static void buildLocationsMap() {
