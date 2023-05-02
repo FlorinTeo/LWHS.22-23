@@ -1,6 +1,7 @@
 package main;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -57,7 +58,8 @@ public class Graph<T extends Comparable<T>>{
 		
 	}
 	public void graphColoring() {
-		Queue<Node<T>> unlabeledQueue = (Queue<Node<T>>) _nodes.values();
+		Queue<Node<T>> unlabeledQueue = new LinkedList<Node<T>>();
+		unlabeledQueue.addAll(_nodes.values());
 		int label = 1;
 		while(!unlabeledQueue.isEmpty()) {
 			greedy(label, unlabeledQueue);
@@ -69,11 +71,14 @@ public class Graph<T extends Comparable<T>>{
 	
 	public void greedy(int label, Queue<Node<T>> unlabeledQ) {
 		Set<Node<T>> labelSet = new HashSet<Node<T>>();
-		for(Node<T> node: unlabeledQ) {
+		int nUnlabeled = unlabeledQ.size();
+	    for (int i = 0; i < nUnlabeled; i++) {
+	        Node<T> node = unlabeledQ.remove();
 			if(!node.isConnected(labelSet)) {
 				node.label(label);
-				unlabeledQ.remove(node);
 				labelSet.add(node);
+			} else {
+			    unlabeledQ.add(node);
 			}
 		}
 	}
