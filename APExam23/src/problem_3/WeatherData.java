@@ -1,6 +1,5 @@
 package problem_3;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class WeatherData {
 
@@ -33,7 +32,7 @@ public class WeatherData {
         int maxLength = 0;
         for (int i = 1; i < temperatures.size(); i++) {
             if (temperatures.get(i-1) <= threshold && temperatures.get(i) > threshold) {
-                // begining of a new heat wave
+                // beginning of a new heat wave
                 start = i;
             } else if (temperatures.get(i-1) > threshold && temperatures.get(i) <= threshold) {
                 // ending of the current heat wave
@@ -45,6 +44,7 @@ public class WeatherData {
     }
     
     // Instance variables, constructors and methods below are not shown in the exam text.
+    
     public WeatherData(double[] tempArr) {
         temperatures = new ArrayList<Double>();
         for(double temp : tempArr) {
