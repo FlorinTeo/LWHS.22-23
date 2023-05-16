@@ -25,8 +25,8 @@ public class Solver {
 	public Solver(MazeCanvas mc, Maze maze) {
 		this.mc = mc;
 		this.maze = maze;
-		this.fwdPath = new Color(255, 0, 0);
-				this.fwdPath = new Color(45, 0, 45);
+		this.fwdPath = new Color(200, 200, 0);
+				this.bckPath = new Color(245, 0, 245);
 	}
 	
 	/**
@@ -37,6 +37,7 @@ public class Solver {
 	 * @return
 	 */
 	private boolean run(Cell cell, Side fromSide) {
+	    mc.step();
 		int row = cell.getRow();
 		int col = cell.getCol();
 		//mark cells
@@ -65,7 +66,7 @@ public class Solver {
 					
 				} else {
 					//otherwise show that we have explored it
-					mc.drawPath(row, col, fromSide, this.bckPath);
+					mc.drawPath(row, col, toSide, this.bckPath);
 				}
 			}
 		}
