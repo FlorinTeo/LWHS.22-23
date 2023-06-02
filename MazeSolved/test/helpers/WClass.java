@@ -17,6 +17,7 @@ public abstract class WClass {
     protected Map<String, Method> _wrapMs;
     protected Object _wrapObj;
     
+    @SuppressWarnings("deprecation")
     private void loadClass() {
         _wrapCtors = new HashMap<String, Constructor>();
         for (Constructor ctor : _wrapC.getConstructors()) {
