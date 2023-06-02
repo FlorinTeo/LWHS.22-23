@@ -26,7 +26,7 @@ public class Maze {
 		for(int curRow = 0 ; curRow < rows; curRow++ ) {
 				for(int curCol = 0; curCol < cols; curCol++) {
 					if(curRow == 0|| curRow == rows - 1) {
-						mazeCanvas.drawCell(curRow, curCol,Color.RED.darker()); // applies to all tops + bottoms, basic cell draw
+						mazeCanvas.drawCell(curRow, curCol); // applies to all tops + bottoms, basic cell draw
 						if(curRow == 0) { // for cells at the minimum row
 							if(curCol % 2 == 0) { // for evens
 								mazeCanvas.eraseWall(curRow, curCol, MazeCanvas.Side.Left);
@@ -34,12 +34,13 @@ public class Maze {
 								mazeCanvas.drawPath(curRow, curCol, MazeCanvas.Side.Left, Color.RED);
 							}else { // for odds
 								mazeCanvas.eraseWall(curRow, curCol, MazeCanvas.Side.Right);
+								mazeCanvas.eraseWall(curRow, curCol, MazeCanvas.Side.Bottom);
 								mazeCanvas.drawPath(curRow, curCol, MazeCanvas.Side.Right, Color.RED);
 							}
 							mazeCanvas.drawPath( curRow, curCol, MazeCanvas.Side.Bottom, Color.RED); // applies to all of them
-							mazeCanvas.drawPath(curRow, curCol, MazeCanvas.Side.Center, Color.RED.darker());
+							mazeCanvas.drawCenter(curRow, curCol, Color.RED.darker());
 						}else if(curRow == rows - 1) { // for cells at the maximum row
-							mazeCanvas.drawCell(curRow, curCol,Color.RED.darker());
+							mazeCanvas.drawCell(curRow, curCol);
 							if(curCol % 2 == 0) { // if even
 								mazeCanvas.eraseWall(curRow, curCol, MazeCanvas.Side.Right);
 								mazeCanvas.drawPath(curRow, curCol, MazeCanvas.Side.Right, Color.RED);
@@ -49,16 +50,16 @@ public class Maze {
 							}
 							// applies to evens + odds
 							mazeCanvas.eraseWall(curRow, curCol, MazeCanvas.Side.Top); // when you call parameters use the class with methods use the instance of the class
-							mazeCanvas.drawPath(curRow, curCol, MazeCanvas.Side.Center, Color.RED.darker());
+							mazeCanvas.drawCenter(curRow, curCol, Color.RED.darker());
 							mazeCanvas.drawPath(curRow, curCol, MazeCanvas.Side.Top, Color.RED);
 						}
 					}else { // for most cells except for those special ones on the top and bottom 
-						mazeCanvas.drawCell(curRow, curCol, Color.RED);
+						mazeCanvas.drawCell(curRow, curCol);
 						mazeCanvas.eraseWall(curRow, curCol, MazeCanvas.Side.Top);
 						mazeCanvas.eraseWall(curRow, curCol, MazeCanvas.Side.Bottom);
 						mazeCanvas.drawPath(curRow, curCol, MazeCanvas.Side.Top, Color.RED);
 						mazeCanvas.drawPath(curRow, curCol, MazeCanvas.Side.Bottom, Color.RED);
-						mazeCanvas.drawPath(curRow, curCol, MazeCanvas.Side.Center, Color.RED);
+						mazeCanvas.drawCenter(curRow, curCol, Color.RED);
 					}
 							
 							
