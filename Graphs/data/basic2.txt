@@ -1,4 +1,0 @@
-A > B X
-B > C X
-C > A X
-X > A B C

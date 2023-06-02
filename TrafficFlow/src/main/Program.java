@@ -76,7 +76,7 @@ public class Program {
         _mapFrame.stop();
 
         // builds the locationsMap, and re-registers the locations keys
-        buildLocationsMap();
+        //buildLocationsMap();
         
         // stops again, waiting for user action
         _mapFrame.stop();
