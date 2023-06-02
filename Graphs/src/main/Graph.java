@@ -1,4 +1,5 @@
 package main;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -113,13 +114,28 @@ public class Graph<T extends Comparable<T>> {
      * @see Graph#addEdge(Comparable, Comparable)
      */
     public void removeEdge(T from, T to) {
-        Node<T> fromNode = _nodes.get(from.hashCode());
-        Node<T> toNode = _nodes.get(to.hashCode());
-        if (fromNode == null || toNode == null) {
-            throw new RuntimeException("Node(s) not in the graph!");
-        }
-        
-        fromNode.removeEdge(toNode);
+        // TODO: Implement this method according to
+        // TODO: the specification in javadocs
+ 
+    	Node fromNode = null;
+    	Node toNode = null;
+    	for(Node n : _nodes.values()) {
+    		if(n.getData() == from) {
+    			fromNode = n;
+    			
+    		}
+    		
+    		if(n.getData() == to) {
+    			toNode = n;
+    		}
+    	}
+    	if(fromNode == null || toNode == null) {
+    		throw new RuntimeException();
+    	}else {
+    		fromNode.removeEdgeFromNode(toNode);
+    	}
+    	
+    	
     }
     
     /**
@@ -130,12 +146,25 @@ public class Graph<T extends Comparable<T>> {
      * @param data - Node to be removed from the Graph.
      */
     public void removeNode(T data) {
-        Node<T> node = _nodes.get(data.hashCode());
-        for(Node<T> n : _nodes.values()) {
-            n.removeEdge(node);
-        }
-        _nodes.remove(data.hashCode());
+        // TODO: Implement this method according to
+        // TODO: the specification in javadocs
+    	Node dataNode = null;
+    	for(Node n: _nodes.values()) {
+    		if(n.getData().hashCode() == data.hashCode()) {
+    			dataNode = n;
+    		}
+    	}
+    	if(dataNode != null) {
+    	    for (Node<T> n : _nodes.values()) {
+    	        n.removeEdges(dataNode);
+    	    }
+    		_nodes.remove(dataNode.getData().hashCode());
+    	}
+    	
+    	
     }
+    
+    
     
     /**
      * Gives a multi-line String representation of this Graph. Each line in the returned
@@ -178,58 +207,32 @@ public class Graph<T extends Comparable<T>> {
     }
     
     public boolean isUGraph() {
-        boolean uGraph = true;
-        for(Node<?> node : _nodes.values()) {
-            if (!node.isUNode()) {
-                uGraph = false;
-                break;
-            }
-        }
-        
-        reset();
-        return uGraph;
+    	boolean isUGraph = true;
+    	for(Node<T> n: _nodes.values()) {
+    		if(!n.isUndirectedNode()) {
+    			isUGraph = false;
+    			break;
+    		}
+    		
+    	}
+    	this.resetMarks();
+		return isUGraph;
     }
     
-    public boolean isConnected() {
-        boolean connected = true;
-        Iterator<Node<T>> iNodes = _nodes.values().iterator();
-        while(connected && iNodes.hasNext()) {
-            Node<T> node = iNodes.next();
-            // traverse the grap starting from node
-            node.traverse();
-            
-            // expand the visited nodes based on proximity
-            // to other visited nodes. Stop when no expansion happened.
-            boolean again = true;
-            while (again) {
-                again = false;
-                for (Node<?> n : _nodes.values()) {
-                    again = again || n.expand();
-                }
-            }
-            
-            // verify if any node was left not visited
-            for (Node<?> n : _nodes.values()) {
-                if (n.getState() != 1) {
-                    connected = false;
-                    break;
-                }
-            }
-        }
-        
-        reset();
-        return connected;
-    }
-    
-    public boolean isDAGraph() {
-        boolean dag = true;
-        Iterator<Node<T>> iNodes = _nodes.values().iterator();
-        while(dag && iNodes.hasNext()) {
-            Node<T> n = iNodes.next();
-            dag = !n.loops(n);
-            reset();
-        }        
-        return dag;
+    public int[][] getAdjacencyMatrix(){
+    	int[][] matrix = new int[_nodes.size()][_nodes.size()];
+    	Collection<Node<T>> nodes = _nodes.values();
+    	Node<T>[] arrayOfNodes = new Node[nodes.size()];
+    	nodes.toArray(arrayOfNodes);
+    	for(int i =0; i < arrayOfNodes.length; i++) {
+    		for(int j = 0; j < arrayOfNodes.length; j++) {
+    			if(arrayOfNodes[i].isNeighbor(arrayOfNodes[j])) {
+    				matrix[i][j] = 1;
+    			}
+    		}
+    	}
+    	
+    	return matrix;
     }
 
     public int[][] getAdjacencyMatrix() {
