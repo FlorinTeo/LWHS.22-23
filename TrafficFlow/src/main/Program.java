@@ -74,7 +74,13 @@ public class Program {
         
         // stops, waiting for user action
         _mapFrame.stop();
+
+        // builds the locationsMap, and re-registers the locations keys
+        buildLocationsMap();
         
+        // stops again, waiting for user action
+        _mapFrame.stop();
+
         // close the window and terminate the program
         _mapFrame.close();
         
