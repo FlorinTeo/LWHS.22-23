@@ -52,8 +52,8 @@ public class Tournament {
      * There's a non-null chart and the root (final) game in the chart is valid.
      */
     public void checkValid() {
-        if (_chart == null) {
-            throw new RuntimeException("Tournament not initialized!");
+        if (_chart == null || _chart.getPrevCount() != 2) {
+            throw new RuntimeException("Tournament with no games played!");
         }
         _chart.checkValid();
     }

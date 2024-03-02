@@ -46,27 +46,31 @@ public class Game {
         return output;
     }
     
+    public int getPrevCount() {
+        int n = (_prev1 != null) ? 1 : 0;
+        n += (_prev2 != null) ? 1 : 0;
+        return n;
+    }
+    
     public void checkValid() throws RuntimeException {
+        switch(getPrevCount()) {
+        case 0:
+            return;
+        case 1:
+            throw new RuntimeException("Missing one qualifying game!");
+        case 2:
+            if (!_winner.equals(_prev1._winner) && !_winner.equals(_prev2._winner)) {
+                throw new RuntimeException("Missing one qualifying game!");
+            }
+        }
         if (_prev1 == null && _prev2 == null) {
             return;
         }
         if (_prev1 == null || _prev2 == null) {
-            throw new RuntimeException("Missing one qualifying game!");
+            throw new RuntimeException("Invalid winner given qualifying games!");
         }
         _prev1.checkValid();
         _prev2.checkValid();
-        
-        int count = 0;
-        if (_winner.equals(_prev1._winner)) {
-            count++;
-        }
-        if (_winner.equals(_prev2._winner)) {
-            count++;
-        }
-        
-        if (count != 1) {
-            throw new RuntimeException("Invalid winner given qualifying games!");
-        }
     }
     
     public int countGames() {

@@ -4,7 +4,8 @@ public class Program {
 
     public static void main(String[] args) {
         System.out.println("Welcome to the Tournament!");
-        Tournament t = new Tournament("abc", "def", "ghj", "xyz", "wuv", "123", "456", "lkm", "rsp");
+        Tournament t = new Tournament("a","b","a","b");
         System.out.println(t);
+        t.checkValid();
     }
 }
