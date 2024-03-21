@@ -46,7 +46,7 @@ public class Cell extends WClass {
     
     @SuppressWarnings("unchecked")
     public List<Side> getWalls() {
-        return (List<Side>)super.invoke("public java.util.*List *Cell.getWalls()");
+        return (List<Side>)super.invoke("public java.util.*List Cell.getWalls()");
     }
     
     public void removeWall(Side side) {

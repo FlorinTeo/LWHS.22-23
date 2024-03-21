@@ -190,7 +190,7 @@ public abstract class WClass {
             }
         }
         assertTrue(
-                String.format("### Missing or invalid '%s' method declaration in class '%s'.", mPattern, _wrapC.getName()),
+                String.format("### Missing or invalid '%s' method declaration in class '%s'.", mDecl, _wrapC.getName()),
                 mDecl != null);
         return _wrapMs.get(mDecl);
     }
